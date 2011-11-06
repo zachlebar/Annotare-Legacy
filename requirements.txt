@@ -1,0 +1,3 @@
+bottle==0.9.6
+simplejson
+markdown

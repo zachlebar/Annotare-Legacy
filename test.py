@@ -1,9 +1,6 @@
 #!/usr/bin/python
 
-from bottle import route, run
+from bottle import run, route
+from annotare import *
 
-@route('/hello/:name')
-def index(name='World'):
-	return '<b>Hello %s!</b>' % name
-
-run(host='localhost', port=8080)
+run(host='localhost', port=8000)

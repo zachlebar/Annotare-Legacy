@@ -1,0 +1,51 @@
+@import 'modular-scale/modular-scale';
+
+body {
+  width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+  background: #333;
+  color: #EEE;
+  font: 13px/1.5 Helvetica, Arial, sans-serif;
+}
+
+h1 { font-size: modular-scale(3); }
+h2 { font-size: modular-scale(2); }
+h3 { font-size: modular-scale(1); }
+h4 { font-size: modular-scale(1); }
+h5 { font-size: modular-scale(0); }
+h6 { font-size: modular-scale(0); }
+
+h1, h2, h3, h4, h5, h6 { 
+  margin-bottom: 0;
+  a {
+    color: #EEE;
+    text-decoration: none;
+    &:hover{
+      color: darken(#EEE, 20%);
+    }
+  }
+}
+
+#content {
+  #tool-bar {
+    a {
+      padding-left: 10px;
+    }
+    text-align: right;
+  }
+  background: #EEE;
+  color: #222;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  padding: 20px;
+}
+
+#edit {
+  textarea {
+    width: 100%;
+    height: 600px;
+    font: 13px/1.5 Consolas, monospace;
+  }
+}
