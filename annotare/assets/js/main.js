@@ -1,3 +1,4 @@
+window.device = 'desktop';
 require(['views'], function main(views) {
     // Map hashbangs to views
     window.annotare = annotare = {};
@@ -5,7 +6,8 @@ require(['views'], function main(views) {
     var urls = [
         ['^test$',  annotare.views.test],
         ['^document$', annotare.views.doc],
-        ['^edit$', annotare.views.edit]
+        ['^edit$', annotare.views.edit],
+        ['^history$', annotare.views.history]
     ]
     
     // Modal Object
@@ -17,9 +19,9 @@ require(['views'], function main(views) {
     }
     Modal.prototype = {
         open: function() {
-            if (SETTINGS.device == 'iphone') {
+            if (device == 'iphone') {
                 $(this.container).css({
-                    'position': 'absolute',
+                    'position': 'fixed',
                     'z-index': 9999,
                     'top': '20px',
                     'left': '20px',
@@ -32,7 +34,7 @@ require(['views'], function main(views) {
                     close.id = "close-button";
                     $(close).css({
                         'z-index': 9999,
-                        'position': 'absolute',
+                        'position': 'fixed',
                         'top': '5px',
                         'right': '5px'
                     });
@@ -43,7 +45,7 @@ require(['views'], function main(views) {
                 $(this.container).css({
                     'width': width,
                     'height': height,
-                    'position': 'absolute',
+                    'position': 'fixed',
                     'z-index': 9998,
                     'top': '-' + ($(window).height() + height) + 'px',
                     'left': (($(window).width() - width) / 2) + 'px',
@@ -70,7 +72,7 @@ require(['views'], function main(views) {
             $(mask).css({
                 'width': '100%',
                 'height': '100%',
-                'position': 'absolute',
+                'position': 'fixed',
                 'z-index': 9000,
                 'top': 0,
                 'left': 0,
@@ -82,12 +84,13 @@ require(['views'], function main(views) {
                 'margin': '0 0 0 0',
                 'cursor': 'pointer'
             });
+            $(this.container).addClass('modal');
             document.body.appendChild(mask);
             document.body.appendChild(this.container);
             if (!this.view.display.disable_close)
                 document.body.appendChild(close);
             $(mask).animate({'opacity': 0.75}, 500);
-            if (SETTINGS.device != 'iphone')
+            if (device != 'iphone')
                 $(this.container).css({'top': ($(window).height() - this.view.display.height) / 2});
             this.is_open = true;
             if (!this.view.display.disable_close) {

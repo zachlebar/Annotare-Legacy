@@ -41,10 +41,23 @@ define(['api', 'showdown', 'diff_match_patch', 'util'], function(api, showdown, 
         if (name) {
             this.container.appendChild(document.createTextNode('Loading Document...'));
             api.get_markdown(name, function(data) {
-                // Display
+                // Convert Doc
                 var converter = new Showdown.converter();
                 var html = converter.makeHtml(data);
-                container.innerHTML = "<div id='tool-bar'><a href='#edit?name=" + name + "'>Edit Document</a></div>"
+                // Toolbar
+                container.innerHTML = "";
+                var toolbar = document.createElement('div');
+                toolbar.id = 'tool-bar';
+                var edit = document.createElement('a');
+                edit.href = '#edit?name=' + name;
+                edit.innerHTML = 'Edit Document';
+                toolbar.appendChild(edit);
+                var history = document.createElement('a');
+                history.href = '#document.history?name=' + name;
+                history.innerHTML = 'View History';
+                toolbar.appendChild(history);
+                container.appendChild(toolbar);
+                // Display Document
                 container.innerHTML += html;
             }, function(data){
                 container.innerHTML = "Error Loading Document. Status Code: " + data.status;
@@ -97,17 +110,19 @@ define(['api', 'showdown', 'diff_match_patch', 'util'], function(api, showdown, 
                     differ = new diff_match_patch();
                     var new_text = $(editor).val();
                     var patch = {
-                        patch: differ.patch_make(data, new_text),
+                        patch: differ.patch_toText(differ.patch_make(data, new_text)),
                         time: +(new Date())
                     }
                     // Save Patch
-                    var key = name + "-patches";
-                    if (util.cache.exists(key)) {
-                        var patches = util.cache.get(key);
-                        patches.push(patch);
-                        util.cache.set(key, patches);
-                    } else {
-                        util.cache.set(key, [patch]);
+                    if (patch.patch.length > 0) {
+                        var key = name + "-patches";
+                        if (util.cache.exists(key)) {
+                            var patches = util.cache.get(key);
+                            patches.push(patch);
+                            util.cache.set(key, patches);
+                        } else {
+                            util.cache.set(key, [patch]);
+                        }
                     }
                 });
                 container.appendChild(toolbar);
@@ -129,6 +144,48 @@ define(['api', 'showdown', 'diff_match_patch', 'util'], function(api, showdown, 
     }
     EditView.prototype.restart = function() {
         return new EditView();
+    }
+    
+    /*
+     * Generic Modal Form View
+     * Provides methods for displaying and submiting a modal form
+     * Text Areas, File Uploads not supported
+    */
+    function HistoryView() {
+        this.name = "History"
+        this.display = {
+            format: 'modal',
+            width: 600,
+            height: 450
+        }
+    }
+    HistoryView.prototype = new View();
+    HistoryView.prototype.load = function() {
+        var container = this.container = document.createElement('div');
+        this.container.id = 'history';
+        var name = annotare.router.parse_arguments(window.location.hash).name;
+        if (name) {
+            this.container.innerHTML = "<h2>Change Log</h2>"
+            var patches = util.cache.get(name + '-patches');
+            var list = document.createElement('ul');
+            for (var i=patches.length-1; i>=0; i--) {
+                var patch = patches[i];
+                var item = document.createElement('li');
+                item.innerHTML = (new Date(patch.time)).toString() + "<pre><code>" + patch.patch + "</code></pre>";
+                item.title = (new Date(patch.time)).toString();
+                list.appendChild(item);
+            }
+            this.container.appendChild(list);
+        } else {
+            this.container.appendChild(document.createTextNode('Error. Document name not specified.'));
+        }
+        return this.container;
+    }
+    HistoryView.prototype.unload = function() {
+        $(this.container).remove();
+    }
+    HistoryView.prototype.restart = function() {
+        return new HistoryView();
     }
     
     
@@ -235,7 +292,8 @@ define(['api', 'showdown', 'diff_match_patch', 'util'], function(api, showdown, 
     var views = {
         test: new View(),
         doc: new DocumentView(),
-        edit: new EditView()
+        edit: new EditView(),
+        history: new HistoryView()
     };
     return views
 });

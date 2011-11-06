@@ -11,8 +11,8 @@ define(['util'], function(util) {
                 differ = new diff_match_patch();
                 var patches = util.cache.get(key);
                 for (var i=0; i<patches.length; i++) {
-                    console.log(patches[i]);
-                    data = differ.patch_apply(patches[i].patch, data)[0];
+                    var patch = differ.patch_fromText(patches[i].patch);
+                    data = differ.patch_apply(patch, data)[0];
                 }
             }
             // Call success with newly patches text
@@ -29,8 +29,8 @@ define(['util'], function(util) {
                         differ = new diff_match_patch();
                         var patches = util.cache.get(key);
                         for (var i=0; i<patches.length; i++) {
-                            console.log(patches[i]);
-                            data = differ.patch_apply(patches[i].patch, data)[0];
+                            var patch = differ.patch_fromText(patches[i].patch);
+                            data = differ.patch_apply(patch, data)[0];
                         }
                     }
                     success(data);
