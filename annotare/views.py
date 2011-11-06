@@ -39,28 +39,30 @@ def send_static(filename):
 ==========================================================
 """	
 
-@bottle.route('/document/:filename.:format')
-def document(filename, format='md'):
-    if format not in ['md', 'html']:
-        return bottle.abort(400, "Sorry, I don't recognize that file format.")
-    # Sanitize
-    filename = filename.replace('/', '')
-    filename = filename.replace('..', '')
-    # Serve
-    filename = "%s.md" % filename
-    if format == 'md':
-        try:
-            return bottle.static_file(filename, root=settings.DOCUMENT_ROOT)
-        except IOError, e:
-            return bottle.abort(404, e)
-    else:
-        try:
-            md = open(os.path.join(settings.DOCUMENT_ROOT, filename), 'rU')
-        except IOError, e:
-            return bottle.abort(404, e)
-        html = markdown.markdown(md.read())
-        md.close()
-        return html
+@bottle.route('/json/:key', method="POST")
+def store_json(key):
+    filename = "%s.json" % key
+    json = bottle.request.body.read()
+    json_file = open(os.path.join(settings.DOCUMENT_ROOT, filename), 'w')
+    json_file.write(json)
+    json_file.close()
+    
+@bottle.route('/json/:key', method="GET")
+def get_json(key):
+    filename = "%s.json" % key
+    try:
+        json_file = open(os.path.join(settings.DOCUMENT_ROOT, filename), 'rU')
+    except IOError, e:
+        return bottle.abort(404, e)
+    json = json_file.read()
+    json_file.close()
+    return json
+    
+@bottle.route('/json/exists/:key', method="GET")
+def json_exists(key):
+    filename = "%s.json" % key
+    filename = os.path.join(settings.DOCUMENT_ROOT, filename)
+    return simplejson.dumps({'exists': os.path.exists(filename)})
         
     
     

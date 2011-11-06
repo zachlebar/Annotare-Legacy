@@ -43,6 +43,10 @@ h1, h2, h3, h4, h5, h6 {
     text-align: right; }
     #content #tool-bar a {
       padding-left: 10px; }
+  #content .highlight, #content em {
+    font-style: normal;
+    background: #CC0000;
+    color: #EEE; }
 
 #edit textarea {
   width: 100%;

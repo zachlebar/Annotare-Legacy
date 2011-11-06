@@ -1,4 +1,4 @@
-define(['api', 'showdown', 'diff_match_patch', 'util'], function(api, showdown, diff, util) {
+define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, showdown, diff, util) {
     /* 
      * Subclass this to make views
      * Overwrite load and unload methods
@@ -33,21 +33,20 @@ define(['api', 'showdown', 'diff_match_patch', 'util'], function(api, showdown, 
         this.name = "Document"
     }
     DocumentView.prototype = new View();
-    DocumentView.prototype.load = function() {
+    DocumentView.prototype.load = function(args) {
         var container = this.container = document.createElement('div');
         this.container.id = 'document';
         // Get Doc
-        var name = annotare.router.parse_arguments(window.location.hash).name;
+        var name = args.name;
         if (name) {
             this.container.appendChild(document.createTextNode('Loading Document...'));
-            api.get_markdown(name, function(data) {
-                // Convert Doc
-                var converter = new Showdown.converter();
-                var html = converter.makeHtml(data);
+            var doc = new models.Doc(name);
+            doc.load(function(data) {
                 // Toolbar
                 container.innerHTML = "";
                 var toolbar = document.createElement('div');
                 toolbar.id = 'tool-bar';
+                container.appendChild(toolbar);
                 var edit = document.createElement('a');
                 edit.href = '#edit?name=' + name;
                 edit.innerHTML = 'Edit Document';
@@ -56,10 +55,29 @@ define(['api', 'showdown', 'diff_match_patch', 'util'], function(api, showdown, 
                 history.href = '#document.history?name=' + name;
                 history.innerHTML = 'View History';
                 toolbar.appendChild(history);
-                container.appendChild(toolbar);
+                var highlighter = document.createElement('a');
+                highlighter.innerHTML = 'Hightlight Text';
+                highlighter.href= "javascript:null;";
+                toolbar.appendChild(highlighter);
+                $(highlighter).click(function(event){
+                    var selection = util.get_selected_text();
+                    doc.new_highlight(selection);
+                    event.preventDefault();
+                });
+                var refresh = document.createElement('a');
+                refresh.innerHTML = 'Refresh Document';
+                refresh.href= "javascript:null";
+                toolbar.appendChild(refresh);
+                $(refresh).click(function(event){
+                    doc.load_from_cache();
+                    doc.reload_view();
+                });
                 // Display Document
-                container.innerHTML += html;
-            }, function(data){
+                var wiki = document.createElement('div');
+                wiki.id = name;
+                wiki.innerHTML = this.to_html();
+                container.appendChild(wiki);
+            }, function(data) {
                 container.innerHTML = "Error Loading Document. Status Code: " + data.status;
             });
         } else {
@@ -82,14 +100,15 @@ define(['api', 'showdown', 'diff_match_patch', 'util'], function(api, showdown, 
         this.name = "Edit"
     }
     EditView.prototype = new View();
-    EditView.prototype.load = function() {
+    EditView.prototype.load = function(args) {
         var container = this.container = document.createElement('div');
         this.container.id = 'edit';
         // Get Doc
-        var name = annotare.router.parse_arguments(window.location.hash).name;
+        var name = args.name;
         if (name) {
             this.container.appendChild(document.createTextNode('Loading Document...'));
-            api.get_markdown(name, function(data){
+            var doc = new models.Doc(name)
+            doc.load(function(data){
                 // Toolbar
                 container.innerHTML = "";
                 var toolbar = document.createElement('div');
@@ -107,29 +126,15 @@ define(['api', 'showdown', 'diff_match_patch', 'util'], function(api, showdown, 
                 save.innerHTML = 'Save and Close';
                 toolbar.appendChild(save);
                 $(save).click(function(){
-                    differ = new diff_match_patch();
                     var new_text = $(editor).val();
-                    var patch = {
-                        patch: differ.patch_toText(differ.patch_make(data, new_text)),
-                        time: +(new Date())
-                    }
-                    // Save Patch
-                    if (patch.patch.length > 0) {
-                        var key = name + "-patches";
-                        if (util.cache.exists(key)) {
-                            var patches = util.cache.get(key);
-                            patches.push(patch);
-                            util.cache.set(key, patches);
-                        } else {
-                            util.cache.set(key, [patch]);
-                        }
-                    }
+                    console.log(new_text);
+                    doc.new_patch(new_text);
+                    console.log(doc);
                 });
                 container.appendChild(toolbar);
                 // Editor
                 var editor = document.createElement('textarea');
-                editor.innerHTML = data;
-                var differ = new diff_match_patch();
+                editor.innerHTML = this.render();
                 container.appendChild(editor);
             }, function(data){
                 container.innerHTML = "Error Loading Document. Status Code: " + data.status;
@@ -160,22 +165,32 @@ define(['api', 'showdown', 'diff_match_patch', 'util'], function(api, showdown, 
         }
     }
     HistoryView.prototype = new View();
-    HistoryView.prototype.load = function() {
+    HistoryView.prototype.load = function(args) {
         var container = this.container = document.createElement('div');
         this.container.id = 'history';
-        var name = annotare.router.parse_arguments(window.location.hash).name;
+        var name = args.name;
         if (name) {
-            this.container.innerHTML = "<h2>Change Log</h2>"
-            var patches = util.cache.get(name + '-patches');
-            var list = document.createElement('ul');
-            for (var i=patches.length-1; i>=0; i--) {
-                var patch = patches[i];
-                var item = document.createElement('li');
-                item.innerHTML = (new Date(patch.time)).toString() + "<pre><code>" + patch.patch + "</code></pre>";
-                item.title = (new Date(patch.time)).toString();
-                list.appendChild(item);
-            }
-            this.container.appendChild(list);
+            var self = this;
+            var doc = new models.Doc(name);
+            doc.load(function(data) {
+                self.container.innerHTML = "<h2>Change Log</h2>";
+                var del = document.createElement('a');
+                del.innerHTML = "Pop Latest Revision";
+                del.href = "javascript:null;";
+                $(del).click(function(){
+                    doc.rollback();
+                });
+                self.container.appendChild(del);
+                var list = document.createElement('ul');
+                for (var i=this.revisions.length-1; i>=0; i--) {
+                    var patch = this.revisions[i];
+                    var item = document.createElement('li');
+                    item.innerHTML = (new Date(patch.time)).toString() + "<pre><code>" + patch.patch + "</code></pre>";
+                    item.title = (new Date(patch.time)).toString();
+                    list.appendChild(item);
+                }
+                self.container.appendChild(list);
+            });
         } else {
             this.container.appendChild(document.createTextNode('Error. Document name not specified.'));
         }
