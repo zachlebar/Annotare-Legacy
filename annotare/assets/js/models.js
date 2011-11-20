@@ -76,7 +76,7 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
         // Create New Highlight
         toggle_highlight: function(elem) {
             var highlight = new Annotation(elem.id, +(new Date()));
-            highlight.apply();
+            highlight.apply(document.getElementById(this.name));
             this.annotations[highlight.hash] = highlight;
             this.save();
         },
@@ -174,7 +174,6 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
             var ids = ids || [];
             var self = this;
             $(elem).children().each(function() {
-                console.log(this);
                 ids.push(this.id);
                 ids = self.get_all_ids(this, ids);
             });
@@ -182,7 +181,6 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
         },
         get_element: function(container) {
             var ids = this.get_all_ids(container);
-            console.log(ids);
             // Exact match?
             if (ids.indexOf(this.hash) != -1) {
                 var elem = document.getElementById(ids[ids.indexOf(this.hash)]);
@@ -192,8 +190,6 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
         },
         apply: function(container) {
             var elem = this.get_element(container);
-            console.log(elem);
-            console.log('apply');
             $(elem).addClass('highlight');
         },
         remove: function() {

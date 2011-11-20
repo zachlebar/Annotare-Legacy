@@ -151,9 +151,7 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
                 toolbar.appendChild(save);
                 $(save).click(function(){
                     var new_text = $(editor).val();
-                    console.log(new_text);
                     doc.new_patch(new_text);
-                    console.log(doc);
                 });
                 container.appendChild(toolbar);
                 // Editor
