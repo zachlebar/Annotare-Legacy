@@ -1,11 +1,23 @@
 @import 'modular-scale/modular-scale';
 
+@mixin shadow($blur, $color) {
+  box-shadow: 0 0 $blur $color;
+  -webkit-box-shadow: 0 0 $blur $color;
+  -moz-box-shadow: 0 0 $blur $color;
+}
+
+@mixin round($rad) {
+  border-radius: $rad;
+  -webkit-border-radius: $rad;
+  -mox-border-radius: $rad;
+}
+
 body {
   width: 960px;
   margin-left: auto;
   margin-right: auto;
-  background: #333;
-  color: #EEE;
+  background: #EEE;
+  color: #333;
   font: 13px/1.5 Helvetica, Arial, sans-serif;
 }
 
@@ -19,32 +31,48 @@ h6 { font-size: modular-scale(0); }
 h1, h2, h3, h4, h5, h6 { 
   margin-bottom: 0;
   a {
-    color: #EEE;
+    color: #333;
     text-decoration: none;
     &:hover{
-      color: darken(#EEE, 20%);
+      color: darken(#333, 20%);
     }
   }
 }
 
+#footer {
+  border-top: 1px solid #999;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  color: #666;
+  font-size: 12px;
+}
+
 #content {
+  padding-bottom: 50px;
   #tool-bar {
     a {
       padding-left: 10px;
     }
     text-align: right;
   }
-  .highlight, em {
-    font-style: normal;
-    background: #CC0000;
-    color: #EEE;
+  .highlightable {
+    padding: 2px;
   }
-  background: #EEE;
-  color: #222;
-  border-radius: 10px;
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
-  padding: 20px;
+  .highlight {
+    font-style: normal;
+    background: #FFFF00;
+  }
+  @include round(10px);
+}
+
+.highlight-mode {
+  .highlightable {
+    cursor: pointer;
+    &:hover {
+      background: #CCC;
+    }
+  }
 }
 
 #edit {
@@ -83,3 +111,36 @@ div.modal {
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
 }
+
+#tool-bar {
+  padding: 10px;
+  position: fixed;
+  bottom: 50px;
+  right: 100px;
+  background: #EEE;
+  @include shadow(10px, #111);
+  @include round(10px);
+  a {
+    background: #DDD;
+    color: #666;
+    text-decoration: none;
+    margin: 0 5px;
+    display: inline-block;
+    padding: 2px 5px;
+    @include round(5px);
+    border: 1px solid #999;
+    @include shadow(10px, #CCC);
+    &:hover {
+      background: #CCC;
+    }
+    &.active, &:active {
+      background: #BBB;
+      font-weight: bold;
+    }
+  }
+}
+
+
+
+
+

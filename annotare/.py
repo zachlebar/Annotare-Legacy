@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import bottle
 import views
 import settings

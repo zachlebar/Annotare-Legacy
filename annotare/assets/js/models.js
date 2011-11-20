@@ -1,13 +1,14 @@
 /*
  * Data Models for Annotare
 */
-define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown'], function(util, api, diff_match, JSON, showdown){
+define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(util, api, diff_match, JSON, showdown, hash){
     
     function Doc(name) {
         this.name = name;
         this.key = name;
         this.text = "";
         this.revisions = [];
+        this.annotations = {};
         this.on_server = false;
     }
     Doc.prototype = {
@@ -24,15 +25,20 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown'], function(util, a
         },
         // Cache Document
         save_to_cache: function() {
+            // Revision patches
             var revs = [];
-            for (var i=0; i<this.revisions.length; i++) {
+            for (var i=0; i<this.revisions.length; i++)
                 revs.push(this.revisions[i].export());
-            }
+            // Highlights
+            var annotations = {};
+            for (key in this.annotations)
+                annotations[key] = this.annotations[key].export();
             util.cache.set(this.key, {
                 name: this.name,
                 key: this.key,
                 text: this.text,
                 revisions: revs,
+                annotations: annotations,
                 on_server: this.on_server,
             });
         },
@@ -49,6 +55,12 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown'], function(util, a
                     this.revisions.push(new Patch(rev));
                 }
             }
+            this.annotations = {};
+            if (data.annotations) {
+                for (var key in data.annotations) {
+                    this.annotations[key] = new Annotation(data.annotations[key].hash, data.annotations[key].timestamp, data.annotations[key].data);
+                }
+            }
         },
         // Create New Patch
         new_patch: function(new_text) {
@@ -62,12 +74,11 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown'], function(util, a
             }
         },
         // Create New Highlight
-        new_highlight: function(range) {
-            var highlight = new Highlight({range: range, time: +(new Date()), name: this.name});
-            var old_text = this.render();
-            var new_text = highlight.apply(old_text);
-            this.new_patch(new_text);
-            this.reload_view(this, []);
+        toggle_highlight: function(elem) {
+            var highlight = new Annotation(elem.id, +(new Date()));
+            highlight.apply();
+            this.annotations[highlight.hash] = highlight;
+            this.save();
         },
         // Apply Patches & Annotations and return rendered text
         render: function() {
@@ -79,7 +90,44 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown'], function(util, a
         },
         to_html: function() {
             var converter = new Showdown.converter();
-            return converter.makeHtml(this.render());
+            var md = this.render();
+            var container = document.createElement('div');
+            var html = converter.makeHtml(md);
+            container.innerHTML = html;
+            // Split elements into highlightable setences
+            var process_highlightable_text = function() {
+                var tag_name = this.tagName.toLowerCase();
+                if (tag_name == 'ul' || tag_name == 'ol' || tag_name == 'dl') {
+                    // Lists are a special case :(
+                    $(this).children('li, dt, dd').each(process_highlightable_text);
+                } else {
+                    // All other elements
+                    if (this.innerHTML.indexOf('.') != -1 || this.innerHTML.indexOf('!') != -1 || this.innerHTML.indexOf('?') != -1) {
+                        var para = this.innerHTML.split(/(\. )|(\! )|(\? )/);
+                        if (para.length == 1)
+                            para = this.innerHTML.split(/(\.)|(\!)|(\?)/);
+                        this.innerHTML = "";
+                        for (var i=0; i<para.length; i++) {
+                            if (para[i] != undefined && para[i].length > 2) {
+                                var punct = para[i+1] || para[i+2] || '';
+                                this.innerHTML += "<span class='highlightable' id='" + hash.hex(para[i]) + "'>" + para[i] + punct + "</span>";
+                            }
+                        }
+                    } else {
+                        var para = this.innerHTML;
+                        if (para.length > 0) {
+                            this.innerHTML = "<span class='highlightable' id='" + hash.hex(para) + "'>" + para + "</span>";
+                        }
+                    }
+                }
+            }
+            $(container).children().each(process_highlightable_text);
+            return container
+        },
+        apply_annotations: function(elem) {
+            for (var key in this.annotations) {
+                this.annotations[key].apply(elem);
+            }
         },
         rollback: function() {
             this.revisions.pop();
@@ -109,92 +157,55 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown'], function(util, a
     }
     
     
-    function Highlight(args) {
-        this.time = args.time;
-        this.name = args.name;
-        if (args.range) {
-            this.range = args.range;
-            this.process();
+    function Annotation(hash, timestamp, data) {
+        this.hash = hash;
+        this.timestamp = timestamp;
+        if (data == undefined) {
+            this.type = 'highlight';
+            this.data = undefined;
         } else {
-            this.parts = args.parts;
+            this.type = 'note';
+            this.data = data;
         }
     }
-    Highlight.prototype = {
+    Annotation.prototype = {
         differ: new diff_match_patch(),
-        get_next_node: function(node, skipChildren, endNode){
-            //if there are child nodes and we didn't come from a child node
-            if (endNode.data == node.innerHTML)
-                return null;
-            if (node.firstChild && !skipChildren)
-                return node.firstChild;
-            if (!node.parentNode)
-                return null;
-            return node.nextSibling || this.get_next_node(node.parentNode, skipChildren, endNode); 
+        get_all_ids: function(elem, ids) {
+            var ids = ids || [];
+            var self = this;
+            $(elem).children().each(function() {
+                console.log(this);
+                ids.push(this.id);
+                ids = self.get_all_ids(this, ids);
+            });
+            return ids
         },
-        get_nodes_in_range: function(range) {
-            var startNode = range.startContainer.childNodes[range.startOffset] || range.startContainer;//it's a text node
-            var endNode = range.endContainer.childNodes[range.endOffset] || range.endContainer;
-            
-            if (startNode.innerHTML == undefined)
-                startNode = startNode.parentNode;
-            
-            if (startNode.data == endNode.data && startNode.childNodes.length === 0) {
-                if (range.endOffset - range.startOffset > 0) {
-                    return [startNode];
-                }
-            };
-
-            var nodes = [];
-            do {
-                if (!startNode.data)
-                    nodes.push(startNode);
-            } while (startNode = this.get_next_node(startNode, true, endNode));
-            return nodes;
-        },
-        process: function() {
-            var elements = this.get_nodes_in_range(this.range);
-            var parts = [];
-            for (var i=0; i<elements.length; i++) {
-                var element = elements[i];
-                var text = element.innerHTML;
-                // Discard Text Nodes
-                if (text != undefined) {
-                    if (elements.length == 1) {
-                        // One element
-                        text = text.slice(this.range.startOffset, this.range.endOffset);
-                    } else if (i == 0) {
-                        // First
-                        text = text.slice(this.range.startOffset);
-                    } else if (i == elements.length-1) {
-                        // Last
-                        text = text.slice(0, this.range.endOffset);
-                    }
-                    text = text.strip();
-                    parts.push(text);
-                }
+        get_element: function(container) {
+            var ids = this.get_all_ids(container);
+            console.log(ids);
+            // Exact match?
+            if (ids.indexOf(this.hash) != -1) {
+                var elem = document.getElementById(ids[ids.indexOf(this.hash)]);
             }
-            this.parts = parts;
+            this.elem = elem;
+            return this.elem;
         },
-        apply: function(text) {
-            console.log(this.parts);
-            var container = $('#' + this.name)[0];
-            //var range = document.createRange();
-            //range.setStart(container.firstChild);
-            //range.setEnd(container.lastChild);
-            //var elements = this.get_nodes_in_range(range);
-            var differ = new diff_match_patch();
-            for (var i=0; i<this.parts.length; i++) {
-                var part = this.parts[i];
-                // Replace the string
-                text = text.replace(part, '*' + part + '*')
-            }
-            return text;
+        apply: function(container) {
+            var elem = this.get_element(container);
+            console.log(elem);
+            console.log('apply');
+            $(elem).addClass('highlight');
+        },
+        remove: function() {
+            var elem = this.get_element();
+            $(elem).removeClass('highlight');
         },
         export: function() {
             return {
-                parts: this.parts,
-                time: this.time,
-                name: this.name
+                hash: this.hash,
+                timestamp: this.timestamp,
+                type: this.type,
+                data: this.data
             }
         }
     }

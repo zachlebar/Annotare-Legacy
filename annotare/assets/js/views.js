@@ -47,23 +47,42 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
                 var toolbar = document.createElement('div');
                 toolbar.id = 'tool-bar';
                 container.appendChild(toolbar);
+                
+                // Edit Option
                 var edit = document.createElement('a');
                 edit.href = '#edit?name=' + name;
                 edit.innerHTML = 'Edit Document';
                 toolbar.appendChild(edit);
+                
+                // View Revision History
                 var history = document.createElement('a');
                 history.href = '#document.history?name=' + name;
                 history.innerHTML = 'View History';
                 toolbar.appendChild(history);
+                
+                // Highlighing
                 var highlighter = document.createElement('a');
-                highlighter.innerHTML = 'Hightlight Text';
+                highlighter.innerHTML = 'Highlighter';
                 highlighter.href= "javascript:null;";
                 toolbar.appendChild(highlighter);
                 $(highlighter).click(function(event){
-                    var selection = util.get_selected_text();
-                    doc.new_highlight(selection);
+                    if ($(this).hasClass('active')) {
+                        $(this).removeClass('active');
+                        $(container).removeClass('highlight-mode');
+                        $('.highlightable').unbind();
+                    } else {
+                        //var selection = util.get_selected_text();
+                        //doc.new_highlight(selection);
+                        $(this).addClass('active');
+                        $(container).addClass('highlight-mode');
+                        $('.highlightable').click(function(){
+                            doc.toggle_highlight(this);
+                        });
+                    }
                     event.preventDefault();
                 });
+                
+                // Rebuild/render document
                 var refresh = document.createElement('a');
                 refresh.innerHTML = 'Refresh Document';
                 refresh.href= "javascript:null";
@@ -72,11 +91,16 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
                     doc.load_from_cache();
                     doc.reload_view();
                 });
+                
                 // Display Document
                 var wiki = document.createElement('div');
                 wiki.id = name;
-                wiki.innerHTML = this.to_html();
+                wiki.appendChild(this.to_html());
                 container.appendChild(wiki);
+                
+                // Display annotations
+                // We set a short delay becuase we need to wait for the browser to render the doc first
+                setTimeout(function(){ doc.apply_annotations(wiki)}, 500);
             }, function(data) {
                 container.innerHTML = "Error Loading Document. Status Code: " + data.status;
             });

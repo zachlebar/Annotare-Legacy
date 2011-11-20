@@ -14,3 +14,20 @@ ASSETS_ROOT = os.path.join(PROJECT_ROOT, 'assets')
 TEMPLATES_ROOT = os.path.join(PROJECT_ROOT, 'templates')
 
 DOCUMENT_ROOT = os.path.join(PROJECT_ROOT, 'documents')
+
+# Server Settings
+SERVERS = {
+    'dev': {
+        'host': 'localhost',
+        'port': 8000
+    },
+}
+
+# Environment Setup
+try:
+    from settings_local import *
+except ImportError:
+    env = 'dev'
+
+TARGET_HOST = SERVERS[env]['host']
+PORT = SERVERS[env]['port']
