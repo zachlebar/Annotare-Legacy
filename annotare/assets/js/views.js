@@ -156,6 +156,11 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
                 container.appendChild(toolbar);
                 // Editor
                 var editor = document.createElement('textarea');
+                
+                // Force Editor to be as large as possible
+                var footerHeight = $('footer').outerHeight(true);
+                $(editor).height(window.innerHeight - footerHeight - 7)
+                                
                 editor.innerHTML = this.render();
                 container.appendChild(editor);
             }, function(data){
