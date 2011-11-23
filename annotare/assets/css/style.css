@@ -35,6 +35,13 @@ h1, h2, h3, h4, h5, h6 {
 .clear {
   clear: both; }
 
+.annotation-popover, .annotation {
+  background: #FFF;
+  border: 1px solid #333;
+  position: absolute;
+  right: 0px;
+  width: 316.8px; }
+
 #page-title {
   float: right;
   font-size: 31px;
@@ -43,7 +50,7 @@ h1, h2, h3, h4, h5, h6 {
   top: -28px; }
 
 #content {
-  width: 640px;
+  width: 604.8px;
   float: left;
   padding-top: 30px;
   padding-bottom: 50px;
@@ -57,7 +64,7 @@ h1, h2, h3, h4, h5, h6 {
     background: #FFFF00; }
 
 #sidebar {
-  width: 320px;
+  width: 316.8px;
   float: right;
   padding-top: 30px;
   padding-bottom: 50px; }
