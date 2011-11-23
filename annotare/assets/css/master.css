@@ -9,12 +9,17 @@ MASTER.CSS -- Annotare ❧ For Inquistive Minds
 ------------------------------------------------------------------------------*/
 
 body {
-	background-color: #fdf6e3;
-	color: #586e75;
+	background-color: #FAF8F7;
+	color: #211C18;
 }
 
 a {
-	color: #859900;
+	color: #1F2430;
+	text-decoration: none;
+}
+
+a:hover {
+	background-color: #CCC;
 }
 
 
@@ -30,12 +35,28 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-	font-family: 'Adobe Garamond Pro', 'Times New Roman', Times, serif;
+	font-family: 'Times New Roman', Times, serif;
+	font-weight: normal;
 	margin: 0;
+}
+
+a {
+	margin: 0 1.3em 0 0;
 }
 
 p {
 	line-height: 1.5em;
+}
+
+article h1 {
+	font-size: 4em;
+}
+
+article h2 {
+	font-size: 1.8em;
+	text-transform: uppercase;
+	
+	margin: 1em 0;
 }
 
 
@@ -52,16 +73,27 @@ p {
 
 nav {
 	overflow: auto;
-	background: #073642;
-	border: 1px solid #002b36;
-}
-
-nav a {
-	color: #fdf6e3;
+	padding: 2%;
+	margin: 3% 0 3% 0;
+	border-bottom: 1px solid #211C18; 
 }
 
 nav h1 {
 	float: left;
+	text-transform: uppercase;
+	margin-top: 0.3%;
+	padding-top: 0.5%;
+	border-right: 3px double #211C18;
+}
+
+nav h1 a {
+	font-family: double-pica-1, double-pica-2 !important;
+	font-style: italic;
+}
+
+nav ul {
+	overflow: auto;
+	padding: 0 0 0 2%;
 }
 
 nav ul li {
@@ -69,9 +101,29 @@ nav ul li {
 	float: left;
 }
 
+nav ul li a {
+	text-transform: uppercase;
+	padding: 0.8%;
+}
+
+#tool-bar {
+	padding: 2%;
+	margin: 0 0 4% 0;
+	border-top: 1px solid #211C18;
+	border-bottom: 1px solid #211C18;
+	
+	font-family: museo-sans-1, museo-sans-2;
+	text-transform: uppercase;
+	font-size: 0.85em;
+}
+
+#tool-bar a {
+	padding: 0.8%;
+}
+
 article {
 	width: 66%;
-	border-right: 1px solid #586e75;
+	border-right: 1px solid #211C18;
 	padding-right: 1%;
 	
 	float: left;
@@ -87,8 +139,12 @@ footer {
 	clear: both;
 	
 	margin: 4% 0 8% 0;
-	border-top: 1px solid #586e75;
+	border-top: 1px solid #211C18;
 	padding: 2% 0 0 0;
+	
+	text-transform: uppercase;
+	font-size: 0.9em;
+	word-spacing: 0.5em;
 }
 
 
@@ -106,11 +162,18 @@ footer {
 -- ANNOTATIONS
 ------------------------------------------------------------------------------*/
 
-.highlight {
-	background-color: #6c71c4;
-	color: #eee8d5;
+#tool-bar .active {
+	background-color: #CCC;
 }
 
+.highlight-mode span.highlightable:hover {
+	background-color: #CCC;
+	cursor: pointer;
+}
+
+.highlight {
+	background-color: #91C0EB;
+}
 
 
 
