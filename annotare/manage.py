@@ -18,7 +18,7 @@ def task(help, *args, **kwargs):
 def startserver():
     import views
     from bottle import run
-    run(host=settings.TARGET_HOST, port=settings.PORT)
+    run(host=settings.TARGET_HOST, port=settings.PORT, reloader=True)
     
 @task("Says howdy like a good friend should.")
 def sayhi():

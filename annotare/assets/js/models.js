@@ -75,9 +75,22 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
         },
         // Create New Highlight
         toggle_highlight: function(elem) {
-            var highlight = new Annotation(elem.id, +(new Date()));
-            highlight.apply(document.getElementById(this.name));
-            this.annotations[highlight.hash] = highlight;
+            if ($(elem).hasClass('highlight')) {
+                this.annotations[elem.id].remove();
+                delete this.annotations[elem.id];
+            } else {
+                var highlight = new Annotation(elem.id, +(new Date()));
+                highlight.apply(document.getElementById(this.name));
+                this.annotations[highlight.hash] = highlight;
+            }
+            this.save();
+        },
+        // Create / Edit an annotation
+        annotate: function(elem, text) {
+            var id = elem.id || elem;
+            var note = new Annotation(id, +(new Date()), text);
+            note.apply(document.getElementById(this.name));
+            this.annotations[note.hash] = note;
             this.save();
         },
         // Apply Patches & Annotations and return rendered text
@@ -180,6 +193,9 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
             return ids
         },
         get_element: function(container) {
+            if (this.elem)
+                return this.elem;
+            
             var ids = this.get_all_ids(container);
             // Exact match?
             if (ids.indexOf(this.hash) != -1) {
@@ -190,11 +206,21 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
         },
         apply: function(container) {
             var elem = this.get_element(container);
-            $(elem).addClass('highlight');
+            $(elem).addClass(this.type);
+            if (this.type == 'note') {
+                var note = document.createElement('div')
+                note.id = "note-" + this.hash;
+                $(note).addClass('annotation');
+                note.innerHTML = this.data;
+                $(note).css({
+                    top: $(elem).offset().top
+                });
+                $('#sidebar').append(note);
+            }
         },
         remove: function() {
             var elem = this.get_element();
-            $(elem).removeClass('highlight');
+            $(elem).removeClass(this.type);
         },
         export: function() {
             return {

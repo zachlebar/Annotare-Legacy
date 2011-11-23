@@ -125,9 +125,20 @@ define(['JSON', 'diff_match_patch'], function(JSON, dif){
         }
     }
     
+    function gen_querystring(obj) {
+        var qs = "";
+        for (key in obj) {
+            var value = obj[key] + '';
+            value = escape(value);
+            qs += key + "=" + value + "&";
+        }
+        return qs
+    }
+    
     return {
         cache: cache,
         get_selected_text: get_selected_text,
-        fuzzy_string_search: fuzzy_string_search
+        fuzzy_string_search: fuzzy_string_search,
+        gen_querystring: gen_querystring
     }
 });

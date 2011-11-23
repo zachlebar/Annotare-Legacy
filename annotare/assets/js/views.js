@@ -44,9 +44,8 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
             doc.load(function(data) {
                 // Toolbar
                 container.innerHTML = "";
-                var toolbar = document.createElement('div');
-                toolbar.id = 'tool-bar';
-                container.appendChild(toolbar);
+                var toolbar = document.getElementById('tool-bar');
+                $(toolbar).children().remove();
                 
                 // Edit Option
                 var edit = document.createElement('a');
@@ -100,7 +99,14 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
                 
                 // Display annotations
                 // We set a short delay becuase we need to wait for the browser to render the doc first
-                setTimeout(function(){ doc.apply_annotations(wiki)}, 500);
+                setTimeout(function() {
+                    doc.apply_annotations(wiki);
+                }, 500);
+                
+                // Highlight actions
+                $('.highlightable').live('click', function() {
+                    annotare.router.open_modal('annotate', {'id': this.id});
+                });
             }, function(data) {
                 container.innerHTML = "Error Loading Document. Status Code: " + data.status;
             });
@@ -135,8 +141,8 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
             doc.load(function(data){
                 // Toolbar
                 container.innerHTML = "";
-                var toolbar = document.createElement('div');
-                toolbar.id = 'tool-bar';
+                var toolbar = document.getElementById('tool-bar');
+                $(toolbar).children().remove();
                 var discard = document.createElement('a');
                 discard.href = '#document?name=' + name;
                 discard.innerHTML = 'Discard Changes';
@@ -153,7 +159,6 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
                     var new_text = $(editor).val();
                     doc.new_patch(new_text);
                 });
-                container.appendChild(toolbar);
                 // Editor
                 var editor = document.createElement('textarea');
                 
@@ -227,6 +232,57 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
         $(this.container).remove();
     }
     HistoryView.prototype.restart = function() {
+        return new HistoryView();
+    }
+    
+    
+    /*
+     * Generic Modal Form View
+     * Provides methods for displaying and submiting a modal form
+     * Text Areas, File Uploads not supported
+    */
+    function NoteView() {
+        this.name = "Note"
+        this.display = {
+            format: 'modal',
+            width: 600,
+            height: 450
+        }
+    }
+    NoteView.prototype = new View();
+    NoteView.prototype.load = function(args) {
+        var container = this.container = document.createElement('div');
+        this.container.id = 'note';
+        var name = args.name;
+        if (name) {
+            var self = this;
+            var doc = new models.Doc(name);
+            doc.load(function(data) {
+                var header = document.createElement("h2");
+                header.innerHTML = "Note";
+                self.container.appendChild(header);
+                var textarea = document.createElement('textarea');
+                self.container.appendChild(textarea);
+                var save = document.createElement('button');
+                save.innerHTML = "Save";
+                self.container.appendChild(save);
+                $(save).click(function(){
+                    var text = $(textarea).val();
+                    doc.annotate(args.id, text);
+                    annotare.router.close_modal();
+                    doc.load_from_cache();
+                    doc.reload_view();
+                });
+            });
+        } else {
+            this.container.appendChild(document.createTextNode('Error. Document name not specified.'));
+        }
+        return this.container;
+    }
+    NoteView.prototype.unload = function() {
+        $(this.container).remove();
+    }
+    NoteView.prototype.restart = function() {
         return new HistoryView();
     }
     
@@ -335,7 +391,8 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
         test: new View(),
         doc: new DocumentView(),
         edit: new EditView(),
-        history: new HistoryView()
+        history: new HistoryView(),
+        note: new NoteView()
     };
     return views
 });

@@ -1,5 +1,5 @@
 window.device = 'desktop';
-require(['views'], function main(views) {
+require(['views', 'util'], function main(views, util) {
     // Map hashbangs to views
     window.annotare = annotare = {};
     annotare.views = views;
@@ -7,7 +7,8 @@ require(['views'], function main(views) {
         ['^test$',  annotare.views.test],
         ['^document$', annotare.views.doc],
         ['^edit$', annotare.views.edit],
-        ['^history$', annotare.views.history]
+        ['^history$', annotare.views.history],
+        ['^annotate$', annotare.views.note]
     ]
     
     // Modal Object
@@ -331,7 +332,7 @@ require(['views'], function main(views) {
     
     // Wait for the page to load
     $(document).ready(function(){
-        annotare.router = router = new Router(urls, 'test');
+        annotare.router = router = new Router(urls, 'document');
         router.watch();
     });
 });
