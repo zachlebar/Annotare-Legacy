@@ -44,9 +44,8 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
             doc.load(function(data) {
                 // Toolbar
                 container.innerHTML = "";
-                var toolbar = document.createElement('div');
-                toolbar.id = 'tool-bar';
-                container.appendChild(toolbar);
+                var toolbar = document.getElementById('tool-bar');
+                $(toolbar).children().remove();
                 
                 // Edit Option
                 var edit = document.createElement('a');
@@ -135,8 +134,8 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
             doc.load(function(data){
                 // Toolbar
                 container.innerHTML = "";
-                var toolbar = document.createElement('div');
-                toolbar.id = 'tool-bar';
+                var toolbar = document.getElementById('tool-bar');
+                $(toolbar).children().remove();
                 var discard = document.createElement('a');
                 discard.href = '#document?name=' + name;
                 discard.innerHTML = 'Discard Changes';
@@ -153,7 +152,6 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
                     var new_text = $(editor).val();
                     doc.new_patch(new_text);
                 });
-                container.appendChild(toolbar);
                 // Editor
                 var editor = document.createElement('textarea');
                 editor.innerHTML = this.render();

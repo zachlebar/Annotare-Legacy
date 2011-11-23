@@ -12,8 +12,24 @@
   -mox-border-radius: $rad;
 }
 
+@mixin round_corner($rad, $side) {
+  border-#{$side}-radius: $rad;
+  -webkit-#{$side}-left-radius: $rad;
+  -moz-border-#{$side}-radius: $rad;
+}
+
+@mixin transition() {
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+
+$width: 960px;
+
 body {
-  width: 960px;
+  width: $width;
   margin-left: auto;
   margin-right: auto;
   background: #EEE;
@@ -39,23 +55,23 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-#footer {
-  border-top: 1px solid #999;
-  text-align: center;
-  padding-top: 10px;
-  padding-bottom: 20px;
-  color: #666;
-  font-size: 12px;
+.clear {
+  clear: both;
+}
+
+#page-title {
+  float: right;
+  font-size: modular-scale(2);
+  position: relative;
+  z-index: 6000;
+  top: -28px;
 }
 
 #content {
+  width: $width * (2 / 3);
+  float: left;
+  padding-top: 30px;
   padding-bottom: 50px;
-  #tool-bar {
-    a {
-      padding-left: 10px;
-    }
-    text-align: right;
-  }
   .highlightable {
     padding: 2px;
   }
@@ -64,6 +80,13 @@ h1, h2, h3, h4, h5, h6 {
     background: #FFFF00;
   }
   @include round(10px);
+}
+
+#sidebar {
+  width: $width * (1 / 3);
+  float: right;
+  padding-top: 30px;
+  padding-bottom: 50px;
 }
 
 .highlight-mode {
@@ -115,11 +138,17 @@ div.modal {
 #tool-bar {
   padding: 10px;
   position: fixed;
-  bottom: 50px;
-  right: 100px;
-  background: #EEE;
+  top: 0;
+  width: $width;
+  margin-left: auto;
+  margin-right: auto;
+  background: rgba(255, 255, 255, 0.6);
+  z-index: 5000;
+  @include round_corner(10px, bottom-left);
+  @include round_corner(10px, bottom-right);
   @include shadow(10px, #111);
-  @include round(10px);
+  @include transition();
+  &:hover { background: rgba(255, 255, 255, 0.95); }
   a {
     background: #DDD;
     color: #666;
@@ -138,6 +167,15 @@ div.modal {
       font-weight: bold;
     }
   }
+}
+
+#footer {
+  border-top: 1px solid #999;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  color: #666;
+  font-size: 12px;
 }
 
 

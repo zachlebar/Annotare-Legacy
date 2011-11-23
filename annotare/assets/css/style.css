@@ -32,28 +32,35 @@ h1, h2, h3, h4, h5, h6 {
     h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
       color: black; }
 
-#footer {
-  border-top: 1px solid #999;
-  text-align: center;
-  padding-top: 10px;
-  padding-bottom: 20px;
-  color: #666;
-  font-size: 12px; }
+.clear {
+  clear: both; }
+
+#page-title {
+  float: right;
+  font-size: 31px;
+  position: relative;
+  z-index: 6000;
+  top: -28px; }
 
 #content {
+  width: 640px;
+  float: left;
+  padding-top: 30px;
   padding-bottom: 50px;
   border-radius: 10px;
   -webkit-border-radius: 10px;
   -mox-border-radius: 10px; }
-  #content #tool-bar {
-    text-align: right; }
-    #content #tool-bar a {
-      padding-left: 10px; }
   #content .highlightable {
     padding: 2px; }
   #content .highlight {
     font-style: normal;
     background: #FFFF00; }
+
+#sidebar {
+  width: 320px;
+  float: right;
+  padding-top: 30px;
+  padding-bottom: 50px; }
 
 .highlight-mode .highlightable {
   cursor: pointer; }
@@ -91,15 +98,28 @@ div.modal {
 #tool-bar {
   padding: 10px;
   position: fixed;
-  bottom: 50px;
-  right: 100px;
-  background: #EEE;
+  top: 0;
+  width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+  background: rgba(255, 255, 255, 0.6);
+  z-index: 5000;
+  border-bottom-left-radius: 10px;
+  -webkit-bottom-left-left-radius: 10px;
+  -moz-border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  -webkit-bottom-right-left-radius: 10px;
+  -moz-border-bottom-right-radius: 10px;
   box-shadow: 0 0 10px #111111;
   -webkit-box-shadow: 0 0 10px #111111;
   -moz-box-shadow: 0 0 10px #111111;
-  border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -mox-border-radius: 10px; }
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out; }
+  #tool-bar:hover {
+    background: rgba(255, 255, 255, 0.95); }
   #tool-bar a {
     background: #DDD;
     color: #666;
@@ -119,3 +139,11 @@ div.modal {
     #tool-bar a.active, #tool-bar a:active {
       background: #BBB;
       font-weight: bold; }
+
+#footer {
+  border-top: 1px solid #999;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  color: #666;
+  font-size: 12px; }
