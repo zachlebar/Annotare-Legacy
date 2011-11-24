@@ -1,4 +1,4 @@
-define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, showdown, diff, util) {
+define(['models', 'showdown', 'diff_match_patch', 'util', 'autoresize'], function(models, showdown, diff, util, autoresize) {
     /* 
      * Subclass this to make views
      * Overwrite load and unload methods
@@ -6,7 +6,8 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
     function View() {
         this.name = "Sample";
         this.display = {
-            format: 'fullscreen'
+            format: 'fullscreen',
+            layout: 'two-column'
         };
     }
     View.prototype = {
@@ -31,6 +32,10 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
     */
     function DocumentView() {
         this.name = "Document"
+        this.display = {
+            format: 'fullscreen',
+            layout: 'two-column'
+        }
     }
     DocumentView.prototype = new View();
     DocumentView.prototype.load = function(args) {
@@ -128,6 +133,9 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
     */
     function EditView() {
         this.name = "Edit"
+        this.display = {
+            layout: 'one-column'
+        }
     }
     EditView.prototype = new View();
     EditView.prototype.load = function(args) {
@@ -161,6 +169,10 @@ define(['models', 'showdown', 'diff_match_patch', 'util'], function(models, show
                 });
                 // Editor
                 var editor = document.createElement('textarea');
+                $(editor).autoResize({
+                    extraSpace: 100,
+                    maxHeight: 2000
+                });
                 
                 // Force Editor to be as large as possible
                 var footerHeight = $('footer').outerHeight(true);

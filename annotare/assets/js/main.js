@@ -306,6 +306,10 @@ require(['views', 'util'], function main(views, util) {
                     this.current_view.unload();
                 if (this.current_view_index != undefined)
                     this.urls[this.current_view_index][1] = this.urls[this.current_view_index][1].restart();
+                // Set New Layout
+                var layout = $('#main').attr('data-layout');
+                $('#main').removeClass(layout).addClass(view.display.layout).attr('data-layout', view.display.layout);
+                // Load New View
                 var container = view.load(args);
                 $('#content').append(container);
                 this.current_view = view;

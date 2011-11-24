@@ -2,205 +2,189 @@
 
 MASTER.CSS -- Annotare ❧ For Inquistive Minds
 
-------------------------------------------------------------------------------*/
+To compile this file into css, please run ./compilesass from the project root.
 
+------------------------------------------------------------------------------*/
+@import url(normalize.css);
+/**
+ * Functions and mixins for Annotare
+ */
 /*------------------------------------------------------------------------------
 -- COLOR SCHEME
 ------------------------------------------------------------------------------*/
-
 body {
-	background: #FAF8F7 url("../img/bg.png") repeat;
-	color: #444;
-}
+  background: #faf8f7 url("../img/bg.png") repeat;
+  color: #444; }
 
 a {
-	color: #91C0EB;
-	text-decoration: none;
-}
-
-a:hover {
-	background-color: #CCC;
-}
-
+  color: #91C0EB;
+  text-decoration: none; }
+  a:hover {
+    background-color: #CCC; }
 
 /*------------------------------------------------------------------------------
 -- TYPOGRAPHY
 ------------------------------------------------------------------------------*/
-
 body {
-	font-family: Helvetica, Verdana, sans-serif;
-	font-size: 0.8em;
-	
-	letter-spacing: 0.1em;
-}
+  font-size: 0.813em;
+  line-height: 1.5;
+  font-family: Helvetica, Verdana, sans-serif; }
 
 h1, h2, h3, h4, h5, h6 {
-	font-family: 'Times New Roman', Times, serif;
-	font-weight: normal;
-	margin: 0;
-}
+  font-family: "Times New Roman", Times, serif;
+  font-weight: normal;
+  margin: 0; }
+
+h1 {
+  font-size: 3.444em; }
 
 h2 {
-	font-size: 1.8em;
-	text-transform: uppercase;
-	
-	margin: 1em 0;
-}
+  font-size: 2.128em; }
+
+h3 {
+  font-size: 2.128em; }
+
+h4 {
+  font-size: 1.315em; }
+
+h5 {
+  font-size: 1.315em; }
+
+h6 {
+  font-size: 0.813em; }
+
+h2 {
+  text-transform: uppercase;
+  margin: 1em 0; }
 
 a {
-	margin: 0 1.3em 0 0;
-}
+  margin: 0 1.3em 0 0; }
 
 p {
-	line-height: 1.5em;
-}
+  line-height: 1.5em; }
 
 article h1 {
-	font-size: 4em;
-}
-
+  font-size: 4em; }
 
 /*------------------------------------------------------------------------------
 -- LAYOUT
 ------------------------------------------------------------------------------*/
-
 #main {
-	max-width: 58%;
-	margin: 0 auto;
-	
-	overflow: auto;
-}
+  max-width: 58%;
+  margin: 0 auto;
+  overflow: visible; }
+  #main.one-column article {
+    width: 100%;
+    border-right: none; }
+  #main.one-column aside {
+    width: 0;
+    display: none; }
+  #main.two-column article {
+    width: 66%;
+    border-right: 1px solid #211C18; }
+  #main.two-column aside {
+    width: 31; }
+  #main article {
+    padding-right: 1%;
+    float: left;
+    padding-bottom: 50px;
+    -webkit-transition: width 0.5s ease-in-out;
+    -moz-transition: width 0.5s ease-in-out;
+    -o-transition: width 0.5s ease-in-out;
+    -ms-transition: width 0.5s ease-in-out;
+    transition: width 0.5s ease-in-out; }
+  #main aside {
+    padding-left: 1%;
+    margin-left: 67%;
+    -webkit-transition: width 0.5s ease-in-out;
+    -moz-transition: width 0.5s ease-in-out;
+    -o-transition: width 0.5s ease-in-out;
+    -ms-transition: width 0.5s ease-in-out;
+    transition: width 0.5s ease-in-out; }
 
 nav {
-	overflow: auto;
-	padding: 2%;
-	margin: 3% 0 3% 0;
-	border-bottom: 1px solid #211C18; 
-}
-
-nav a {
-	color: #444;
-}
-
-nav h1 {
-	float: left;
-	text-transform: uppercase;
-	margin-top: 0.3%;
-	padding-top: 0.5%;
-	border-right: 3px double #211C18;
-}
-
-nav h1 a {
-	font-family: double-pica-1, double-pica-2 !important;
-	font-style: italic;
-}
-
-nav ul {
-	overflow: auto;
-	padding: 0 0 0 2%;
-}
-
-nav ul li {
-	display: block;
-	float: left;
-}
-
-nav ul li a {
-	text-transform: uppercase;
-	padding: 0.8%;
-}
+  overflow: auto;
+  padding: 2%;
+  margin: 3% 0 3% 0;
+  border-bottom: 1px solid #211C18; }
+  nav a {
+    color: #444; }
+  nav h1 {
+    float: left;
+    text-transform: uppercase;
+    margin-top: 0.3%;
+    padding-top: 0.5%;
+    border-right: 3px double #211C18; }
+    nav h1 a {
+      font-family: double-pica-1, double-pica-2 !important;
+      font-style: italic; }
+  nav ul {
+    overflow: auto;
+    padding: 0 0 0 2%; }
+    nav ul li {
+      display: block;
+      float: left; }
+      nav ul li a {
+        text-transform: uppercase;
+        padding: 0.8%; }
 
 #tool-bar {
-	padding: 2%;
-	margin: 0 0 4% 0;
-	border-top: 1px solid #211C18;
-	border-bottom: 1px solid #211C18;
-	
-	font-family: museo-sans-1, museo-sans-2;
-	text-transform: uppercase;
-	font-size: 0.85em;
-}
-
-#tool-bar a {
-	padding: 0.8%;
-	color: #444;
-}
-
-article {
-	width: 66%;
-	border-right: 1px solid #211C18;
-	padding-right: 1%;
-	
-	float: left;
-}
-
-aside {
-	width: 31%;
-	padding-left: 1%;
-	margin-left: 67%;
-}
+  padding: 2%;
+  margin: 0 0 4% 0;
+  border-top: 1px solid #211C18;
+  border-bottom: 1px solid #211C18;
+  font-family: museo-sans-1, museo-sans-2;
+  text-transform: uppercase;
+  font-size: 0.85em; }
+  #tool-bar a {
+    padding: 0.8%;
+    color: #444; }
 
 footer {
-	clear: both;
-	
-	margin: 4% 0 8% 0;
-	border-top: 1px solid #211C18;
-	padding: 2% 0 0 0;
-	
-	text-transform: uppercase;
-	font-size: 0.9em;
-	word-spacing: 0.5em;
-}
-
+  clear: both;
+  margin: 4% 0 8% 0;
+  border-top: 1px solid #211C18;
+  padding: 2% 0 0 0;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  word-spacing: 0.5em; }
 
 /*------------------------------------------------------------------------------
 -- EDIT VIEW
 ------------------------------------------------------------------------------*/
-
 #edit textarea {
-	width: 100%;
-	height: 100%;
-}
-
+  box-shadow: 0 0 2px #333333;
+  -webkit-box-shadow: 0 0 2px #333333;
+  -moz-box-shadow: 0 0 2px #333333;
+  width: 100%;
+  border: none;
+  padding: none;
+  margin: none;
+  background: #faf8f7 url("../img/bg.png") repeat;
+  font-size: 1.315em;
+  font-family: Consolas, Incolsolata, monospace;
+  outline: none; }
 
 /*------------------------------------------------------------------------------
 -- MODAL
 ------------------------------------------------------------------------------*/
-
 .modal {
-	background: #FAF8F7;
-	overflow: auto;
-	
-	padding: 3%;
-	-webkit-border-radius: 20px;
-}
-
-.modal textarea {
-	width: 100%;
-	height: 100%;
-}
-
-.modal h2 {
-	margin-top: 0;
-}
-
+  background: #FAF8F7;
+  overflow: auto;
+  padding: 3%;
+  -webkit-border-radius: 20px; }
+  .modal h2 {
+    margin-top: 0; }
 
 /*------------------------------------------------------------------------------
 -- ANNOTATIONS
 ------------------------------------------------------------------------------*/
-
 #tool-bar .active {
-	background-color: #CCC;
-}
+  background-color: #CCC; }
 
 .highlight-mode span.highlightable:hover {
-	background-color: #CCC;
-	cursor: pointer;
-}
+  background-color: #CCC;
+  cursor: pointer; }
 
 .highlight {
-	background-color: #91C0EB;
-}
-
-
-
+  background-color: #91C0EB; }

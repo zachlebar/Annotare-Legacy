@@ -1,0 +1,29 @@
+/**
+ * Functions and mixins for Annotare
+ */
+ 
+@mixin shadow($blur, $color) {
+  box-shadow: 0 0 $blur $color;
+  -webkit-box-shadow: 0 0 $blur $color;
+  -moz-box-shadow: 0 0 $blur $color;
+}
+
+@mixin round($rad) {
+  border-radius: $rad;
+  -webkit-border-radius: $rad;
+  -mox-border-radius: $rad;
+}
+
+@mixin round_corner($rad, $corner) {
+  border-#{$corner}-radius: $rad;
+  -webkit-#{$corner}-left-radius: $rad;
+  -moz-border-#{$corner}-radius: $rad;
+}
+
+@mixin transition($prop, $dur: 0.5s) {
+  -webkit-transition: $prop $dur ease-in-out;
+  -moz-transition: $prop $dur ease-in-out;
+  -o-transition: $prop $dur ease-in-out;
+  -ms-transition: $prop $dur ease-in-out;
+  transition: $prop $dur ease-in-out;
+}

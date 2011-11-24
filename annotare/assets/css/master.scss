@@ -1,0 +1,251 @@
+/*------------------------------------------------------------------------------
+
+MASTER.CSS -- Annotare ❧ For Inquistive Minds
+
+To compile this file into css, please run ./compilesass from the project root.
+
+------------------------------------------------------------------------------*/
+
+@import 'normalize.css';
+@import 'modular-scale/modular-scale.sass';
+@import 'functions.scss';
+
+$base-size: 0.813em;
+
+$page-background: #FAF8F7 url("../img/bg.png") repeat;
+
+$sans: Helvetica, Verdana, sans-serif;
+$serif: 'Times New Roman', Times, serif;
+$code: Consolas, Incolsolata, monospace;
+
+/*------------------------------------------------------------------------------
+-- COLOR SCHEME
+------------------------------------------------------------------------------*/
+
+body {
+	background: $page-background;
+	color: #444;
+}
+
+a {
+	color: #91C0EB;
+	text-decoration: none;
+  &:hover {
+	  background-color: #CCC;
+  }
+}
+
+
+/*------------------------------------------------------------------------------
+-- TYPOGRAPHY
+------------------------------------------------------------------------------*/
+
+body {
+	font-size: modular-scale(0);
+	line-height: 1.5;
+	font-family: $sans;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: $serif;
+	font-weight: normal;
+	margin: 0;
+}
+
+h1 { font-size: modular-scale(3); }
+h2 { font-size: modular-scale(2); }
+h3 { font-size: modular-scale(2); }
+h4 { font-size: modular-scale(1); }
+h5 { font-size: modular-scale(1); }
+h6 { font-size: modular-scale(0); }
+
+h2 {
+	text-transform: uppercase;	
+	margin: 1em 0;
+}
+
+a {
+	margin: 0 1.3em 0 0;
+}
+
+p {
+	line-height: 1.5em;
+}
+
+article {
+  h1 {
+	  font-size: 4em;
+  }
+}
+
+
+/*------------------------------------------------------------------------------
+-- LAYOUT
+------------------------------------------------------------------------------*/
+
+#main {
+	max-width: 58%;
+	margin: 0 auto;
+	
+	overflow: visible;
+	
+	&.one-column {
+	  article {
+	    width: 100%;
+	    border-right: none;
+	  }
+    aside { width: 0; display:none; }
+	}
+	&.two-column {
+	  article {
+	    width: 66%;
+	    border-right: 1px solid #211C18;
+	  }
+    aside { width: 31; }
+	}
+	
+	article {
+  	padding-right: 1%;
+  	float: left;
+  	padding-bottom: 50px;
+  	@include transition(width);
+  }
+
+  aside {
+  	padding-left: 1%;
+  	margin-left: 67%;
+  	@include transition(width);
+  }
+}
+
+nav {
+	overflow: auto;
+	padding: 2%;
+	margin: 3% 0 3% 0;
+	border-bottom: 1px solid #211C18;
+	
+	a {
+    color: #444;
+  }
+  
+  h1 {
+    float: left;
+	  text-transform: uppercase;
+	  margin-top: 0.3%;
+	  padding-top: 0.5%;
+	  border-right: 3px double #211C18;
+	  
+	  a {
+      font-family: double-pica-1, double-pica-2 !important;
+	    font-style: italic;
+    }
+  }
+  
+  ul {
+    overflow: auto;
+	  padding: 0 0 0 2%;
+	  
+	  li {
+      display: block;
+	    float: left;
+	    
+	    a {
+      text-transform: uppercase;
+	    padding: 0.8%;
+      }
+    }
+  }
+}
+
+#tool-bar {
+	padding: 2%;
+	margin: 0 0 4% 0;
+	border-top: 1px solid #211C18;
+	border-bottom: 1px solid #211C18;
+	
+	font-family: museo-sans-1, museo-sans-2;
+	text-transform: uppercase;
+	font-size: 0.85em;
+  
+  a {
+	  padding: 0.8%;
+	  color: #444;
+  }
+}
+
+footer {
+	clear: both;
+	
+	margin: 4% 0 8% 0;
+	border-top: 1px solid #211C18;
+	padding: 2% 0 0 0;
+	
+	text-transform: uppercase;
+	font-size: 0.9em;
+	word-spacing: 0.5em;
+}
+
+
+/*------------------------------------------------------------------------------
+-- EDIT VIEW
+------------------------------------------------------------------------------*/
+
+#edit { 
+  textarea {
+    @include shadow(2px, #333);
+    width: 100%;
+	  border: none;
+	  padding: none;
+	  margin: none;
+	  background: $page-background;
+	  font-size: modular-scale(1);
+	  font-family: $code;
+	  outline: none;
+  }
+}
+
+
+/*------------------------------------------------------------------------------
+-- MODAL
+------------------------------------------------------------------------------*/
+
+.modal {
+	background: #FAF8F7;
+	overflow: auto;
+	
+	padding: 3%;
+	-webkit-border-radius: 20px;
+
+  h2 {
+	  margin-top: 0;
+  }
+}
+
+
+/*------------------------------------------------------------------------------
+-- ANNOTATIONS
+------------------------------------------------------------------------------*/
+
+#tool-bar {
+  .active {
+	  background-color: #CCC;
+  }
+}
+
+.highlight-mode {
+  span {
+    &.highlightable {
+      &:hover {
+        background-color: #CCC;
+	      cursor: pointer;
+      }
+    }
+  }
+}
+
+.highlight {
+	background-color: #91C0EB;
+}
+
+
+
