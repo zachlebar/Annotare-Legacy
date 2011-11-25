@@ -10,40 +10,27 @@ To compile this file into css, please run ./compilesass from the project root.
 @import 'modular-scale/modular-scale.sass';
 @import 'functions.scss';
 
+/*------------------------------------------------------------------------------
+-- BASE STYLES
+------------------------------------------------------------------------------*/
+
 $base-size: 0.813em;
 
 $page-background: #FAF8F7 url("../img/bg.png") repeat;
 
-$sans: Helvetica, Verdana, sans-serif;
-$serif: 'Times New Roman', Times, serif;
+$sans: 'Myriad Pro', sans-serif;
+$serif: old-standard-1, old-standard-2, 'Times New Roman', Times, serif;
 $code: Consolas, Incolsolata, monospace;
-
-/*------------------------------------------------------------------------------
--- COLOR SCHEME
-------------------------------------------------------------------------------*/
 
 body {
 	background: $page-background;
 	color: #444;
-}
-
-a {
-	color: #91C0EB;
-	text-decoration: none;
-  &:hover {
-	  background-color: #CCC;
-  }
-}
-
-
-/*------------------------------------------------------------------------------
--- TYPOGRAPHY
-------------------------------------------------------------------------------*/
-
-body {
+	
 	font-size: modular-scale(0);
 	line-height: 1.5;
 	font-family: $sans;
+	
+	margin: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -53,132 +40,170 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 { font-size: modular-scale(3); }
-h2 { font-size: modular-scale(2); }
+h2 { 
+	font-size: modular-scale(2); 
+	margin: 1em 0;
+}
 h3 { font-size: modular-scale(2); }
 h4 { font-size: modular-scale(1); }
 h5 { font-size: modular-scale(1); }
 h6 { font-size: modular-scale(0); }
 
-h2 {
-	text-transform: uppercase;	
-	margin: 1em 0;
-}
-
 a {
-	margin: 0 1.3em 0 0;
+	color: #91C0EB;
+	text-decoration: none;
+  &:hover {
+	  background-color: rgba(68, 68, 68, 0.3);
+  }
 }
 
 p {
 	line-height: 1.5em;
 }
 
-article {
-  h1 {
-	  font-size: 4em;
-  }
-}
-
-
-/*------------------------------------------------------------------------------
--- LAYOUT
-------------------------------------------------------------------------------*/
-
-#main {
-	max-width: 58%;
+.wrap {
+	max-width: 64%;
 	margin: 0 auto;
 	
-	overflow: visible;
-	
-	&.one-column {
-	  article {
-	    width: 100%;
-	    border-right: none;
-	  }
-    aside { width: 0; display:none; }
-	}
-	&.two-column {
-	  article {
-	    width: 66%;
-	    border-right: 1px solid #211C18;
-	  }
-    aside { width: 31; }
-	}
-	
-	article {
-  	padding-right: 1%;
-  	float: left;
-  	padding-bottom: 50px;
-  	@include transition(width);
-  }
-
-  aside {
-  	padding-left: 1%;
-  	margin-left: 67%;
-  	@include transition(width);
-  }
+	overflow: auto;
 }
 
-nav {
-	overflow: auto;
-	padding: 2%;
-	margin: 3% 0 3% 0;
-	border-bottom: 1px solid #211C18;
-	
-	a {
-    color: #444;
-  }
-  
-  h1 {
-    float: left;
-	  text-transform: uppercase;
-	  margin-top: 0.3%;
-	  padding-top: 0.5%;
-	  border-right: 3px double #211C18;
-	  
-	  a {
-      font-family: double-pica-1, double-pica-2 !important;
-	    font-style: italic;
-    }
-  }
-  
-  ul {
-    overflow: auto;
-	  padding: 0 0 0 2%;
-	  
-	  li {
-      display: block;
-	    float: left;
-	    
-	    a {
-      text-transform: uppercase;
-	    padding: 0.8%;
-      }
-    }
-  }
+/*------------------------------------------------------------------------------
+-- HEADER
+------------------------------------------------------------------------------*/
+
+header {
+	nav {
+		overflow: auto;
+		padding: 1% 2% 1% 0;
+		
+		max-width: 65%;
+		margin: 0 auto;
+		
+		a {
+			color: #444;
+		}
+		
+		h1 {
+			float: left;
+			border-right: 3px double #211C18;
+			margin: 0.3% 1% 0 1%;
+			padding: 0.7% 0.35em 0 0;
+			
+			font-size: modular-scale(2);
+			text-transform: uppercase;
+			
+			a {
+				font-family: old-standard-1, old-standard-2 !important;
+				display: block;
+				margin: 0;
+				padding: 0 0.7em;
+			}
+		}
+		
+		ul {
+			overflow: auto;
+			margin: 0.8% 1.3% 1.3% 1.3%;
+			padding: 0;
+			
+			li {
+				display: block;
+				float: left;
+				
+				a {
+					text-transform: uppercase;
+					
+					display: block;
+					padding: 1em;
+				}
+			}
+		}
+	}
+}
+
+/*------------------------------------------------------------------------------
+-- TOOLBAR
+------------------------------------------------------------------------------*/
+
+.tool-bar-wrap {
+	border-top: 1px solid rgba(250, 248, 247, 0.4);
+	border-bottom: 1px solid rgba(250, 248, 247, 0.4);
+	-webkit-box-shadow: 0 -1px 0 #211C18, 0 1px 0 #211C18;
+	background-color: rgba(68, 68, 68, 0.35);
+	margin: 0 0 2% 0;
 }
 
 #tool-bar {
-	padding: 2%;
-	margin: 0 0 4% 0;
-	border-top: 1px solid #211C18;
-	border-bottom: 1px solid #211C18;
+	max-width: 66%;
+	padding: 1%;
+	margin: 0 auto;
 	
 	font-family: museo-sans-1, museo-sans-2;
 	text-transform: uppercase;
 	font-size: 0.85em;
-  
-  a {
-	  padding: 0.8%;
-	  color: #444;
-  }
+	
+	a {
+		padding: 1.1% 0.5% 0.8% 0.5%;
+		margin: 0 1.5%;
+		color: rgba(33, 28, 24, 0.7);
+		
+		&:hover {
+			background-color: transparent;
+			-webkit-box-shadow: 0 2px 0 rgba(33, 28, 24, 0.65);
+		}
+	}
+	
+	.active {
+		background-color: transparent;
+		-webkit-box-shadow: 0 2px 0 rgba(96, 141, 182, 1);
+	}
 }
+
+/*------------------------------------------------------------------------------
+-- DOCUMENT
+------------------------------------------------------------------------------*/
+
+.one-column {
+	article {
+    	width: 100%;
+    	border-right: none;
+	}
+    
+    aside { 
+    	width: 0; 
+    	display:none; 
+    }
+}
+
+.two-column {
+	article {
+		width: 66%;
+		border-right: 1px solid #211C18;
+		padding-right: 2%;
+		
+		float: left;
+		
+		@include transition(width);
+	}
+	
+	aside { 
+		width: 30%; 
+		margin-left: 69%;
+		
+		@include transition(width);
+	}
+}
+
+/*------------------------------------------------------------------------------
+-- FOOTER
+------------------------------------------------------------------------------*/
 
 footer {
 	clear: both;
 	
 	margin: 4% 0 8% 0;
-	border-top: 1px solid #211C18;
-	padding: 2% 0 0 0;
+	border-top: 3px double #211C18;
+	padding: 1% 0 0 0;
 	
 	text-transform: uppercase;
 	font-size: 0.9em;
@@ -192,7 +217,7 @@ footer {
 
 #edit { 
   textarea {
-    @include shadow(2px, #333);
+/*    @include shadow(2px, #333); -- put back for debugging if you need to */
     width: 100%;
 	  border: none;
 	  padding: none;
@@ -226,12 +251,6 @@ footer {
 -- ANNOTATIONS
 ------------------------------------------------------------------------------*/
 
-#tool-bar {
-  .active {
-	  background-color: #CCC;
-  }
-}
-
 .highlight-mode {
   span {
     &.highlightable {
@@ -245,6 +264,8 @@ footer {
 
 .highlight {
 	background-color: #91C0EB;
+	padding: 0.2em 0.2em 0.2em 0.3em;
+	margin-right: 0.3em;
 }
 
 

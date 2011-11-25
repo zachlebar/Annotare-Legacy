@@ -10,28 +10,18 @@ To compile this file into css, please run ./compilesass from the project root.
  * Functions and mixins for Annotare
  */
 /*------------------------------------------------------------------------------
--- COLOR SCHEME
+-- BASE STYLES
 ------------------------------------------------------------------------------*/
 body {
   background: #faf8f7 url("../img/bg.png") repeat;
-  color: #444; }
-
-a {
-  color: #91C0EB;
-  text-decoration: none; }
-  a:hover {
-    background-color: #CCC; }
-
-/*------------------------------------------------------------------------------
--- TYPOGRAPHY
-------------------------------------------------------------------------------*/
-body {
+  color: #444;
   font-size: 0.813em;
   line-height: 1.5;
-  font-family: Helvetica, Verdana, sans-serif; }
+  font-family: "Myriad Pro", sans-serif;
+  margin: 0; }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Times New Roman", Times, serif;
+  font-family: old-standard-1, old-standard-2, "Times New Roman", Times, serif;
   font-weight: normal;
   margin: 0; }
 
@@ -39,7 +29,8 @@ h1 {
   font-size: 3.444em; }
 
 h2 {
-  font-size: 2.128em; }
+  font-size: 2.128em;
+  margin: 1em 0; }
 
 h3 {
   font-size: 2.128em; }
@@ -53,98 +44,119 @@ h5 {
 h6 {
   font-size: 0.813em; }
 
-h2 {
-  text-transform: uppercase;
-  margin: 1em 0; }
-
 a {
-  margin: 0 1.3em 0 0; }
+  color: #91C0EB;
+  text-decoration: none; }
+  a:hover {
+    background-color: rgba(68, 68, 68, 0.3); }
 
 p {
   line-height: 1.5em; }
 
-article h1 {
-  font-size: 4em; }
+.wrap {
+  max-width: 64%;
+  margin: 0 auto;
+  overflow: auto; }
 
 /*------------------------------------------------------------------------------
--- LAYOUT
+-- HEADER
 ------------------------------------------------------------------------------*/
-#main {
-  max-width: 58%;
-  margin: 0 auto;
-  overflow: visible; }
-  #main.one-column article {
-    width: 100%;
-    border-right: none; }
-  #main.one-column aside {
-    width: 0;
-    display: none; }
-  #main.two-column article {
-    width: 66%;
-    border-right: 1px solid #211C18; }
-  #main.two-column aside {
-    width: 31; }
-  #main article {
-    padding-right: 1%;
-    float: left;
-    padding-bottom: 50px;
-    -webkit-transition: width 0.5s ease-in-out;
-    -moz-transition: width 0.5s ease-in-out;
-    -o-transition: width 0.5s ease-in-out;
-    -ms-transition: width 0.5s ease-in-out;
-    transition: width 0.5s ease-in-out; }
-  #main aside {
-    padding-left: 1%;
-    margin-left: 67%;
-    -webkit-transition: width 0.5s ease-in-out;
-    -moz-transition: width 0.5s ease-in-out;
-    -o-transition: width 0.5s ease-in-out;
-    -ms-transition: width 0.5s ease-in-out;
-    transition: width 0.5s ease-in-out; }
-
-nav {
+header nav {
   overflow: auto;
-  padding: 2%;
-  margin: 3% 0 3% 0;
-  border-bottom: 1px solid #211C18; }
-  nav a {
+  padding: 1% 2% 1% 0;
+  max-width: 65%;
+  margin: 0 auto; }
+  header nav a {
     color: #444; }
-  nav h1 {
+  header nav h1 {
     float: left;
-    text-transform: uppercase;
-    margin-top: 0.3%;
-    padding-top: 0.5%;
-    border-right: 3px double #211C18; }
-    nav h1 a {
-      font-family: double-pica-1, double-pica-2 !important;
-      font-style: italic; }
-  nav ul {
+    border-right: 3px double #211C18;
+    margin: 0.3% 1% 0 1%;
+    padding: 0.7% 0.35em 0 0;
+    font-size: 2.128em;
+    text-transform: uppercase; }
+    header nav h1 a {
+      font-family: old-standard-1, old-standard-2 !important;
+      display: block;
+      margin: 0;
+      padding: 0 0.7em; }
+  header nav ul {
     overflow: auto;
-    padding: 0 0 0 2%; }
-    nav ul li {
+    margin: 0.8% 1.3% 1.3% 1.3%;
+    padding: 0; }
+    header nav ul li {
       display: block;
       float: left; }
-      nav ul li a {
+      header nav ul li a {
         text-transform: uppercase;
-        padding: 0.8%; }
+        display: block;
+        padding: 1em; }
+
+/*------------------------------------------------------------------------------
+-- TOOLBAR
+------------------------------------------------------------------------------*/
+.tool-bar-wrap {
+  border-top: 1px solid rgba(250, 248, 247, 0.4);
+  border-bottom: 1px solid rgba(250, 248, 247, 0.4);
+  -webkit-box-shadow: 0 -1px 0 #211c18, 0 1px 0 #211c18;
+  background-color: rgba(68, 68, 68, 0.35);
+  margin: 0 0 2% 0; }
 
 #tool-bar {
-  padding: 2%;
-  margin: 0 0 4% 0;
-  border-top: 1px solid #211C18;
-  border-bottom: 1px solid #211C18;
+  max-width: 66%;
+  padding: 1%;
+  margin: 0 auto;
   font-family: museo-sans-1, museo-sans-2;
   text-transform: uppercase;
   font-size: 0.85em; }
   #tool-bar a {
-    padding: 0.8%;
-    color: #444; }
+    padding: 1.1% 0.5% 0.8% 0.5%;
+    margin: 0 1.5%;
+    color: rgba(33, 28, 24, 0.7); }
+    #tool-bar a:hover {
+      background-color: transparent;
+      -webkit-box-shadow: 0 2px 0 rgba(33, 28, 24, 0.65); }
+  #tool-bar .active {
+    background-color: transparent;
+    -webkit-box-shadow: 0 2px 0 #608db6; }
 
+/*------------------------------------------------------------------------------
+-- DOCUMENT
+------------------------------------------------------------------------------*/
+.one-column article {
+  width: 100%;
+  border-right: none; }
+.one-column aside {
+  width: 0;
+  display: none; }
+
+.two-column article {
+  width: 66%;
+  border-right: 1px solid #211C18;
+  padding-right: 2%;
+  float: left;
+  -webkit-transition: width 0.5s ease-in-out;
+  -moz-transition: width 0.5s ease-in-out;
+  -o-transition: width 0.5s ease-in-out;
+  -ms-transition: width 0.5s ease-in-out;
+  transition: width 0.5s ease-in-out; }
+.two-column aside {
+  width: 30%;
+  margin-left: 69%;
+  -webkit-transition: width 0.5s ease-in-out;
+  -moz-transition: width 0.5s ease-in-out;
+  -o-transition: width 0.5s ease-in-out;
+  -ms-transition: width 0.5s ease-in-out;
+  transition: width 0.5s ease-in-out; }
+
+/*------------------------------------------------------------------------------
+-- FOOTER
+------------------------------------------------------------------------------*/
 footer {
   clear: both;
   margin: 4% 0 8% 0;
-  border-top: 1px solid #211C18;
-  padding: 2% 0 0 0;
+  border-top: 3px double #211C18;
+  padding: 1% 0 0 0;
   text-transform: uppercase;
   font-size: 0.9em;
   word-spacing: 0.5em; }
@@ -153,9 +165,7 @@ footer {
 -- EDIT VIEW
 ------------------------------------------------------------------------------*/
 #edit textarea {
-  box-shadow: 0 0 2px #333333;
-  -webkit-box-shadow: 0 0 2px #333333;
-  -moz-box-shadow: 0 0 2px #333333;
+  /*    @include shadow(2px, #333); -- put back for debugging if you need to */
   width: 100%;
   border: none;
   padding: none;
@@ -179,12 +189,11 @@ footer {
 /*------------------------------------------------------------------------------
 -- ANNOTATIONS
 ------------------------------------------------------------------------------*/
-#tool-bar .active {
-  background-color: #CCC; }
-
 .highlight-mode span.highlightable:hover {
   background-color: #CCC;
   cursor: pointer; }
 
 .highlight {
-  background-color: #91C0EB; }
+  background-color: #91C0EB;
+  padding: 0.2em 0.2em 0.2em 0.3em;
+  margin-right: 0.3em; }
