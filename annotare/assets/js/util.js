@@ -52,6 +52,21 @@ define(['JSON', 'diff_match_patch'], function(JSON, dif){
                     self.get(data[i]);
                 }
             }, annotare.server.offline);
+        },
+        save_all: function() {
+            // Save all docs in localStorage to server
+            for (key in localStorage) {
+                if (key.indexOf('annotare-') != -1) {
+                    $.ajax({
+                        url: '/json/' + key,
+                        type: 'POST',
+                        processData: false,
+                        data: localStorage[key],
+                        success: annotare.server.online,
+                        error: annotare.server.offline
+                    });
+                }
+            }
         }
     }
     

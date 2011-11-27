@@ -14,9 +14,10 @@ require(['views', 'util'], function main(views, util) {
     ]
     
     // Server Status
-    function ServerStatus() {};
+    function ServerStatus() {
+        this.status = true;
+    };
     ServerStatus.prototype = {
-        status: true,
         online: function() {
             annotare.server.status = true;
             $('#status').removeClass('offline').addClass('online');
