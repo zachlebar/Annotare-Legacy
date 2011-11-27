@@ -8,12 +8,8 @@ define(['JSON', 'diff_match_patch'], function(JSON, dif){
                 type: 'POST',
                 processData: false,
                 data: ser,
-                success: function(data) {
-                    console.log('Saved.');
-                },
-                error: function(data) {
-                    console.log('Error code: ' + data.status);
-                }
+                success: annotare.server.online,
+                error: annotare.server.offline
             });
         },
         get: function(key) {
@@ -23,11 +19,11 @@ define(['JSON', 'diff_match_patch'], function(JSON, dif){
                 async: false,
                 dataType: 'text',
                 success: function(data) {
-                    localStorage['annotare-' + key] = data
+                    localStorage['annotare-' + key] = data;
+                    annotare.server.online();
+                    console.log('updated ' + key);
                 },
-                error: function(data) {
-                    console.log('Error code: ' + data.status);
-                }
+                error: annotare.server.offline
             });
             var ser = localStorage['annotare-' + key];
             return JSON.parse(ser);
@@ -41,9 +37,21 @@ define(['JSON', 'diff_match_patch'], function(JSON, dif){
                 dataType: 'json',
                 success: function(data) {
                     exists = true;
-                }
+                    annotare.server.online();
+                },
+                error: annotare.server.offline
             });
             return exists;
+        },
+        update_all: function() {
+            // Cache all available documents from the server
+            var self = this;
+            $.getJSON('/json/list/', function(data){
+                annotare.server.online();
+                for (var i=0; i<data.length; i++) {
+                    self.get(data[i]);
+                }
+            }, annotare.server.offline);
         }
     }
     
@@ -134,6 +142,35 @@ define(['JSON', 'diff_match_patch'], function(JSON, dif){
         }
         return qs
     }
+    
+    
+    $('input, textarea').live('focus', function(){
+        var placeholder = $(this).attr('data-placeholder');
+        if ($(this).val() == placeholder) {
+            $(this).val('').removeClass('placeholder');
+        }
+    });
+    $('input, textarea').live('blur', function(){
+        var placeholder = $(this).attr('data-placeholder');
+        if ($(this).val() == placeholder || $(this).val().length == 0) {
+            $(this).val(placeholder).addClass('placeholder');
+        }
+    });
+    $('input, textarea').live('submit', function(){
+        var placeholder = $(this).attr('data-placeholder');
+        if ($(this).val() == placeholder) {
+            $(this).val('').removeClass('placeholder');
+        }
+    });
+    
+    window.thhgttg = "Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the \
+Galaxy lies a small unregarded yellow sun. \n\nOrbiting this at a distance of roughly ninety-eight million miles is an utterly \
+insignificant little blue-green planet whose ape-descended life forms are so amazingly primitive that they still think digital \
+watches are a pretty neat idea. \n\nThis planet has — or rather had — a problem, which was this: most of the people living on it \
+were unhappy for pretty much all of the time. Many solutions were suggested for this problem, but most of these were largely \
+concerned with the movement of small green pieces of paper, which was odd because on the whole it wasn't the small green pieces \
+of paper that were unhappy...";
+    
     
     return {
         cache: cache,

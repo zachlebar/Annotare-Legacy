@@ -8,8 +8,25 @@ require(['views', 'util'], function main(views, util) {
         ['^document$', annotare.views.doc],
         ['^edit$', annotare.views.edit],
         ['^history$', annotare.views.history],
-        ['^annotate$', annotare.views.note]
+        ['^annotate$', annotare.views.note],
+        ['^new$', annotare.views.new_doc],
+        ['^home$', annotare.views.list_docs]
     ]
+    
+    // Server Status
+    function ServerStatus() {};
+    ServerStatus.prototype = {
+        status: true,
+        online: function() {
+            annotare.server.status = true;
+            $('#status').removeClass('offline').addClass('online');
+        },
+        offline: function() {
+            annotare.server.status = false;
+            $('#status').removeClass('online').addClass('offline');
+        }
+    };
+    annotare.server = new ServerStatus();
     
     // Modal Object
     function Modal(container, view, index) {
@@ -336,7 +353,7 @@ require(['views', 'util'], function main(views, util) {
     
     // Wait for the page to load
     $(document).ready(function(){
-        annotare.router = router = new Router(urls, 'document');
+        annotare.router = router = new Router(urls, 'home');
         router.watch();
     });
 });

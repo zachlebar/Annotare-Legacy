@@ -6,7 +6,6 @@ To compile this file into css, please run ./compilesass from the project root.
 
 ------------------------------------------------------------------------------*/
 
-@import 'normalize.css';
 @import 'modular-scale/modular-scale.sass';
 @import 'functions.scss';
 
@@ -17,6 +16,11 @@ To compile this file into css, please run ./compilesass from the project root.
 $base-size: 0.813em;
 
 $page-background: #FAF8F7 url("../img/bg.png") repeat;
+$font-color: #444;
+
+$dark-gray: rgba(68, 68, 68, 0.35);
+$red: #CC0000;
+$green: #00CC00;
 
 $sans: 'Myriad Pro', sans-serif;
 $serif: old-standard-1, old-standard-2, 'Times New Roman', Times, serif;
@@ -24,7 +28,7 @@ $code: Consolas, Incolsolata, monospace;
 
 body {
 	background: $page-background;
-	color: #444;
+	color: $font-color;
 	
 	font-size: modular-scale(0);
 	line-height: 1.5;
@@ -49,6 +53,26 @@ h4 { font-size: modular-scale(1); }
 h5 { font-size: modular-scale(1); }
 h6 { font-size: modular-scale(0); }
 
+input {
+  color: $font-color;
+  border-radius: 5px;
+  padding: 5px 10px;
+  border: 1px solid lighten($font-color, 20%);;
+  outline: none;
+  font-size: modular-scale(1);
+  font-family: $code;
+  margin-bottom: 20px;
+  &.placeholder {
+    color: lighten($font-color, 20%);
+  }
+}
+
+textarea {
+  &.placeholder {
+    color: lighten($font-color, 20%) !important;
+  }
+}
+
 a {
 	color: #91C0EB;
 	text-decoration: none;
@@ -59,6 +83,27 @@ a {
 
 p {
 	line-height: 1.5em;
+}
+
+#status {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 2px 10px;
+  border-bottom-left-radius: 10px;
+  box-shadow: 0 0 5px $font-color;
+  &.online {
+    background: $green;
+    #online { display: inline; }
+    #offline { display: none; }
+  }
+  
+  &.offline {
+    background: $red;
+    color: white;
+    #online { display: none; }
+    #offline { display: inline; }
+  }
 }
 
 .wrap {
@@ -129,7 +174,7 @@ header {
 	border-top: 1px solid rgba(250, 248, 247, 0.4);
 	border-bottom: 1px solid rgba(250, 248, 247, 0.4);
 	-webkit-box-shadow: 0 -1px 0 #211C18, 0 1px 0 #211C18;
-	background-color: rgba(68, 68, 68, 0.35);
+	background-color: $dark-gray;
 	margin: 0 0 2% 0;
 }
 
@@ -151,11 +196,10 @@ header {
 			background-color: transparent;
 			-webkit-box-shadow: 0 2px 0 rgba(33, 28, 24, 0.65);
 		}
-	}
-	
-	.active {
-		background-color: transparent;
-		-webkit-box-shadow: 0 2px 0 rgba(96, 141, 182, 1);
+		
+		&.active {
+		  -webkit-box-shadow: 0 2px 0 rgba(33, 28, 24, 0.65), 0 -2px 0 rgba(33, 28, 24, 0.65);
+	  }
 	}
 }
 
@@ -167,11 +211,15 @@ header {
 	article {
     	width: 100%;
     	border-right: none;
+    	
+    	@include transition(width);
 	}
     
     aside { 
     	width: 0; 
     	display:none; 
+    	
+    	@include transition(width);
     }
 }
 
@@ -215,17 +263,50 @@ footer {
 -- EDIT VIEW
 ------------------------------------------------------------------------------*/
 
-#edit { 
+#edit, #new {
+  input {
+    width: 80%;
+  }
   textarea {
-/*    @include shadow(2px, #333); -- put back for debugging if you need to */
+    min-height: 500px;
     width: 100%;
 	  border: none;
-	  padding: none;
-	  margin: none;
+	  padding: 0;
+	  margin: 0;
 	  background: $page-background;
-	  font-size: 0.9em;
+	  font-size: modular-scale(1);
 	  font-family: $code;
+	  color: $font-color;
 	  outline: none;
+  }
+}
+
+
+/*------------------------------------------------------------------------------
+-- EDIT VIEW
+------------------------------------------------------------------------------*/
+
+#list_docs {
+  .document {
+    background: white;
+    box-shadow: -2px 2px 10px #111;
+    border-radius: 5px;
+    float: left;
+    width: 280px;
+    height: 280px;
+    overflow: hidden;
+    border: 1px solid $font-color;
+    padding: 0 20px;
+    margin: 10px;
+    cursor: pointer;
+    @include transition(all);
+    
+    &:hover {
+      -webkit-transform: rotate(2deg);
+      position: relative;
+      z-index: 2000;
+      cursor: pointer;
+    }
   }
 }
 

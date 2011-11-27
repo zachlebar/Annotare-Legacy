@@ -17,7 +17,8 @@ def task(help, *args, **kwargs):
 @task("Starts a development server on http://%s:%s" % (settings.TARGET_HOST, settings.PORT))
 def startserver():
     import views
-    from bottle import run
+    from bottle import run, debug
+    debug(mode=True)
     run(host=settings.TARGET_HOST, port=settings.PORT, reloader=True)
     
 @task("Says howdy like a good friend should.")

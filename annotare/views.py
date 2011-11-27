@@ -64,7 +64,12 @@ def json_exists(key):
     filename = os.path.join(settings.DOCUMENT_ROOT, filename)
     return simplejson.dumps({'exists': os.path.exists(filename)})
         
-    
+@bottle.route('/json/list/', method="GET")
+def list_documents():
+    documents = os.listdir(settings.DOCUMENT_ROOT)
+    documents = filter(lambda item: item.endswith('.json'), documents)
+    documents = map(lambda item: '.'.join(item.split('.')[:-1]), documents)
+    return simplejson.dumps(documents)
     
     
     

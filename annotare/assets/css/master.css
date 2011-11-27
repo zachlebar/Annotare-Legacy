@@ -5,7 +5,6 @@ MASTER.CSS -- Annotare ❧ For Inquistive Minds
 To compile this file into css, please run ./compilesass from the project root.
 
 ------------------------------------------------------------------------------*/
-@import url(normalize.css);
 /**
  * Functions and mixins for Annotare
  */
@@ -14,7 +13,7 @@ To compile this file into css, please run ./compilesass from the project root.
 ------------------------------------------------------------------------------*/
 body {
   background: #faf8f7 url("../img/bg.png") repeat;
-  color: #444;
+  color: #444444;
   font-size: 0.813em;
   line-height: 1.5;
   font-family: "Myriad Pro", sans-serif;
@@ -44,6 +43,21 @@ h5 {
 h6 {
   font-size: 0.813em; }
 
+input {
+  color: #444444;
+  border-radius: 5px;
+  padding: 5px 10px;
+  border: 1px solid #777777;
+  outline: none;
+  font-size: 1.315em;
+  font-family: Consolas, Incolsolata, monospace;
+  margin-bottom: 20px; }
+  input.placeholder {
+    color: #777777; }
+
+textarea.placeholder {
+  color: #777777 !important; }
+
 a {
   color: #91C0EB;
   text-decoration: none; }
@@ -52,6 +66,27 @@ a {
 
 p {
   line-height: 1.5em; }
+
+#status {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 2px 10px;
+  border-bottom-left-radius: 10px;
+  box-shadow: 0 0 5px #444444; }
+  #status.online {
+    background: #00cc00; }
+    #status.online #online {
+      display: inline; }
+    #status.online #offline {
+      display: none; }
+  #status.offline {
+    background: #cc0000;
+    color: white; }
+    #status.offline #online {
+      display: none; }
+    #status.offline #offline {
+      display: inline; }
 
 .wrap {
   max-width: 64%;
@@ -116,19 +151,28 @@ header nav {
     #tool-bar a:hover {
       background-color: transparent;
       -webkit-box-shadow: 0 2px 0 rgba(33, 28, 24, 0.65); }
-  #tool-bar .active {
-    background-color: transparent;
-    -webkit-box-shadow: 0 2px 0 #608db6; }
+    #tool-bar a.active {
+      -webkit-box-shadow: 0 2px 0 rgba(33, 28, 24, 0.65), 0 -2px 0 rgba(33, 28, 24, 0.65); }
 
 /*------------------------------------------------------------------------------
 -- DOCUMENT
 ------------------------------------------------------------------------------*/
 .one-column article {
   width: 100%;
-  border-right: none; }
+  border-right: none;
+  -webkit-transition: width 0.5s ease-in-out;
+  -moz-transition: width 0.5s ease-in-out;
+  -o-transition: width 0.5s ease-in-out;
+  -ms-transition: width 0.5s ease-in-out;
+  transition: width 0.5s ease-in-out; }
 .one-column aside {
   width: 0;
-  display: none; }
+  display: none;
+  -webkit-transition: width 0.5s ease-in-out;
+  -moz-transition: width 0.5s ease-in-out;
+  -o-transition: width 0.5s ease-in-out;
+  -ms-transition: width 0.5s ease-in-out;
+  transition: width 0.5s ease-in-out; }
 
 .two-column article {
   width: 66%;
@@ -164,16 +208,45 @@ footer {
 /*------------------------------------------------------------------------------
 -- EDIT VIEW
 ------------------------------------------------------------------------------*/
-#edit textarea {
-  /*    @include shadow(2px, #333); -- put back for debugging if you need to */
+#edit input, #new input {
+  width: 80%; }
+#edit textarea, #new textarea {
+  min-height: 500px;
   width: 100%;
   border: none;
-  padding: none;
-  margin: none;
+  padding: 0;
+  margin: 0;
   background: #faf8f7 url("../img/bg.png") repeat;
-  font-size: 0.9em;
+  font-size: 1.315em;
   font-family: Consolas, Incolsolata, monospace;
+  color: #444444;
   outline: none; }
+
+/*------------------------------------------------------------------------------
+-- EDIT VIEW
+------------------------------------------------------------------------------*/
+#list_docs .document {
+  background: white;
+  box-shadow: -2px 2px 10px #111111;
+  border-radius: 5px;
+  float: left;
+  width: 280px;
+  height: 280px;
+  overflow: hidden;
+  border: 1px solid #444444;
+  padding: 0 20px;
+  margin: 10px;
+  cursor: pointer;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out; }
+  #list_docs .document:hover {
+    -webkit-transform: rotate(2deg);
+    position: relative;
+    z-index: 2000;
+    cursor: pointer; }
 
 /*------------------------------------------------------------------------------
 -- MODAL

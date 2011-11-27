@@ -4,6 +4,7 @@
 define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(util, api, diff_match, JSON, showdown, hash){
     
     function Doc(name) {
+        name = name.toLowerCase().replace(/[^\_\ 0-9a-z-]/g, "").replace(/ /g, '_');  // remove non-alphanumerics and replace spaces
         this.name = name;
         this.key = name;
         this.text = "";

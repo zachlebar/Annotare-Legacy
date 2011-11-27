@@ -55,18 +55,18 @@ define(['models', 'showdown', 'diff_match_patch', 'util', 'autoresize'], functio
                 // Edit Option
                 var edit = document.createElement('a');
                 edit.href = '#edit?name=' + name;
-                edit.innerHTML = 'Edit Document';
+                edit.innerHTML = 'Edit';
                 toolbar.appendChild(edit);
                 
                 // View Revision History
                 var history = document.createElement('a');
                 history.href = '#document.history?name=' + name;
-                history.innerHTML = 'View History';
+                history.innerHTML = 'History';
                 toolbar.appendChild(history);
                 
                 // Highlighing
                 var highlighter = document.createElement('a');
-                highlighter.innerHTML = 'Highlighter';
+                highlighter.innerHTML = 'Highlight';
                 highlighter.href= "javascript:null;";
                 toolbar.appendChild(highlighter);
                 $(highlighter).click(function(event){
@@ -88,7 +88,7 @@ define(['models', 'showdown', 'diff_match_patch', 'util', 'autoresize'], functio
                 
                 // Rebuild/render document
                 var refresh = document.createElement('a');
-                refresh.innerHTML = 'Refresh Document';
+                refresh.innerHTML = 'Refresh';
                 refresh.href= "javascript:null";
                 toolbar.appendChild(refresh);
                 $(refresh).click(function(event){
@@ -128,8 +128,8 @@ define(['models', 'showdown', 'diff_match_patch', 'util', 'autoresize'], functio
     }
     
     /*
-     * Document View
-     * Fetch a document from the server and display it
+     * Edit View
+     * Fetch a document from the server and edit it
     */
     function EditView() {
         this.name = "Edit"
@@ -194,6 +194,137 @@ define(['models', 'showdown', 'diff_match_patch', 'util', 'autoresize'], functio
     EditView.prototype.restart = function() {
         return new EditView();
     }
+    
+    
+    /*
+     * New Document View
+     * Create a new document
+    */
+    function NewDocView() {
+        this.name = "New"
+        this.display = {
+            layout: 'one-column'
+        }
+    }
+    NewDocView.prototype = new View();
+    NewDocView.prototype.load = function(args) {
+        var container = this.container = document.createElement('div');
+        this.container.id = 'new';
+        container.innerHTML = "";
+        
+        // Editor
+        var title = document.createElement('h2');
+        title.innerText = "Create a New Document";
+        container.appendChild(title);
+        
+        var name = document.createElement('input');
+        $(name).attr('name', name).attr('id', 'name').attr('data-placeholder', 'The Hitchhiker\'s Guide to the Galaxy');
+        container.appendChild(name);
+        $(name).blur();
+        
+        var editor = document.createElement('textarea');
+        $(editor).attr('id', 'editor').attr('data-placeholder', window.thhgttg);
+        container.appendChild(editor);
+        $(editor).autoResize({
+            extraSpace: 100,
+            maxHeight: 2000
+        });
+        $(editor).blur();
+        
+        var toolbar = document.getElementById('tool-bar');
+        $(toolbar).children().remove();
+        
+        var discard = document.createElement('a');
+        discard.href = '#!/home';
+        discard.innerHTML = 'Discard';
+        toolbar.appendChild(discard);
+        $(discard).click(function(event){
+            if (!confirm('Are you sure you want to discard all unsaved changes?'))
+                event.preventDefault();
+        });
+        
+        var save = document.createElement('a');
+        save.href = 'javascript:null;';
+        save.innerHTML = 'Save Document';
+        toolbar.appendChild(save);
+        $(save).click(function(event) {
+            var name = $('#name').val();
+            var content = $('#editor').val();
+            var doc = new models.Doc(name);
+            doc.text = content;
+            doc.save();
+            event.preventDefault();
+            window.location.hash = "#!/document?" + util.gen_querystring({name: doc.name});
+        });
+                
+        // Force Editor to be as large as possible
+        var footerHeight = $('footer').outerHeight(true);
+        $(editor).height(window.innerHeight - footerHeight - 7);
+        
+        return this.container;
+    }
+    NewDocView.prototype.unload = function() {
+        $(this.container).remove();
+    }
+    NewDocView.prototype.restart = function() {
+        return new NewDocView();
+    }
+    
+    
+    /*
+     * List Documents View
+     * Create a new document
+    */
+    function ListDocView() {
+        this.name = "List"
+        this.display = {
+            layout: 'one-column'
+        }
+    }
+    ListDocView.prototype = new View();
+    ListDocView.prototype.load = function(args) {
+        // Update Docs
+        util.cache.update_all();
+        // Hide toolbar
+        $('#tool-bar').html('');
+        // Display docs
+        var container = this.container = document.createElement('div');
+        this.container.id = 'list_docs';
+        container.innerHTML = "";
+        var documents = [];
+        
+        for (var key in localStorage) {
+            if (key.indexOf('annotare-') != -1) {
+                var name = key.slice('annotare-'.length)
+                var doc = new models.Doc(name);
+                doc.load(function(){
+                    var id = 'document-' + this.name;
+                    var elem = document.getElementById(id);
+                    if (document.getElementById(id) === null)
+                        elem = document.createElement('div');
+                    elem.id = id;
+                    $(elem).addClass('document').attr('data-name', this.name);
+                    elem.appendChild(this.to_html());
+                    
+                    var name = this.name;
+                    $(elem).click(function(event){
+                        window.location.hash = '#!/document?' + util.gen_querystring({name: name});
+                    });
+                    
+                    container.appendChild(elem);
+                });
+            }
+        }
+        
+        return this.container;
+    }
+    ListDocView.prototype.unload = function() {
+        $(this.container).remove();
+    }
+    ListDocView.prototype.restart = function() {
+        return new ListDocView();
+    }
+    
     
     /*
      * Generic Modal Form View
@@ -404,7 +535,9 @@ define(['models', 'showdown', 'diff_match_patch', 'util', 'autoresize'], functio
         doc: new DocumentView(),
         edit: new EditView(),
         history: new HistoryView(),
-        note: new NoteView()
+        note: new NoteView(),
+        new_doc: new NewDocView(),
+        list_docs: new ListDocView()
     };
     return views
 });
