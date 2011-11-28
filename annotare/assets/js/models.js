@@ -59,7 +59,7 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
             this.annotations = {};
             if (data.annotations) {
                 for (var key in data.annotations) {
-                    this.annotations[key] = new Annotation(data.annotations[key].hash, data.annotations[key].timestamp, data.annotations[key].data);
+                    this.annotations[key] = new Annotation(data.annotations[key].range, data.annotations[key].data, data.annotations[key].uid);
                 }
             }
         },
@@ -74,32 +74,26 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
                 this.save_to_cache();
             }
         },
-        // Create New Highlight
-        toggle_highlight: function(elem) {
-            if ($(elem).hasClass('highlight')) {
-                this.annotations[elem.id].remove();
-                delete this.annotations[elem.id];
-            } else {
-                var highlight = new Annotation(elem.id, +(new Date()));
-                highlight.apply(document.getElementById(this.name));
-                this.annotations[highlight.hash] = highlight;
-            }
-            this.save();
-        },
         // Create / Edit an annotation
-        annotate: function(elem, text) {
-            var id = elem.id || elem;
-            var note = new Annotation(id, +(new Date()), text);
-            note.apply(document.getElementById(this.name));
-            this.annotations[note.hash] = note;
+        annotate: function(sel, text) {
+            var range;
+            if (sel.getRangeAt)
+		        range = sel.getRangeAt(0);
+        	else { // Safari!
+        		range = document.createRange();
+        		range.setStart(sel.anchorNode, sel.anchorOffset);
+        		range.setEnd(sel.focusNode, sel.focusOffset);
+        	}
+            var note = new Annotation(range, text);
+            note.apply();
+            this.annotations[note.uid] = note;
             this.save();
         },
         // Apply Patches & Annotations and return rendered text
         render: function() {
             var text = this.text;
-            for (var i=0; i<this.revisions.length; i++) {
+            for (var i=0; i<this.revisions.length; i++)
                 text = this.revisions[i].apply(text);
-            }
             return text;
         },
         to_html: function() {
@@ -108,39 +102,11 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
             var container = document.createElement('div');
             var html = converter.makeHtml(md);
             container.innerHTML = html;
-            // Split elements into highlightable setences
-            var process_highlightable_text = function() {
-                var tag_name = this.tagName.toLowerCase();
-                if (tag_name == 'ul' || tag_name == 'ol' || tag_name == 'dl') {
-                    // Lists are a special case :(
-                    $(this).children('li, dt, dd').each(process_highlightable_text);
-                } else {
-                    // All other elements
-                    if (this.innerHTML.indexOf('.') != -1 || this.innerHTML.indexOf('!') != -1 || this.innerHTML.indexOf('?') != -1) {
-                        var para = this.innerHTML.split(/(\. )|(\! )|(\? )/);
-                        if (para.length == 1)
-                            para = this.innerHTML.split(/(\.)|(\!)|(\?)/);
-                        this.innerHTML = "";
-                        for (var i=0; i<para.length; i++) {
-                            if (para[i] != undefined && para[i].length > 2) {
-                                var punct = para[i+1] || para[i+2] || '';
-                                this.innerHTML += "<span class='highlightable' id='" + hash.hex(para[i]) + "'>" + para[i] + punct + "</span>";
-                            }
-                        }
-                    } else {
-                        var para = this.innerHTML;
-                        if (para.length > 0) {
-                            this.innerHTML = "<span class='highlightable' id='" + hash.hex(para) + "'>" + para + "</span>";
-                        }
-                    }
-                }
-            }
-            $(container).children().each(process_highlightable_text);
             return container
         },
-        apply_annotations: function(elem) {
+        apply_annotations: function() {
             for (var key in this.annotations) {
-                this.annotations[key].apply(elem);
+                this.annotations[key].apply();
             }
         },
         rollback: function() {
@@ -171,9 +137,9 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
     }
     
     
-    function Annotation(hash, timestamp, data) {
-        this.hash = hash;
-        this.timestamp = timestamp;
+    function Annotation(range, data, uid) {
+        this.range = range;
+        this.uid = uid || +(new Date());
         if (data == undefined) {
             this.type = 'highlight';
             this.data = undefined;
@@ -183,40 +149,65 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
         }
     }
     Annotation.prototype = {
-        differ: new diff_match_patch(),
-        get_all_ids: function(elem, ids) {
-            var ids = ids || [];
-            var self = this;
-            $(elem).children().each(function() {
-                ids.push(this.id);
-                ids = self.get_all_ids(this, ids);
-            });
-            return ids
-        },
-        get_element: function(container) {
-            if (this.elem)
-                return this.elem;
+        recurse_elements: function(node, end) {
+            if (node == null)
+                return false;
             
-            var ids = this.get_all_ids(container);
-            // Exact match?
-            if (ids.indexOf(this.hash) != -1) {
-                var elem = document.getElementById(ids[ids.indexOf(this.hash)]);
+            var name = node.nodeName.toLowerCase();
+            if (node.nodeType == 1 && name != 'ul' && name != 'ol')  // lists is a special case
+                this.elems.push(node);
+            
+            if (node == end)
+                return true;
+            else {
+                if (node.childNodes) {
+                    for (var i=0; i<node.childNodes.length; i++) {
+                        if (this.recurse_elements(node.childNodes[i], end)) {
+                            return true;
+                        }
+                    }
+                }
+                if (this.recurse_elements(node.nextSibling, end))
+                    return true;
             }
-            this.elem = elem;
-            return this.elem;
         },
-        apply: function(container) {
-            var elem = this.get_element(container);
-            $(elem).addClass(this.type);
-            if (this.type == 'note') {
-                var note = document.createElement('div')
-                note.id = "note-" + this.hash;
-                $(note).addClass('annotation');
-                note.innerHTML = this.data;
-                $(note).css({
-                    top: $(elem).offset().top
-                });
-                $('#sidebar').append(note);
+        apply: function() {
+            if (this.range === undefined)
+                return;
+            // Get Elements
+            var start = this.range.startContainer;
+            var end = this.range.endContainer;
+            if (start.nodeType == 3)
+                start = start.parentNode;
+            if (end.nodeType == 3)
+                end = end.parentNode;
+            this.elems = [];
+            this.recurse_elements(start, end);
+            // Highlight elements
+            for (var i=0; i<this.elems.length; i++) {
+                if (i == 0 && i == this.elems.length-1) {
+                    var start = this.range.startOffset;
+                    var end = this.range.endOffset;
+                    var text = "<span>" + this.elems[i].innerHTML.slice(0, start) + "</span>";
+                    text += "<span class='highlight'>" + this.elems[i].innerHTML.slice(start, end) + "</span>";
+                    text += "<span>" + this.elems[i].innerHTML.slice(end) + "</span>";
+                    this.elems[i].innerHTML = text;
+                } else if (i == 0) {
+                    var start = this.range.startOffset;
+                    var text = "<span>" + this.elems[i].innerHTML.slice(0, start) + "</span>";
+                    text += "<span class='highlight'>" + this.elems[i].innerHTML.slice(start) + "</span>";
+                    this.elems[i].innerHTML = text;
+                } else if (i == this.elems.length-1) {
+                    var end = this.range.endOffset;
+                    var text = "<span class='highlight'>" + this.elems[i].innerHTML.slice(0, end) + "</span>";
+                    text += "<span>" + this.elems[i].innerHTML.slice(end) + "</span>";
+                    this.elems[i].innerHTML = text;
+                } else {
+                    var highlight = document.createElement('span')
+                    highlight.innerHTML = this.elems[i].innerHTML;
+                    $(highlight).addClass('highlight');
+                    $(this.elems[i]).empty().append(highlight);
+                }
             }
         },
         remove: function() {
@@ -225,8 +216,8 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
         },
         export: function() {
             return {
-                hash: this.hash,
-                timestamp: this.timestamp,
+                uid: this.uid,
+                range: this.range,
                 type: this.type,
                 data: this.data
             }

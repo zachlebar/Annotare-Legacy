@@ -70,19 +70,12 @@ define(['models', 'showdown', 'diff_match_patch', 'util', 'autoresize'], functio
                 highlighter.href= "javascript:null;";
                 toolbar.appendChild(highlighter);
                 $(highlighter).click(function(event){
-                    if ($(this).hasClass('active')) {
-                        $(this).removeClass('active');
-                        $(container).removeClass('highlight-mode');
-                        $('.highlightable').unbind();
-                    } else {
-                        //var selection = util.get_selected_text();
-                        //doc.new_highlight(selection);
-                        $(this).addClass('active');
-                        $(container).addClass('highlight-mode');
-                        $('.highlightable').click(function(){
-                            doc.toggle_highlight(this);
-                        });
-                    }
+                    var selection;
+                    if (window.getSelection)
+                    	selection = window.getSelection();
+                    else if (document.selection) // should come last; Opera!
+                    	selection = document.selection.createRange();
+                    doc.annotate(selection);
                     event.preventDefault();
                 });
                 
@@ -109,9 +102,9 @@ define(['models', 'showdown', 'diff_match_patch', 'util', 'autoresize'], functio
                 }, 500);
                 
                 // Highlight actions
-                $('.highlightable').live('click', function() {
-                    annotare.router.open_modal('annotate', {'id': this.id});
-                });
+                //$('.highlightable').live('click', function() {
+                //    annotare.router.open_modal('annotate', {'id': this.id});
+                //});
             }, function(data) {
                 container.innerHTML = "Error Loading Document. Status Code: " + data.status;
             });
