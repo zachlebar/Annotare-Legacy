@@ -21,10 +21,6 @@ def startserver():
     debug(mode=True)
     run(host=settings.TARGET_HOST, port=settings.PORT, reloader=True)
     
-@task("Says howdy like a good friend should.")
-def sayhi():
-    print "Guten Tag!"
-    
 def route(command=None, *args, **kwargs):
     if not command and len(sys.argv) >= 2:
         command = sys.argv[1]

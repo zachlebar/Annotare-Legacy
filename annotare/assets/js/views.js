@@ -45,7 +45,7 @@ define(['models', 'showdown', 'diff_match_patch', 'util', 'autoresize'], functio
         var name = args.name;
         if (name) {
             this.container.appendChild(document.createTextNode('Loading Document...'));
-            var doc = new models.Doc(name);
+            var doc = window.doc = new models.Doc(name);
             doc.load(function(data) {
                 // Toolbar
                 container.innerHTML = "";
@@ -96,10 +96,7 @@ define(['models', 'showdown', 'diff_match_patch', 'util', 'autoresize'], functio
                 container.appendChild(wiki);
                 
                 // Display annotations
-                // We set a short delay becuase we need to wait for the browser to render the doc first
-                setTimeout(function() {
-                    doc.apply_annotations(wiki);
-                }, 500);
+                setTimeout(function() { doc.apply_annotations(); }, 500);
                 
                 // Highlight actions
                 //$('.highlightable').live('click', function() {
@@ -114,7 +111,7 @@ define(['models', 'showdown', 'diff_match_patch', 'util', 'autoresize'], functio
         return this.container;
     }
     DocumentView.prototype.unload = function() {
-        $(this.container).remove();
+        $("#content").empty();
     }
     DocumentView.prototype.restart = function() {
         return new DocumentView();
@@ -138,7 +135,7 @@ define(['models', 'showdown', 'diff_match_patch', 'util', 'autoresize'], functio
         var name = args.name;
         if (name) {
             this.container.appendChild(document.createTextNode('Loading Document...'));
-            var doc = new models.Doc(name)
+            var doc = window.doc = new models.Doc(name)
             doc.load(function(data){
                 // Toolbar
                 container.innerHTML = "";
@@ -243,7 +240,7 @@ define(['models', 'showdown', 'diff_match_patch', 'util', 'autoresize'], functio
         $(save).click(function(event) {
             var name = $('#name').val();
             var content = $('#editor').val();
-            var doc = new models.Doc(name);
+            var doc = window.doc = new models.Doc(name);
             doc.text = content;
             doc.save();
             event.preventDefault();
@@ -290,6 +287,7 @@ define(['models', 'showdown', 'diff_match_patch', 'util', 'autoresize'], functio
             if (key.indexOf('annotare-') != -1) {
                 var name = key.slice('annotare-'.length)
                 var doc = new models.Doc(name);
+                window.doc = null;
                 doc.load(function(){
                     var id = 'document-' + this.name;
                     var elem = document.getElementById(id);

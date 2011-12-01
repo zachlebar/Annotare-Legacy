@@ -9,8 +9,9 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
         this.key = name;
         this.text = "";
         this.revisions = [];
-        this.annotations = {};
+        this.annotations = [];
         this.on_server = false;
+        this.nodes = {};
     }
     Doc.prototype = {
         // Load Document from the server
@@ -31,9 +32,9 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
             for (var i=0; i<this.revisions.length; i++)
                 revs.push(this.revisions[i].export());
             // Highlights
-            var annotations = {};
-            for (key in this.annotations)
-                annotations[key] = this.annotations[key].export();
+            var annotations = [];
+            for (var i=0; i<this.annotations.length; i++)
+                annotations.push(this.annotations[i].export());
             util.cache.set(this.key, {
                 name: this.name,
                 key: this.key,
@@ -56,10 +57,10 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
                     this.revisions.push(new Patch(rev));
                 }
             }
-            this.annotations = {};
+            this.annotations = [];
             if (data.annotations) {
-                for (var key in data.annotations) {
-                    this.annotations[key] = new Annotation(data.annotations[key].range, data.annotations[key].data, data.annotations[key].uid);
+                for (var i=0; i<data.annotations.length; i++) {
+                    this.annotations.push(new Annotation(data.annotations[i].text, data.annotations[i].data, data.annotations[i].uid));
                 }
             }
         },
@@ -75,18 +76,13 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
             }
         },
         // Create / Edit an annotation
-        annotate: function(sel, text) {
-            var range;
-            if (sel.getRangeAt)
-		        range = sel.getRangeAt(0);
-        	else { // Safari!
-        		range = document.createRange();
-        		range.setStart(sel.anchorNode, sel.anchorOffset);
-        		range.setEnd(sel.focusNode, sel.focusOffset);
-        	}
-            var note = new Annotation(range, text);
+        annotate: function(sel, data) {
+            var selected_text = sel;
+            if (sel.toString())
+	            selected_text = sel.toString();
+            var note = new Annotation(selected_text, data);
             note.apply();
-            this.annotations[note.uid] = note;
+            this.annotations.push(note);
             this.save();
         },
         // Apply Patches & Annotations and return rendered text
@@ -96,17 +92,31 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
                 text = this.revisions[i].apply(text);
             return text;
         },
+        // Apply IDs
+        id_elements: function(nodes) {
+            for (var i=0; i<nodes.length; i++) {
+                var node = nodes[i];
+                if (node.nodeType == 1) {
+                    var node_hash = hash.hex(node.innerText);
+                    node.id = node_hash;
+                    this.nodes[node_hash] = node;
+                    if (node.childNodes != undefined && node.childNodes.length > 0)
+                        this.id_elements(node.childNodes);
+                }
+            }
+        },
         to_html: function() {
             var converter = new Showdown.converter();
             var md = this.render();
             var container = document.createElement('div');
             var html = converter.makeHtml(md);
             container.innerHTML = html;
+            this.id_elements(container.childNodes);
             return container
         },
         apply_annotations: function() {
-            for (var key in this.annotations) {
-                this.annotations[key].apply();
+            for (var i=0; i<this.annotations.length; i++) {
+                this.annotations[i].apply();
             }
         },
         rollback: function() {
@@ -137,8 +147,8 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
     }
     
     
-    function Annotation(range, data, uid) {
-        this.range = range;
+    function Annotation(text, data, uid) {
+        this.text = text;
         this.uid = uid || +(new Date());
         if (data == undefined) {
             this.type = 'highlight';
@@ -172,43 +182,15 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
             }
         },
         apply: function() {
-            if (this.range === undefined)
-                return;
-            // Get Elements
-            var start = this.range.startContainer;
-            var end = this.range.endContainer;
-            if (start.nodeType == 3)
-                start = start.parentNode;
-            if (end.nodeType == 3)
-                end = end.parentNode;
-            this.elems = [];
-            this.recurse_elements(start, end);
-            // Highlight elements
-            for (var i=0; i<this.elems.length; i++) {
-                if (i == 0 && i == this.elems.length-1) {
-                    var start = this.range.startOffset;
-                    var end = this.range.endOffset;
-                    var text = "<span>" + this.elems[i].innerHTML.slice(0, start) + "</span>";
-                    text += "<span class='highlight'>" + this.elems[i].innerHTML.slice(start, end) + "</span>";
-                    text += "<span>" + this.elems[i].innerHTML.slice(end) + "</span>";
-                    this.elems[i].innerHTML = text;
-                } else if (i == 0) {
-                    var start = this.range.startOffset;
-                    var text = "<span>" + this.elems[i].innerHTML.slice(0, start) + "</span>";
-                    text += "<span class='highlight'>" + this.elems[i].innerHTML.slice(start) + "</span>";
-                    this.elems[i].innerHTML = text;
-                } else if (i == this.elems.length-1) {
-                    var end = this.range.endOffset;
-                    var text = "<span class='highlight'>" + this.elems[i].innerHTML.slice(0, end) + "</span>";
-                    text += "<span>" + this.elems[i].innerHTML.slice(end) + "</span>";
-                    this.elems[i].innerHTML = text;
-                } else {
-                    var highlight = document.createElement('span')
-                    highlight.innerHTML = this.elems[i].innerHTML;
-                    $(highlight).addClass('highlight');
-                    $(this.elems[i]).empty().append(highlight);
-                }
+            var doc = $('#content').html();
+            var parts = this.text.split('\n');
+            for (var i=0; i<parts.length; i++) {
+                var text = parts[i] + "";
+                console.log(text);
+                console.log(doc.indexOf(text));
+                doc = doc.replace(text, '<span class="highlight">' + text + '</span>');
             }
+            $('#content').html(doc);
         },
         remove: function() {
             var elem = this.get_element();
@@ -217,15 +199,19 @@ define(['util', 'api', 'diff_match_patch', 'JSON', 'showdown', 'md5'], function(
         export: function() {
             return {
                 uid: this.uid,
-                range: this.range,
+                text: this.text,
                 type: this.type,
                 data: this.data
             }
         }
     }
     
-    return {
+    
+    window.models = {
         Doc: Doc,
-        Patch: Patch
+        Patch: Patch,
+        Annotation: Annotation,
     }
+    
+    return window.models;
 });
