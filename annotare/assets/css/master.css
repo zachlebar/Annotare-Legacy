@@ -17,8 +17,7 @@ body {
   font-size: 0.813em;
   line-height: 1.5;
   font-family: "Myriad Pro", sans-serif;
-  margin: 0;
-  padding-top: 50px; }
+  margin: 0; }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: old-standard-1, old-standard-2, "Times New Roman", Times, serif;
@@ -50,7 +49,7 @@ input {
   padding: 5px 10px;
   border: 1px solid #777777;
   outline: none;
-  font-size: 1.315em;
+  font-size: 1em;
   font-family: Consolas, Incolsolata, monospace;
   margin-bottom: 20px; }
   input.placeholder {
@@ -133,9 +132,6 @@ header nav {
 -- TOOLBAR
 ------------------------------------------------------------------------------*/
 .tool-bar-wrap {
-  position: fixed;
-  top: 0;
-  z-index: 5000;
   width: 100%;
   border-top: 1px solid rgba(250, 248, 247, 0.8);
   border-bottom: 1px solid rgba(250, 248, 247, 0.8);
@@ -223,7 +219,7 @@ footer {
   padding: 0;
   margin: 0;
   background: #faf8f7 url("../img/bg.png") repeat;
-  font-size: 1.315em;
+  font-size: 1em;
   font-family: Consolas, Incolsolata, monospace;
   color: #444444;
   outline: none; }
