@@ -18,26 +18,9 @@ bottle.TEMPLATE_PATH.append(settings.TEMPLATES_ROOT)
 
 """
 ==========================================================
- Web Views
-==========================================================
-"""
-
-@bottle.route('/')
-def app():
-	return bottle.template('app.html')
-	
-@bottle.route('/assets/:filename#.*#')
-def send_static(filename):
-    # Sanitize
-    filename = filename.replace('..', '')
-    return bottle.static_file(filename, root=settings.ASSETS_ROOT)
-
-
-"""
-==========================================================
  API Views
 ==========================================================
-"""	
+"""
 
 @bottle.route('/json/:key', method="POST")
 def store_json(key):
@@ -70,6 +53,23 @@ def list_documents():
     documents = filter(lambda item: item.endswith('.json'), documents)
     documents = map(lambda item: '.'.join(item.split('.')[:-1]), documents)
     return simplejson.dumps(documents)
+    
+
+"""
+==========================================================
+ Web Views
+==========================================================
+"""
+
+@bottle.route('/')
+def app():
+	return bottle.template('index.html')
+	
+@bottle.route('/:filename#.*#')
+def send_static(filename):
+    # Sanitize
+    filename = filename.replace('..', '')
+    return bottle.static_file(filename, root=settings.ASSETS_ROOT)
     
     
     

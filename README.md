@@ -11,13 +11,24 @@ All of those are contributing factors to Annotare's creation. Annotare exists be
 
 ## Getting Started
 
-Annotare is designed to be run locally, for a single user. Because of that, authentication, users, and permissions don't actually exist.  Currently, in place of a more robust db, documents are stored as individual JSON files in the annotare/documents/ folder. This isn't ideal, but for dev purposes it works fine (and will be fixed eventually).
+Annotare is designed to be run locally, for a single user. Because of that, authentication, users, and permissions don't actually exist.  Currently, in place of a more robust db, documents are **ONLY IN BROWSER LOCALSTORAGE.** This is currently being fixed so the notes are stored as flat files by syncing to the server, but until then don't be sure you'll ever see any of your notes again.
 
 #### Getting up and running
 
 *These instructions are written assuming you're running a sane operating system, such as Mac OS X or Linux, and that you're comfortable with a terminal. If you're running Windows and can't figure out how to make this work, please consider using OneNote instead.* 
 
-To make sure your system meets the required dependancies, from the project root directory, run: 
+##### Hem Server
+
+Since Annotare is essentually a client-side Javascript app (based on Spine.js), you can run it with only a static-file host. One easy way to do this is to use the Hem bundler, inculded with Spine.js. First, install [node.js](node), [npm](npm), and [Spine.js](spine). You can follow this guide to help get up and running: [http://spinejs.com/docs/started](http://spinejs.com/docs/started).  After that, from your project root:
+
+    cd annotare
+    hem server
+
+Hem will compile Annotare and start a server on [http://localhost:9294](http://localhost:9294).
+
+##### Python Server
+
+The Python server is the *real* Annotare server, and will eventually include syncing, backup, and image hosting. To make sure your system meets the required dependancies, from the project root directory, run: 
 
     sudo pip install -r requirements.txt
     

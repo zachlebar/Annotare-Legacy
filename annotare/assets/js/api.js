@@ -1,3 +1,0 @@
-define(['util'], function(util) {
-
-});

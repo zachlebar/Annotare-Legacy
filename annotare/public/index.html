@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    
+    <title>Annotare  ❧  For Inquistive Minds</title>
+    
+    <link type="text/css" rel="stylesheet" href="/application.css" />
+    
+    <script type="text/javascript" src="http://use.typekit.com/eho4xds.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    
+    <script src="/application.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+        var jQuery  = require("jqueryify");
+        var exports = this;
+        jQuery(function(){
+            var App = require("index");
+            exports.app = new App({el: $("#application")});      
+        });
+    </script>
+  
+</head>
+<body>
+    <header>
+        <nav class="wrap">
+            <h1><a href="#/list">Annotare  ❧</a></h1>
+            <ul>
+                <li><a href="#/list">Home</a></li>
+                <li><a href="#/new">New Document</a></li>
+            </ul>
+        </nav>
+        
+        <div id="status" class="online">
+            <span id="online" title="Connection to Annotare server is functioning normally.">Server Online</span>
+            <span id="offline" title="Connection to Annotare server is offline. Some features may be disabled.">Server Offline</span>
+        </div>
+    </header>
+    
+    <div id="application" class="wrap">
+            
+    </div>
+    
+    <footer>
+        <section class="wrap">Annotare  ❧  For Inquistive Minds</section>
+    </footer>
+</body>
+</html>

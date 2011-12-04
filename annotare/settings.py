@@ -9,9 +9,9 @@ DEBUG = True
 # Discover Abs Project Path
 PROJECT_ROOT = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-1])
 
-ASSETS_ROOT = os.path.join(PROJECT_ROOT, 'assets')
+ASSETS_ROOT = os.path.join(PROJECT_ROOT, 'public')
 
-TEMPLATES_ROOT = os.path.join(PROJECT_ROOT, 'templates')
+TEMPLATES_ROOT = os.path.join(PROJECT_ROOT, 'public')
 
 DOCUMENT_ROOT = os.path.join(PROJECT_ROOT, 'documents')
 
