@@ -15,10 +15,10 @@ To compile this file into css, please run ./compilesass from the project root.
 
 $base-size: 0.813em;
 
-$page-background: #FAF8F7 url("../img/bg.png") repeat;
-$font-color: #444;
+$page-background: #e8e1d3 url("../img/bg.png") repeat;
+$font-color: rgba(68, 68, 68, 1.0);
 
-$dark-gray: rgba(204, 204, 204, 0.9);
+$accent-color: rgba(182, 32, 28, 0.7);
 $red: #CC0000;
 $green: #00CC00;
 
@@ -47,8 +47,12 @@ h1 { font-size: modular-scale(3); }
 h2 { 
 	font-size: modular-scale(2); 
 	margin: 1em 0;
+	color: rgba(68, 68, 68, 0.6);
 }
-h3 { font-size: modular-scale(2); }
+h3 { 
+	font-size: modular-scale(2); 
+	color: rgba(68, 68, 68, 0.6);
+}
 h4 { font-size: modular-scale(1); }
 h5 { font-size: modular-scale(1); }
 h6 { font-size: modular-scale(0); }
@@ -83,28 +87,6 @@ a {
 
 p {
 	line-height: 1.5em;
-}
-
-#status {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 6000;
-  padding: 2px 10px;
-  border-bottom-left-radius: 10px;
-  box-shadow: 0 0 5px $font-color;
-  &.online {
-    background: $green;
-    #online { display: inline; }
-    #offline { display: none; }
-  }
-  
-  &.offline {
-    background: $red;
-    color: white;
-    #online { display: none; }
-    #offline { display: inline; }
-  }
 }
 
 .wrap {
@@ -165,18 +147,67 @@ header {
 			}
 		}
 	}
+	
+	#status {
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		font-size: 0.85em;
+		color: rgba(68, 68, 68, 0.6);
+	
+		&.online {
+			#online { 
+				display: block; 
+				
+				em {
+					font-style: normal;
+					color: rgba(132, 176, 84, 0.8);
+				}
+			}
+			
+			#offline { 
+				display: none; 
+				
+				em {
+					font-style: normal;
+					color: $accent-color;
+				}
+			}
+		}
+	  
+		&.offline {
+			#online { 
+				display: none; 
+				
+				em {
+					font-style: normal;
+					color: rgba(132, 176, 84, 0.8);
+				}
+			}
+			
+			#offline { 
+				display: block; 
+				
+				em {
+					font-style: normal;
+					color: $accent-color;
+				}
+			}
+		}
+		
+	}
 }
 
 /*------------------------------------------------------------------------------
 -- TOOLBAR
 ------------------------------------------------------------------------------*/
 
-.tool-bar-wrap {
+.tool-bar-wrap,
+footer {
 	width: 100%;
-	border-top: 1px solid rgba(250, 248, 247, 0.8);
-	border-bottom: 1px solid rgba(250, 248, 247, 0.8);
-	-webkit-box-shadow: 0 -1px 0 #211C18, 0 1px 0 #211C18;
-	background-color: $dark-gray;
+	border-top: 1px solid $font-color;
+	border-bottom: 1px solid $font-color;
+	-webkit-box-shadow: 0 -1.5px 0 rgba(255, 255, 255, 0.5), 0 1.5px 0 rgba(255, 255, 255, 0.5);
+	background-color: $accent-color;
 	margin: 0 0 2% 0;
 }
 
@@ -252,8 +283,7 @@ footer {
 	clear: both;
 	
 	margin: 4% 0 8% 0;
-	border-top: 3px double #211C18;
-	padding: 1% 0 0 0;
+	padding: 0.5% 0;
 	
 	text-transform: uppercase;
 	font-size: 0.9em;
