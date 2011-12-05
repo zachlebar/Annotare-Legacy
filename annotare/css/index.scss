@@ -8,6 +8,7 @@ To compile this file into css, please run ./compilesass from the project root.
 
 @import 'modular-scale/modular-scale.sass';
 @import 'functions.scss';
+@import 'apprise.scss';
 
 /*------------------------------------------------------------------------------
 -- BASE STYLES
@@ -252,6 +253,7 @@ header {
 ------------------------------------------------------------------------------*/
 
 .one-column {
+  position: relative;
   article {
       width: 100%;
       border-right: none;
@@ -264,6 +266,7 @@ header {
 }
 
 .two-column {
+  position: relative;
   article {
     width: 66%;
     border-right: 1px solid #211C18;
@@ -274,7 +277,7 @@ header {
   
   aside { 
     width: 30%; 
-    margin-left: 69%;   
+    margin-left: 69%;
   }
 }
 
@@ -388,10 +391,35 @@ footer {
   }
 }
 
-.highlight {
+.highlight, .note {
   background-color: #91C0EB;
   padding: 0.2em 0 0.2em 0;
-}
+  
+  &:hover {
+    .note-detail {
+      z-index: 2000;
+      -webkit-box-shadow: 0 0 5px #333;
+      right: 25px;
+    }
+  }
 
+  .note-detail {
+    position: absolute;
+    right: 5px;
+    width: 29%;
+    padding: 3px;
+    background-color: #91C0EB;
+    -webkit-border-radius: 5px;
+    border: 1px solid darken(#91C0EB, 10%);
+    z-index: 1000;
+    font-weight: bold;
+    @include transition(all);
+    &:hover {
+      z-index: 2000;
+      -webkit-box-shadow: 0 0 5px #333;
+      right: 25px;
+    }
+  }
+}
 
 

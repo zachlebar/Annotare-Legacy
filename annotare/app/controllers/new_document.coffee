@@ -31,6 +31,9 @@ class NewDocument extends Spine.Controller
     $('#name, #editor').blur()
 
   change: (params) =>
+    Document.fetch()
+    Patch.fetch()
+    Annotation.fetch()
     @render()
     
   save: (params) =>

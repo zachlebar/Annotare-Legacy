@@ -15,6 +15,8 @@ class List extends Spine.Controller
     super
     
     Document.bind("refresh change", @render)
+    Annotation.bind("refresh change", @render)
+    Patch.bind("refresh change", @render)
     
     @active @change
     
@@ -25,11 +27,14 @@ class List extends Spine.Controller
     }
     @html require('views/list')(context)
 
-  change: (params) ->
+  change: (params) =>
     Document.fetch()
+    Patch.fetch()
+    Annotation.fetch()
+    @render()
     
   select_doc: (event) ->
-    id = $(event.currentTarget).attr('id')
+    id = $(event.currentTarget).attr('id').replace('document-', '')
     Spine.Route.navigate("/detail", id, true)
     
     

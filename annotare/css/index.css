@@ -8,6 +8,77 @@ To compile this file into css, please run ./compilesass from the project root.
 /**
  * Functions and mixins for Annotare
  */
+.appriseOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: none; }
+
+.appriseOuter {
+  background: #eee;
+  border: 1px solid #fff;
+  box-shadow: 0px 3px 7px #333;
+  -moz-box-shadow: 0px 3px 7px #333;
+  -webkit-box-shadow: 0px 3px 7px #333;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  -khtml-border-radius: 4px;
+  position: absolute;
+  z-index: 99999999;
+  min-width: 200px;
+  min-height: 50px;
+  max-width: 75%;
+  position: fixed;
+  display: none; }
+
+.appriseInner {
+  padding: 20px;
+  color: #333;
+  text-shadow: 0px 1px 0px #fff; }
+
+.appriseInner button {
+  border: 1px solid #bbb;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -khtml-border-radius: 3px;
+  background: -moz-linear-gradient(100% 100% 90deg, #eeeeee, #d5d5d5);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eeeeee), to(#d5d5d5));
+  background: -webkit-linear-gradient(#eeeeee, #d5d5d5);
+  background: -o-linear-gradient(#eeeeee, #d5d5d5);
+  color: #232d3d;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 10px;
+  margin: 0 3px;
+  text-shadow: 0px 1px 0px #fff;
+  cursor: pointer;
+  box-shadow: 0px 1px 2px #ccc;
+  -moz-box-shadow: 0px 1px 2px #ccc;
+  -webkit-box-shadow: 0px 1px 2px #ccc; }
+
+.appriseInner button:hover {
+  color: #d85054; }
+
+.aButtons, .aInput {
+  text-align: center; }
+
+.aTextbox {
+  border: 1px solid #aaa;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  -khtml-border-radius: 4px;
+  box-shadow: 0px 1px 0px #fff;
+  -moz-box-shadow: 0px 1px 0px #fff;
+  -webkit-box-shadow: 0px 1px 0px #fff;
+  width: 180px;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 10px; }
+
 /*------------------------------------------------------------------------------
 -- BASE STYLES
 ------------------------------------------------------------------------------*/
@@ -170,21 +241,25 @@ header #status {
 /*------------------------------------------------------------------------------
 -- DOCUMENT
 ------------------------------------------------------------------------------*/
-.one-column article {
-  width: 100%;
-  border-right: none; }
-.one-column aside {
-  width: 0;
-  display: none; }
+.one-column {
+  position: relative; }
+  .one-column article {
+    width: 100%;
+    border-right: none; }
+  .one-column aside {
+    width: 0;
+    display: none; }
 
-.two-column article {
-  width: 66%;
-  border-right: 1px solid #211C18;
-  padding-right: 2%;
-  float: left; }
-.two-column aside {
-  width: 30%;
-  margin-left: 69%; }
+.two-column {
+  position: relative; }
+  .two-column article {
+    width: 66%;
+    border-right: 1px solid #211C18;
+    padding-right: 2%;
+    float: left; }
+  .two-column aside {
+    width: 30%;
+    margin-left: 69%; }
 
 /*------------------------------------------------------------------------------
 -- FOOTER
@@ -265,6 +340,29 @@ footer {
   background-color: #CCC;
   cursor: pointer; }
 
-.highlight {
+.highlight, .note {
   background-color: #91C0EB;
   padding: 0.2em 0 0.2em 0; }
+  .highlight:hover .note-detail, .note:hover .note-detail {
+    z-index: 2000;
+    -webkit-box-shadow: 0 0 5px #333;
+    right: 25px; }
+  .highlight .note-detail, .note .note-detail {
+    position: absolute;
+    right: 5px;
+    width: 29%;
+    padding: 3px;
+    background-color: #91C0EB;
+    -webkit-border-radius: 5px;
+    border: 1px solid #66a7e3;
+    z-index: 1000;
+    font-weight: bold;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out; }
+    .highlight .note-detail:hover, .note .note-detail:hover {
+      z-index: 2000;
+      -webkit-box-shadow: 0 0 5px #333;
+      right: 25px; }

@@ -10,7 +10,7 @@
 	        <h4>It doesn't look like you've made any notes yet. You should really get on that, Slacker.</h4>
 	    <% else: %>
 	        <% for doc in @list: %>
-	            <div class="document" id="<%= doc.id %>">
+	            <div class="document" id="document-<%= doc.id %>">
 	                <h4><%= doc.name %></h4>
 	                <%- doc.render() %>
 	            </div>

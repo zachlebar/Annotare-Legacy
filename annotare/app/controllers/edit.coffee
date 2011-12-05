@@ -23,8 +23,9 @@ class Edit extends Spine.Controller
   render: ->
     if not @doc_id
       return
-
+      
     @doc = Document.find(@doc_id)
+
     context = {
       doc: @doc
     }
@@ -36,6 +37,9 @@ class Edit extends Spine.Controller
 
   change: (params) =>
     @doc_id = params.id
+    Document.fetch()
+    Patch.fetch()
+    Annotation.fetch()
     @render()
     
   save: (params) =>

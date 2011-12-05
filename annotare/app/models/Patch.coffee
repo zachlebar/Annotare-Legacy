@@ -5,8 +5,11 @@ diff_match_patch = require('lib/diff_match_patch')
 class Patch extends Spine.Model
   @configure 'Patch', 'patch', 'time'
   
-  # Persist with Local Storage
-  @extend @Local
+  # Persist
+  #@extend @Local
+  @extend Spine.Model.Ajax
+  
+  @url: "/api/patch"
   
   @belongsTo 'document', 'models/Document'
   

@@ -2,6 +2,7 @@
     <div id="tool-bar">
         <a href="javascript:null;" class="edit">Edit</a>
         <a href="javascript:null;" class="highlighter">Highlight</a>
+        <a href="javascript:null;" class="annotate">Create Note</a>
     </div>
 </div>
 
@@ -9,7 +10,7 @@
 	<section class="two-column">
 	    <article id="<%= @doc.slug %>">
 	        <h4 class="name"><%= @doc.name %></h4>
-	        <%- @doc.render() %>
+	        <%- @doc.draw_annotations(@doc.render()) %>
 	    </article>
 	    
 	    <aside>

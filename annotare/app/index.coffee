@@ -7,11 +7,16 @@ Document = require('models/Document')
 Patch = require('models/Patch')
 Annotation = require('models/Annotation')
 
+
 class App extends Spine.Controller
   constructor: ->
     super
     @contacts = new Annotare
     @append @contacts
+    
+    Document.fetch()
+    Patch.fetch()
+    Annotation.fetch()
     
     Spine.Route.setup()
     

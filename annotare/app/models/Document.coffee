@@ -12,8 +12,11 @@ class Document extends Spine.Model
   @hasMany 'annotations', 'models/Annotation'
   @hasMany 'patches', 'models/Patch'
   
-  # Persist with Local Storage
-  @extend @Local
+  # Persist
+  #@extend @Local
+  @extend Spine.Model.Ajax
+  
+  @url: "/api/document"
   
   # Generate the doc slug based on the name
   generate_slug: =>
@@ -21,6 +24,14 @@ class Document extends Spine.Model
     slug = slug.toLowerCase().replace(/[^\_\ 0-9a-z-]/g, "").replace(/[ ]/g, '_')
     @slug = slug
     return slug
+    
+  # get notes
+  get_notes: =>
+    notes = []
+    for note in @annotations().all()
+      if note.type == "note"
+        notes.push(note)
+    return notes
   
   # Save a document revision by calculating and saving 
   # a diff between new_text and the current text.  
@@ -47,7 +58,6 @@ class Document extends Spine.Model
     
   # Apply all saved patches to base_text, to render the final Markdown text
   apply_patches: =>
-    Patch.fetch()
     text = @base_text
     for patch in @patches().all()
       text = patch.apply(text)
@@ -55,7 +65,6 @@ class Document extends Spine.Model
     
   # Draw annotations on document
   draw_annotations: (html) =>
-    Annotation.fetch()
     for note in @annotations().all()
       html = note.apply(html)
     return html
@@ -64,7 +73,6 @@ class Document extends Spine.Model
   render: =>
     converter = new Showdown.converter()
     html = converter.makeHtml(@apply_patches())
-    html = @draw_annotations(html)
     return html
   
 module.exports = Document

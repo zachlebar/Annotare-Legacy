@@ -13,7 +13,7 @@ ASSETS_ROOT = os.path.join(PROJECT_ROOT, 'public')
 
 TEMPLATES_ROOT = os.path.join(PROJECT_ROOT, 'public')
 
-DOCUMENT_ROOT = os.path.join(PROJECT_ROOT, 'documents')
+DOCUMENT_ROOT = os.path.join(PROJECT_ROOT, 'records')
 
 # Server Settings
 SERVERS = {
