@@ -24,7 +24,7 @@ $green: #00CC00;
 
 $sans: 'Myriad Pro', sans-serif;
 $serif: old-standard-1, old-standard-2, 'Times New Roman', Times, serif;
-$code: Consolas, Incolsolata, monospace;
+$code: Consolas, Inconsolata, monospace;
 
 body {
   background: $page-background;
@@ -111,7 +111,6 @@ p {
 ------------------------------------------------------------------------------*/
 
 header {
-  margin-top: 50px;
   nav {
     overflow: auto;
     padding: 1% 2% 1% 0;
@@ -219,6 +218,8 @@ header {
  	-webkit-box-shadow: 0 -1.5px 0 rgba(255, 255, 255, 0.5), 0 1.5px 0 rgba(255, 255, 255, 0.5);
  	background-color: $accent-color;
   margin: 0 0 2% 0;
+  
+  color: rgba(232, 226, 213, 1);
 }
 
 #tool-bar {
@@ -233,15 +234,15 @@ header {
   a {
     padding: 1.1% 0.5% 0.8% 0.5%;
     margin: 0 1.5%;
-    color: rgba(33, 28, 24, 0.7);
+    color: rgba(232, 226, 212, 1.0000);
     
     &:hover {
       background-color: transparent;
-      -webkit-box-shadow: 0 2px 0 rgba(33, 28, 24, 0.65);
+      -webkit-box-shadow: 0 2px 0 rgba(232, 226, 212, 0.8);
     }
     
     &.active {
-      -webkit-box-shadow: 0 2px 0 rgba(33, 28, 24, 0.65), 0 -2px 0 rgba(33, 28, 24, 0.65);
+      -webkit-box-shadow: 0 2px 0 rgba(232, 226, 212, 0.8), 0 -2px 0 rgba(232, 226, 212, 0.8);
     }
   }
 }
@@ -290,6 +291,7 @@ footer {
   text-transform: uppercase;
   font-size: 0.9em;
   word-spacing: 0.5em;
+  font-size: 0.85em;
 }
 
 

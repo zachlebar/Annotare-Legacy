@@ -5,13 +5,15 @@
     </div>
 </div>
 
-<section class="two-column">
-    <article id="<%= @doc.slug %>">
-        <h4 class="name"><%= @doc.name %></h4>
-        <%- @doc.render() %>
-    </article>
-    
-    <aside>
-        &nbsp;
-    </aside>
-</section>
+<div class="wrap">
+	<section class="two-column">
+	    <article id="<%= @doc.slug %>">
+	        <h4 class="name"><%= @doc.name %></h4>
+	        <%- @doc.render() %>
+	    </article>
+	    
+	    <aside>
+	        &nbsp;
+	    </aside>
+	</section>
+</div>

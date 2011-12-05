@@ -1,12 +1,20 @@
-<section class="one-column">
-    <% if @list.length == 0: %>
-        <h4>It doesn't look like you've made any notes yet. You should really get on that, Slacker.</h4>
-    <% else: %>
-        <% for doc in @list: %>
-            <div class="document" id="<%= doc.id %>">
-                <h4><%= doc.name %></h4>
-                <%- doc.render() %>
-            </div>
-        <% end %>
-    <% end %>
-</section>
+<div class="tool-bar-wrap">
+    <div id="tool-bar">
+        <p>"You have to be resourceful at Bethel." &mdash; Fred Rusk</p>
+    </div>
+</div>
+
+<div class="wrap">
+	<section class="one-column">
+	    <% if @list.length == 0: %>
+	        <h4>It doesn't look like you've made any notes yet. You should really get on that, Slacker.</h4>
+	    <% else: %>
+	        <% for doc in @list: %>
+	            <div class="document" id="<%= doc.id %>">
+	                <h4><%= doc.name %></h4>
+	                <%- doc.render() %>
+	            </div>
+	        <% end %>
+	    <% end %>
+	</section>
+</div>
