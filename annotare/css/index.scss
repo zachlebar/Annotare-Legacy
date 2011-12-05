@@ -400,6 +400,7 @@ footer {
       z-index: 2000;
       -webkit-box-shadow: 0 0 5px #333;
       right: 25px;
+      background-color: lighten(#91C0EB, 10%);
     }
   }
 
@@ -410,7 +411,7 @@ footer {
     padding: 3px;
     background-color: #91C0EB;
     -webkit-border-radius: 5px;
-    border: 1px solid darken(#91C0EB, 10%);
+    border: 1px solid darken(#91C0EB, 5%);
     z-index: 1000;
     font-weight: bold;
     @include transition(all);
@@ -418,6 +419,7 @@ footer {
       z-index: 2000;
       -webkit-box-shadow: 0 0 5px #333;
       right: 25px;
+      background-color: lighten(#91C0EB, 5%);
     }
   }
 }
