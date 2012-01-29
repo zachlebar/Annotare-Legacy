@@ -1,5 +1,5 @@
 <div class="tool-bar-wrap">
-    <div id="tool-bar">
+    <div id="tool-bar" class="tk-museo-sans">
         <a href="javascript:null;" class="discard">Discard Changes</a>
         <a href="javascript:null;" class="save">Save Changes</a>
     </div>

@@ -18,8 +18,8 @@ DOCUMENT_ROOT = os.path.join(PROJECT_ROOT, 'records')
 # Server Settings
 SERVERS = {
     'dev': {
-        'host': '0.0.0.0',
-        'port': 8000
+        'host': 'localhost',
+        'port': 8888
     },
 }
 

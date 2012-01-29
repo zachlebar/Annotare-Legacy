@@ -1,5 +1,5 @@
 <div class="tool-bar-wrap">
-    <div id="tool-bar">
+    <div id="tool-bar" class="tk-museo-sans">
         <a href="javascript:null;" class="edit">Edit</a>
         <a href="javascript:null;" class="highlighter">Highlight</a>
         <a href="javascript:null;" class="annotate">Create Note</a>
