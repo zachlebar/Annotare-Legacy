@@ -214,11 +214,12 @@ header #status {
 ------------------------------------------------------------------------------*/
 .tool-bar-wrap, footer {
   width: 100%;
-  border-top: 1px solid #444444;
-  border-bottom: 1px solid #444444;
-  -webkit-box-shadow: 0 -1.5px 0 rgba(255, 255, 255, 0.5), 0 1.5px 0 rgba(255, 255, 255, 0.5);
-  background-color: rgba(182, 32, 28, 0.7);
+  border-top: 1px solid rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.9);
+  -webkit-box-shadow: inset 0 0 10px #444444;
+  background: rgba(182, 32, 28, 0.7) url("/img/red-linen.png");
   margin: 0 0 2% 0;
+  text-shadow: rgba(0, 0, 0, 0.8) 0 0 5px;
   color: #e8e2d5; }
 
 #tool-bar {
@@ -297,7 +298,7 @@ footer {
 -- LIST VIEW
 ------------------------------------------------------------------------------*/
 .list .document {
-  border: 1px solid #bdac97;
+  border: 1px solid rgba(68, 68, 68, 0.8);
   background: rgba(189, 172, 151, 0.5);
   width: 95%;
   margin: 2% 0 5% 2%;
@@ -334,30 +335,20 @@ footer {
   cursor: pointer; }
 
 .highlight, .note {
-  background-color: #91C0EB;
+  background-color: rgba(151, 201, 56, 0.5);
   padding: 0.2em 0 0.2em 0; }
   .highlight:hover .note-detail, .note:hover .note-detail {
-    z-index: 2000;
-    -webkit-box-shadow: 0 0 5px #333;
-    right: 25px;
-    background-color: #bcd9f3; }
-  .highlight .note-detail, .note .note-detail {
-    position: absolute;
-    right: 5px;
-    width: 29%;
-    padding: 3px;
-    background-color: #91C0EB;
-    -webkit-border-radius: 5px;
-    border: 1px solid #7bb4e7;
-    z-index: 1000;
-    font-weight: bold;
-    -webkit-transition: all 0.5s ease-in-out;
-    -moz-transition: all 0.5s ease-in-out;
-    -o-transition: all 0.5s ease-in-out;
-    -ms-transition: all 0.5s ease-in-out;
-    transition: all 0.5s ease-in-out; }
-    .highlight .note-detail:hover, .note .note-detail:hover {
-      z-index: 2000;
-      -webkit-box-shadow: 0 0 5px #333;
-      right: 25px;
-      background-color: #a7ccef; }
+    z-index: 2000; }
+
+.note-detail {
+  position: absolute;
+  right: 2.3%;
+  width: 29%;
+  padding: 3px;
+  background: #e8e1d3 url("/img/bg.png") repeat;
+  -webkit-box-shadow: inset 0 -20px 20px -20px rgba(0, 0, 0, 0.5);
+  border-top: 1px solid #444;
+  border-left: 3px solid #444;
+  z-index: 1000; }
+  .note-detail:hover {
+    z-index: 2000; }

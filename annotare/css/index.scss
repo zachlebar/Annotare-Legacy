@@ -214,11 +214,13 @@ header {
 
 .tool-bar-wrap, footer {
   width: 100%;
-  border-top: 1px solid $font-color;
-  border-bottom: 1px solid $font-color;
- 	-webkit-box-shadow: 0 -1.5px 0 rgba(255, 255, 255, 0.5), 0 1.5px 0 rgba(255, 255, 255, 0.5);
- 	background-color: $accent-color;
+  border-top: 1px solid rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.9);
+ 	-webkit-box-shadow: inset 0 0 10px rgba(68, 68, 68, 1.0);
+  background: $accent-color url("/img/red-linen.png");
   margin: 0 0 2% 0;
+  
+  text-shadow: rgba(0, 0, 0, 0.8) 0 0 5px;
   
   color: rgba(232, 226, 213, 1);
 }
@@ -332,7 +334,7 @@ footer {
 
 .list {
   .document {
-    border: 1px solid rgba(189, 172, 151, 1.0);
+    border: 1px solid rgba(68, 68, 68, 0.8);
     background: rgba(189, 172, 151, 0.5);
     
     width: 95%;
@@ -394,35 +396,29 @@ footer {
 }
 
 .highlight, .note {
-  background-color: #91C0EB;
+  background-color: rgba(151, 201, 56, 0.5);
   padding: 0.2em 0 0.2em 0;
   
   &:hover {
-    .note-detail {
-      z-index: 2000;
-      -webkit-box-shadow: 0 0 5px #333;
-      right: 25px;
-      background-color: lighten(#91C0EB, 10%);
-    }
+  	.note-detail {
+	  z-index: 2000;
+	}
   }
+}
 
-  .note-detail {
-    position: absolute;
-    right: 5px;
-    width: 29%;
-    padding: 3px;
-    background-color: #91C0EB;
-    -webkit-border-radius: 5px;
-    border: 1px solid darken(#91C0EB, 5%);
-    z-index: 1000;
-    font-weight: bold;
-    @include transition(all);
-    &:hover {
-      z-index: 2000;
-      -webkit-box-shadow: 0 0 5px #333;
-      right: 25px;
-      background-color: lighten(#91C0EB, 5%);
-    }
+.note-detail {
+  position: absolute;
+  right: 2.3%;
+  width: 29%;
+  padding: 3px;
+  background: $page-background;
+    -webkit-box-shadow: inset 0 -20px 20px -20px rgba(0, 0, 0, 0.5);
+  border-top: 1px solid #444;
+  border-left: 3px solid #444;
+  z-index: 1000;
+  
+  &:hover {
+  	z-index: 2000;
   }
 }
 
