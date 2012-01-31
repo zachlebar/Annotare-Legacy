@@ -1,3 +1,5 @@
 *.scssc
 *.sassc
 *.pyc
+*.json
+*.esproj
