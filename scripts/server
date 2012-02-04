@@ -1,5 +1,0 @@
-#!/bin/sh
-
-echo "Starting Dev Server"
-cd ../annotare/
-python manage.py startserver

@@ -1,7 +1,0 @@
-CACHE MANIFEST
-
-CACHE:
-/
-%for name in filenames:
-{{ name }}
-%end

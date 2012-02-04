@@ -1,5 +1,0 @@
-#!/bin/sh
-
-echo "Starting Hem Watcher"
-cd ../annotare
-hem watch

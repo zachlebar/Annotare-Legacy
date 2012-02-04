@@ -1,6 +1,5 @@
-require('lib/setup')
+Flakey = require('flakey')
 
-Spine    = require('spine')
 Annotare = require('controllers/annotare')
 
 Document = require('models/Document')
@@ -8,7 +7,7 @@ Patch = require('models/Patch')
 Annotation = require('models/Annotation')
 
 
-class App extends Spine.Controller
+class App extends Flakey.Controller
   constructor: ->
     super
     @contacts = new Annotare
