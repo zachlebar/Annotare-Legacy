@@ -1,38 +1,29 @@
 Flakey = require('flakey')
+$ = Flakey.$
 
-Annotare = require('controllers/annotare')
-
-Document = require('models/Document')
-Patch = require('models/Patch')
-Annotation = require('models/Annotation')
+Annotare = require('./controllers/annotare')
 
 
-class App extends Flakey.Controller
+class App extends Flakey.controllers.Controller
   constructor: ->
     super
-    @contacts = new Annotare
-    @append @contacts
-    
-    Document.fetch()
-    Patch.fetch()
-    Annotation.fetch()
-    
-    Spine.Route.setup()
-    
-    # Placeholders
-    $('input, textarea').live('focus', ->
-      placeholder = $(this).attr('data-placeholder')
-      if $(this).val() == placeholder
-        $(this).val('').removeClass('placeholder')
-    ).live('blur', ->
-      placeholder = $(this).attr('data-placeholder')
-      if $(this).val() == placeholder || $(this).val().length == 0
-        $(this).val(placeholder).addClass('placeholder')
-    ).live('submit', ->
-      placeholder = $(this).attr('data-placeholder')
-      if $(this).val() == placeholder
-        $(this).val('').removeClass('placeholder')
-    )
+    @annotare = new Annotare
+    @append @annotare
+
+
+$(document).ready () ->
+  settings = {
+    container: $('#application')
+    #base_model_endpoint: '/api'
+  }
+  Flakey.init(settings)
+
+  # Sync models
+  Flakey.models.backend_controller.sync('Document')
+  Flakey.models.backend_controller.sync('Annotation')
+
+  annotare = window.Annotare = new Annotare()
+  annotare.make_active()
 
 
 module.exports = App

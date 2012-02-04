@@ -1,55 +1,49 @@
-Spine   = require('spine')
-$       = Spine.$
+Flakey = require('flakey')
+$ = Flakey.$
 
-autoresize = require('lib/autoresize')
+autoresize = require('../lib/autoresize')
 
-Document    = require('models/Document')
-Patch      = require('models/Patch')
-Annotation = require('models/Annotation')
+Document    = require('../models/Document')
 
-
-class Edit extends Spine.Controller
-  className: 'edit_document view'
-
-  events:
-    'click .save': 'save'
-    'click .discard': 'discard'
-
-  constructor: ->
-    super
+class Edit extends Flakey.controllers.Controller
+  constructor: (config) ->
+    @id = "edit-view"
+    @class_name = "edit_document view"
     
-    @active @change
-
-  render: ->
-    if not @doc_id
+    @actions = {
+      'click .save': 'save'
+      'click .discard': 'discard'
+    }
+    
+    super(config)
+    @tmpl =  Flakey.templates.get_template('edit', require('../views/edit'))
+  
+  render: () ->
+    if not @query_params.id
       return
       
-    @doc = Document.find(@doc_id)
+    @doc = Document.get(@query_params.id)
 
     context = {
       doc: @doc
     }
-    @html require('views/edit')(context)
+    @html @tmpl.render(context)
+    @unbind_actions()
+    @bind_actions()
+    
     $('#editor').autoResize({
       extraSpace: 100,
-      maxHeight: 2000
+      maxHeight: 10000
     }).blur()
-
-  change: (params) =>
-    @doc_id = params.id
-    Document.fetch()
-    Patch.fetch()
-    Annotation.fetch()
-    @render()
-    
-  save: (params) =>
-    text = $('#editor').val()
-    @doc.revise(text)
-    Spine.Route.navigate("/detail", @doc.id, true)
-    
+  
+  save: () =>
+    @doc.base_text = $('#editor').val()
+    @doc.save()
+    window.location.hash = "#/detail?" + Flakey.util.querystring.build(@query_params)
+  
   discard: (params) =>
     if confirm "Are you sure you want to discard all unsaved changes?"
-      Spine.Route.navigate("/list", true)
-    
-    
+      window.location.hash = "#/list"
+
+
 module.exports = Edit

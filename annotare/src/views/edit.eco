@@ -1,0 +1,16 @@
+<div class="tool-bar-wrap">
+    <div id="tool-bar" class="tk-museo-sans">
+        <a href="javascript:null;" class="discard">Discard Changes</a>
+        <a href="javascript:null;" class="save">Save Changes</a>
+    </div>
+</div>
+
+<div class="wrap">
+	<section class="one-column">
+	    <article>
+	        <h2>Editing <em><%= @doc.name %></em></h2>
+	
+	        <textarea id="editor" placeholder="Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun..."><%= @doc.base_text %></textarea>
+	    </article>
+	</section>
+</div>

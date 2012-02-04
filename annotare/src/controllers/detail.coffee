@@ -1,50 +1,39 @@
-Spine   = require('spine')
-$       = Spine.$
+Flakey = require('flakey')
+$ = Flakey.$
 
-Document   = require('models/Document')
-Patch      = require('models/Patch')
-Annotation = require('models/Annotation')
-
-apprise = require('lib/apprise-1.5.full')
+apprise = require('../lib/apprise-1.5.full')
+Document = require('../models/Document')
 
 
-class Detail extends Spine.Controller
-  className: 'detail view'
+class Detail extends Flakey.controllers.Controller
+  constructor: (config) ->
+    @id = "detail-view"
+    @class_name = "detail view"
     
-  events:
-    'click .edit': 'edit'
-    'click .highlighter': 'highlight'
-    'click .annotate': 'annotate'
-
-  constructor: ->
-    super
+    @actions = {
+      'click .edit': 'edit'
+      'click .highlighter': 'highlight'
+      'click .annotate': 'annotate'
+    }
     
-    Document.bind("refresh change", @render)
-    Annotation.bind("refresh change", @render)
-    Patch.bind("refresh change", @render)
-    
-    @active @change
-
-  render: =>
-    if not @doc_id
+    super(config)
+    @tmpl =  Flakey.templates.get_template('detail', require('../views/detail'))
+  
+  render: () =>
+    if not @query_params.id
       return
       
     # Render Document
-    @doc = Document.find(@doc_id)
+    @doc = Document.get(@query_params.id)
     context = {
       doc: @doc
     }
-    @html require('views/detail')(context)
-    
-  change: (params) =>
-    @doc_id = params.id
-    Document.fetch()
-    Patch.fetch()
-    Annotation.fetch()
-    @render()
+    @html @tmpl.render(context)
+    @unbind_actions()
+    @bind_actions()
     
   edit: (event) =>
-    Spine.Route.navigate("/edit", @doc_id, true)
+    window.location.hash = "#/edit?" + Flakey.util.querystring.build(@query_params)
     
   highlight: (event) =>
     selection = undefined

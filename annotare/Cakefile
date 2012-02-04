@@ -1,3 +1,105 @@
 fs     = require 'fs'
 {exec} = require 'child_process'
+browserify = require 'browserify'
+watch = require 'watch'
 
+
+option '-i', '--input [DIR]', 'Override source directory'
+option '-o', '--output [FILE]', 'Override output file'
+option '-t', '--temp [DIR]', 'Change the temp build directory'
+option '-e', '--entry [FILE]', 'File for application entry point'
+option '-s', '--style [STRING]', 'CSS Output style. Can be nested (default), compact, compressed, or expanded.'
+
+task 'build_js', 'Build Annotare\'s CoffeeScript into a single JS file', (options) ->
+  input = options.input or "src"
+  output_file = options.output or "public/annotare.js"
+  temp = options.temp or "temp"
+  entry_point = options.entry or "index"
+  build_annotare_js(input, output_file, temp, entry_point)
+  
+task 'build_css', 'Build Annotare\'s stylesheets into a single CSS file', (options) ->
+  input = options.input or 'css/index.scss'
+  output_file = options.output or 'public/annotare.css'
+  style = options.style or 'nested'
+  build_annotare_css(input, output_file, style)
+  
+task 'minify_js', 'Minify Annotare JS file with Google\'s closure compiler', (options) ->
+  input = options.input or "public/annotare.js"
+  output_file = options.output or "public/annotare.min.js"
+  closure_compile(input, output_file)
+  
+task 'full_build', 'Perform a full build of CSS and JS with default options', (options) ->
+  build_annotare_css 'css/index.scss', 'public/annotare.css', 'nested'
+  build_annotare_js 'src', "public/annotare.js", 'temp', 'index', () ->
+    closure_compile 'public/annotare.js', 'public/annotare.min.js'
+  
+task 'watch', 'Perform a default full build whenever a file in src/ or css/ changes', (options) ->
+  watch.watchTree "src/", (f, curr, prev) ->
+    build_annotare_js 'src', "public/annotare.js", 'temp', 'index', () ->
+      closure_compile 'public/annotare.js', 'public/annotare.min.js'
+      
+  watch.watchTree "css/", (f, curr, prev) ->
+    build_annotare_css 'css/index.scss', 'public/annotare.css', 'nested'
+
+
+# Build SASS or SCSS into CSS
+build_annotare_css = (input, output, style, callback) ->
+  exec "sass --style #{ style } --update #{ input }:#{ output }", (err, stdout, stderr) ->
+    throw err if err
+    console.log stdout + stderr
+    console.log "Compiled #{ input } to #{ output }"
+    if callback?
+      callback()
+
+
+# Please parden the callback hell
+# Lots of "non-blocking" tasks don't make for pretty build scripts :(
+build_annotare_js = (input, output_file, temp, entry_point, callback) ->
+  exec "mkdir -p #{ temp }/views/", (err, stdout, stderr) ->
+    throw err if err
+    console.log stdout + stderr
+    
+    console.log 'Compiling Templates...'
+    exec "eco -o #{ temp }/views/ #{ input }/views/", (err, stdout, stderr) ->
+      throw err if err
+      console.log stdout + stderr
+      
+      console.log 'Compiling Coffeescript...'
+      exec "coffee -c -o #{ temp }/ #{ input }/; cp -r #{ input }/lib #{ temp }/", (err, stdout, stderr) ->
+        throw err if err
+        console.log stdout + stderr
+        
+        console.log 'Tracing Dependancies...'
+        b = browserify()
+        b.addEntry("./#{ temp }/#{ entry_point }.js")
+        file = b.bundle()
+        
+        fs.writeFile output_file, file, 'utf8', (err) ->
+          throw err if err
+          
+          exec "rm -rf #{ temp }", (err, stdout, stderr) ->
+            throw err if err
+            console.log stdout + stderr
+            console.log "Done. Compiled #{ input }/ to #{ output_file }"
+            if callback?
+              callback()
+    
+
+# Compile JS with Closure
+closure_compile = (input, output_file, callback) ->
+  # Standard options for ornery compilation
+  args = "--js #{ input }
+          --js_output_file #{ output_file }
+          --compilation_level=WHITESPACE_ONLY
+          --warning_level=VERBOSE
+          --summary_detail_level=3
+          --language_in ECMASCRIPT5_STRICT"
+
+  exec "java -jar '../tools/closure/compiler.jar' #{args}", { maxBuffer: 1000 * 1024 }, (error, stdout, stderr) ->
+    throw error if error
+    # Output compilation message and return
+    console.log stdout + stderr
+    console.log "Done. Compiled to #{ output_file }"
+    if callback?
+      callback()
+    

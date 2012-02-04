@@ -1,41 +1,32 @@
-Spine   = require('spine')
-$       = Spine.$
+Flakey = require('flakey')
+$ = Flakey.$
 
-Document   = require('models/Document')
-Patch      = require('models/Patch')
-Annotation = require('models/Annotation')
+Document = require('../models/Document')
 
-class List extends Spine.Controller
-  className: "list view"
-    
-  events:
-    'click .document': 'select_doc'
-    
-  constructor: ->
-    super
-    
-    Document.bind("refresh change", @render)
-    Annotation.bind("refresh change", @render)
-    Patch.bind("refresh change", @render)
-    
-    @active @change
+class List extends Flakey.controllers.Controller
+  constructor: (config) ->
+    @id = "list-view"
+    @class_name = "list view"
+
+    @actions = {
+      'click .document': 'select_doc'
+    }
+
+    super(config)
+    @tmpl =  Flakey.templates.get_template('list', require('../views/list'))
     
   render: =>
     @documents = Document.all()
     context = {
       list: @documents
     }
-    @html require('views/list')(context)
-
-  change: (params) =>
-    Document.fetch()
-    Patch.fetch()
-    Annotation.fetch()
-    @render()
+    @html @tmpl.render(context)
+    @unbind_actions()
+    @bind_actions()
     
   select_doc: (event) ->
     id = $(event.currentTarget).attr('id').replace('document-', '')
-    Spine.Route.navigate("/detail", id, true)
+    window.location.hash = "#/detail?" + Flakey.util.querystring.build({id: id})
     
     
 module.exports = List

@@ -1,16 +1,8 @@
-Spine = require('spine')
-Relation = require('lib/relation')
+Flakey = require('flakey')
 
-class Annotation extends Spine.Model
-  @configure 'Annotation', 'text', 'type', 'attachment'
-  
-  # Persist
-  #@extend @Local
-  @extend Spine.Model.Ajax
-  
-  @url: "/api/annotation"
-  
-  @belongsTo 'document', 'models/Document'
+class Annotation extends Flakey.models.Model
+  @model_name: 'Annotation'
+  @fields: ['text', 'type', 'attachment', 'document']
   
   apply: (html) =>
     parts = @text.split('\n')

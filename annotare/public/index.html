@@ -1,46 +1,37 @@
 <!DOCTYPE html>
-<!-- <html manifest="manifest.appcache"> --> <!-- Uncomment when you want to enable caching i.e. Not actively developing stuff -->
 <html>
 <head>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    
-    <title>Annotare  ❧  For Inquistive Minds</title>
-    
-    <link type="text/css" rel="stylesheet" href="/application.css" />
-    
-    <script type="text/javascript" src="http://use.typekit.com/eho4xds.js"></script>
-    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    
-    <script src="/application.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript" charset="utf-8">
-        var jQuery  = require("jqueryify");
-        var exports = this;
-        jQuery(function(){
-            var App = require("index");
-            exports.app = new App({el: $("#application")});      
-        });
-    </script>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
+  <title>Annotare  ❧  For Inquistive Minds</title>
+  
+  <link type="text/css" rel="stylesheet" href="/annotare.css" />
+  
+  <script type="text/javascript" src="http://use.typekit.com/eho4xds.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  
+  <script src="/annotare.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
+  <div id="stickey-footer-wrap">
     <header>
-        <nav class="wrap">
-            <h1><a href="#/list">Annotare  ❧</a></h1>
-            <ul>
-                <li><a href="#/list">Home</a></li>
-                <li><a href="#/new">New Document</a></li>
-            </ul>
-        </nav>
+      <nav class="wrap">
+        <h1><a href="#/list">Annotare  ❧</a></h1>
+        <ul>
+          <li><a href="#/list">Home</a></li>
+          <li><a href="#/new">New Document</a></li>
+        </ul>
+      </nav>
     </header>
+  
+    <div id="application"></div>
     
-    <div id="application">
-            
-    </div>
-    
-    <footer>
-        <section class="wrap">Annotare  ❧  For Inquistive Minds</section>
-    </footer>
+    <div class="push"><!--Sticky Footer Push--></div>
+  </div>
+  <footer>
+    <section class="wrap">Annotare  ❧  For Inquistive Minds</section>
+  </footer>
 </body>
 </html>

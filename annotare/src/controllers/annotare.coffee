@@ -1,25 +1,31 @@
-Spine   = require('spine')
-$       = Spine.$
+Flakey = require('flakey')
+$ = Flakey.$
 
-NewDocument = require('controllers/new_document')
-List = require('controllers/list')
-Detail = require('controllers/detail')
-Edit = require('controllers/edit')
+NewDocument = require('./new_document')
+List = require('./list')
+Detail = require('./detail')
+Edit = require('./edit')
 
-    
-class Main extends Spine.Stack
-  controllers:
-    new_document: NewDocument
-    list: List
-    detail: Detail
-    edit: Edit
-    
-  routes:
-    '/new': 'new_document'
-    '/list': 'list'
-    '/detail/:id': 'detail'
-    '/edit/:id': 'edit'
-    
-  default: 'list'
+  
+class Main extends Flakey.controllers.Stack
+  constructor: (config) ->
+    @id = 'main-stack'
+    @class_name = 'stack'
+    @controllers = {
+      new_document: NewDocument
+      list: List
+      detail: Detail
+      edit: Edit
+    }
+
+    @routes = {
+      '^/new$': 'new_document'
+      '^/list$': 'list'
+      '^/detail$': 'detail'
+      '^/edit': 'edit'
+    }
+    @default = '/list'
+
+    super(config)
 
 module.exports = Main
