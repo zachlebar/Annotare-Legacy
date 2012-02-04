@@ -2,7 +2,8 @@ Flakey = require('flakey')
 $ = Flakey.$
 
 autoresize = require('../lib/autoresize')
-
+ui = require('../lib/uikit')
+settings = require('../settings')
 Document    = require('../models/Document')
 
 class Edit extends Flakey.controllers.Controller
@@ -39,11 +40,13 @@ class Edit extends Flakey.controllers.Controller
   save: () =>
     @doc.base_text = $('#editor').val()
     @doc.save()
+    ui.info('Everything\'s Shiny Capt\'n!', "\"#{ @doc.name }\" was successfully saved.").hide(settings.growl_hide_after).effect(settings.growl_effect)
     window.location.hash = "#/detail?" + Flakey.util.querystring.build(@query_params)
   
   discard: (params) =>
-    if confirm "Are you sure you want to discard all unsaved changes?"
-      window.location.hash = "#/list"
+    ui.confirm('There be Monsters!', 'Careful there Captain; are you sure you want to discard all changes to this document?').show (ok) ->
+      if ok
+        window.location.hash = "#/list"
 
 
 module.exports = Edit

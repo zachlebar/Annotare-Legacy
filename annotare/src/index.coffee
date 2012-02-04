@@ -1,5 +1,5 @@
 Flakey = require('flakey')
-$ = Flakey.$
+$ = window.$ = Flakey.$
 
 Annotare = require('./controllers/annotare')
 

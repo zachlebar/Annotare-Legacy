@@ -2,6 +2,8 @@ Flakey = require('flakey')
 $ = Flakey.$
 
 apprise = require('../lib/apprise-1.5.full')
+ui = require('../lib/uikit')
+settings = require('../settings')
 Document = require('../models/Document')
 
 
@@ -42,8 +44,9 @@ class Detail extends Flakey.controllers.Controller
     else if document.selection
       selection = document.selection.createRange()
     selection = selection.toString()
+    
     if selection.length == 0
-      apprise('Please select some text first')
+      ui.error('Well, you were right about this being a bad idea.', 'Please select some text first.').hide(settings.growl_hide_after).effect(settings.growl_effect)
     else
       # Save and Render highlight
       html = $("#" + @doc.slug).html()
@@ -58,7 +61,7 @@ class Detail extends Flakey.controllers.Controller
       selection = document.selection.createRange()
     selection = selection.toString()
     if selection.length == 0
-      apprise('Please select some text first')
+      ui.error('Well, you were right about this being a bad idea.', 'Please select some text first.').hide(settings.growl_hide_after).effect(settings.growl_effect)
     else
       # Save and Render highlight
       html = $("#" + @doc.slug).html()

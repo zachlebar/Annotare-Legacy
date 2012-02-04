@@ -35,7 +35,8 @@ class Document extends Flakey.models.Model
     if not @annotations or @annotations.constructor != Array
       @annotations = []
     
-    for note in @annotations
+    for note_id in @annotations
+      note = Annotation.get(note_id)
       html = note.apply(html)
     return html
   
