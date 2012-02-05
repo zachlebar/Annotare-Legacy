@@ -15445,6 +15445,17 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
       return note.apply(html);
     };
 
+    Document.prototype["delete"] = function() {
+      var note, note_id, _i, _len, _ref;
+      _ref = this.annotations;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        note_id = _ref[_i];
+        note = Annotation.get(note_id);
+        note["delete"]();
+      }
+      return Document.__super__["delete"].call(this);
+    };
+
     Document.prototype.draw_annotations = function(html) {
       var note, note_id, _i, _len, _ref;
       if (!this.annotations || this.annotations.constructor !== Array) {
@@ -17061,13 +17072,15 @@ require.define("/controllers/detail.js", function (require, module, exports, __d
     function Detail(config) {
       this.annotate = __bind(this.annotate, this);
       this.highlight = __bind(this.highlight, this);
+      this["delete"] = __bind(this["delete"], this);
       this.edit = __bind(this.edit, this);
       this.render = __bind(this.render, this);      this.id = "detail-view";
       this.class_name = "detail view";
       this.actions = {
         'click .edit': 'edit',
         'click .highlighter': 'highlight',
-        'click .annotate': 'annotate'
+        'click .annotate': 'annotate',
+        'click .delete': 'delete'
       };
       Detail.__super__.constructor.call(this, config);
       this.tmpl = Flakey.templates.get_template('detail', require('../views/detail'));
@@ -17087,6 +17100,16 @@ require.define("/controllers/detail.js", function (require, module, exports, __d
 
     Detail.prototype.edit = function(event) {
       return window.location.hash = "#/edit?" + Flakey.util.querystring.build(this.query_params);
+    };
+
+    Detail.prototype["delete"] = function(event) {
+      var _this = this;
+      return ui.confirm('Be careful!', 'Are you sure you want to delete this document?').show(function(ok) {
+        if (ok) {
+          _this.doc["delete"]();
+          return window.location.hash = "#/list";
+        }
+      });
     };
 
     Detail.prototype.highlight = function(event) {
@@ -17317,7 +17340,7 @@ require.define("/views/detail.js", function (require, module, exports, __dirname
     (function() {
       (function() {
       
-        __out.push('<div class="tool-bar-wrap">\n    <div id="tool-bar" class="tk-museo-sans">\n        <a href="javascript:null;" class="edit">Edit</a>\n        <a href="javascript:null;" class="highlighter">Highlight</a>\n        <a href="javascript:null;" class="annotate">Create Note</a>\n    </div>\n</div>\n\n<div class="wrap">\n\t<section class="two-column">\n\t    <article id="');
+        __out.push('<div class="tool-bar-wrap">\n    <div id="tool-bar" class="tk-museo-sans">\n        <a href="javascript:null;" class="edit">Edit</a>\n        <a href="javascript:null;" class="highlighter">Highlight</a>\n        <a href="javascript:null;" class="annotate">Create Note</a>\n        <a href="javascript:null;" class="delete">Delete</a>\n    </div>\n</div>\n\n<div class="wrap">\n\t<section class="two-column">\n\t    <article id="');
       
         __out.push(__sanitize(this.doc.slug));
       
@@ -17507,7 +17530,8 @@ require.define("/index.js", function (require, module, exports, __dirname, __fil
   $(document).ready(function() {
     var annotare, settings;
     settings = {
-      container: $('#application')
+      container: $('#application'),
+      base_model_endpoint: '/api'
     };
     Flakey.init(settings);
     Flakey.models.backend_controller.sync('Document');

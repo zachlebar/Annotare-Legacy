@@ -30,6 +30,12 @@ class Document extends Flakey.models.Model
     @save()
     return note.apply(html);
     
+  delete: ()->
+    for note_id in @annotations
+      note = Annotation.get(note_id)
+      note.delete()
+    super()
+    
   # Draw annotations on document
   draw_annotations: (html) =>
     if not @annotations or @annotations.constructor != Array

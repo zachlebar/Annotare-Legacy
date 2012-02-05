@@ -3,6 +3,7 @@
         <a href="javascript:null;" class="edit">Edit</a>
         <a href="javascript:null;" class="highlighter">Highlight</a>
         <a href="javascript:null;" class="annotate">Create Note</a>
+        <a href="javascript:null;" class="delete">Delete</a>
     </div>
 </div>
 

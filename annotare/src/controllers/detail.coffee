@@ -16,6 +16,7 @@ class Detail extends Flakey.controllers.Controller
       'click .edit': 'edit'
       'click .highlighter': 'highlight'
       'click .annotate': 'annotate'
+      'click .delete': 'delete'
     }
     
     super(config)
@@ -36,6 +37,12 @@ class Detail extends Flakey.controllers.Controller
     
   edit: (event) =>
     window.location.hash = "#/edit?" + Flakey.util.querystring.build(@query_params)
+    
+  delete: (event) =>
+    ui.confirm('Be careful!', 'Are you sure you want to delete this document?').show (ok) =>
+      if ok
+        @doc.delete()
+        window.location.hash = "#/list"
     
   highlight: (event) =>
     selection = undefined

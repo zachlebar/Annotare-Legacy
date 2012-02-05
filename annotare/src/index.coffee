@@ -14,7 +14,7 @@ class App extends Flakey.controllers.Controller
 $(document).ready () ->
   settings = {
     container: $('#application')
-    #base_model_endpoint: '/api'
+    base_model_endpoint: '/api'
   }
   Flakey.init(settings)
 
