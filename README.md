@@ -22,6 +22,7 @@ Annotare is written in CoffeeScript and based on the [Flakey.js framework by Cra
     cake full_build
     
 The Cakefile includes these tasks:
+
 - **build_js**: Build the src/ directory into public/annotare.js
 - **build_css**: Build css/ into public/annotare.css
 - **minify_js**: Use Google's Closure compiler to minify public/annotare.js into public/annotare.min.js
@@ -46,4 +47,4 @@ This will start up Bottle's built in dev server on localhost:8888.  Head there i
 [md]: http://daringfireball.net/projects/markdown
 [vim]: http://en.wikipedia.org/wiki/Vim_(text_editor)
 [rands]: http://www.randsinrepose.com/archives/2007/11/11/the_nerd_handbook.html
-[flakey]: http://flakey.crgwbr.com
+[flakey]: http://flakeyjs.crgwbr.com
