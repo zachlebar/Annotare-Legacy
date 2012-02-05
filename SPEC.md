@@ -21,16 +21,3 @@ Phase 2 - Expansions
 
 - - -
 - - -
-
-## Punch List
-
-crgwbr: Create "switch" to toggle the ability for a document to be annotated.
-crgwbr: Allow a document to be baked and unbaked, depending on whether it should be edited or annotated
-crgwbr: "History Mode" to allow for viewing the full content of a document througout its history.
-crgwbr: Highlight/annotations working on a per word level.
-
-zachlebar: Set toolbar to always be visible as you scroll down the page.
-zachlebar: Mockup "History Mode" view
-zachlebar: Look into the preliminary ways of parsing library data
-zachlebar: Mockup how documents will be organized and stored
-zachlebar: Mockup Homepage/Dashboard view
