@@ -13586,7 +13586,7 @@ if (!JSON) {
 
 require.define("/controllers/annotare.js", function (require, module, exports, __dirname, __filename) {
 (function() {
-  var $, Detail, Edit, Flakey, List, Main, NewDocument,
+  var $, Detail, Edit, Flakey, History, List, Main, NewDocument,
     __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
@@ -13602,6 +13602,8 @@ require.define("/controllers/annotare.js", function (require, module, exports, _
 
   Edit = require('./edit');
 
+  History = require('./history');
+
   Main = (function(_super) {
 
     __extends(Main, _super);
@@ -13613,13 +13615,15 @@ require.define("/controllers/annotare.js", function (require, module, exports, _
         new_document: NewDocument,
         list: List,
         detail: Detail,
-        edit: Edit
+        edit: Edit,
+        history: History
       };
       this.routes = {
         '^/new$': 'new_document',
         '^/list$': 'list',
         '^/detail$': 'detail',
-        '^/edit': 'edit'
+        '^/edit$': 'edit',
+        '^/history$': 'history'
       };
       this["default"] = '/list';
       Main.__super__.constructor.call(this, config);
@@ -16904,7 +16908,7 @@ require.define("/views/new_document.js", function (require, module, exports, __d
     (function() {
       (function() {
       
-        __out.push('<div class="tool-bar-wrap">\n    <div id="tool-bar" class="tk-museo-sans">\n        <a href="javascript:null;" class="discard">Discard Changes</a>\n        <a href="javascript:null;" class="save">Save Changes</a>\n    </div>\n</div>\n\n<div class="wrap">\n\t<section class="one-column">\n\t    <article>\n\t        <h2>Create a New Document</h2>\n\t\n\t        <input type="text" id="name" name="name" placeholder="The Hitchhiker\'s Guide to the Galaxy" />\n\t\n\t        <textarea id="editor" placeholder="Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun..."></textarea>\n\t    </article>\n\t</section>\n</div>');
+        __out.push('<div class="tool-bar-wrap">\n  <div id="tool-bar" class="tk-museo-sans">\n    <a href="javascript:null;" class="discard">Discard Changes</a>\n    <a href="javascript:null;" class="save">Save Changes</a>\n  </div>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <article>\n      <h2>Create a New Document</h2>\n  \n      <input type="text" id="name" name="name" placeholder="The Hitchhiker\'s Guide to the Galaxy" />\n  \n      <textarea id="editor" placeholder="Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun..."></textarea>\n    </article>\n  </section>\n</div>');
       
       }).call(this);
       
@@ -17016,25 +17020,25 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
       (function() {
         var doc, _i, _len, _ref;
       
-        __out.push('<div class="tool-bar-wrap">\n    <div id="tool-bar" class="tk-museo-sans">\n        <p>"You have to be resourceful at Bethel." &mdash; Fred Rusk</p>\n    </div>\n</div>\n\n<div class="wrap">\n\t<section class="one-column">\n\t    ');
+        __out.push('<div class="tool-bar-wrap">\n  <div id="tool-bar" class="tk-museo-sans">\n    <p>"You have to be resourceful at Bethel." &mdash; Fred Rusk</p>\n  </div>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    ');
       
         if (this.list.length === 0) {
-          __out.push('\n\t        <h4>It doesn\'t look like you\'ve made any notes yet. You should really get on that, Slacker.</h4>\n\t    ');
+          __out.push('\n      <h4>It doesn\'t look like you\'ve made any notes yet. You should really get on that, Slacker.</h4>\n    ');
         } else {
-          __out.push('\n\t        ');
+          __out.push('\n      ');
           _ref = this.list;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             doc = _ref[_i];
-            __out.push('\n\t            <article class="document" id="document-');
+            __out.push('\n        <article class="document" id="document-');
             __out.push(__sanitize(doc.id));
-            __out.push('">\n\t                <h1>');
+            __out.push('">\n          <h1>');
             __out.push(__sanitize(doc.name));
-            __out.push('</h1>\n\t\t\t\t</article>\n\t        ');
+            __out.push('</h1>\n        </article>\n      ');
           }
-          __out.push('\n\t    ');
+          __out.push('\n    ');
         }
       
-        __out.push('\n\t</section>\n</div>');
+        __out.push('\n  </section>\n</div>');
       
       }).call(this);
       
@@ -17340,19 +17344,23 @@ require.define("/views/detail.js", function (require, module, exports, __dirname
     (function() {
       (function() {
       
-        __out.push('<div class="tool-bar-wrap">\n    <div id="tool-bar" class="tk-museo-sans">\n        <a href="javascript:null;" class="edit">Edit</a>\n        <a href="javascript:null;" class="highlighter">Highlight</a>\n        <a href="javascript:null;" class="annotate">Create Note</a>\n        <a href="javascript:null;" class="delete">Delete</a>\n    </div>\n</div>\n\n<div class="wrap">\n\t<section class="two-column">\n\t    <article id="');
+        __out.push('<div class="tool-bar-wrap">\n  <div id="tool-bar" class="tk-museo-sans">\n    <a href="javascript:null;" class="edit">Edit</a>\n    <a href="javascript:null;" class="highlighter">Highlight</a>\n    <a href="javascript:null;" class="annotate">Create Note</a>\n    <a href="#/history?id=');
+      
+        __out.push(this.doc.id);
+      
+        __out.push('" class="">History</a>\n    <a href="javascript:null;" class="delete">Delete</a>\n  </div>\n</div>\n\n<div class="wrap">\n  <section class="two-column">\n    <article id="detail-');
       
         __out.push(__sanitize(this.doc.slug));
       
-        __out.push('">\n\t        <h4 class="name">');
+        __out.push('">\n      <h4 class="name">');
       
         __out.push(__sanitize(this.doc.name));
       
-        __out.push('</h4>\n\t        ');
+        __out.push('</h4>\n      ');
       
         __out.push(this.doc.draw_annotations(this.doc.render()));
       
-        __out.push('\n\t    </article>\n\t    \n\t    <aside>\n\t        &nbsp;\n\t    </aside>\n\t</section>\n</div>');
+        __out.push('\n    </article>\n    \n    <aside>\n      &nbsp;\n    </aside>\n  </section>\n</div>');
       
       }).call(this);
       
@@ -17481,15 +17489,169 @@ require.define("/views/edit.js", function (require, module, exports, __dirname, 
     (function() {
       (function() {
       
-        __out.push('<div class="tool-bar-wrap">\n    <div id="tool-bar" class="tk-museo-sans">\n        <a href="javascript:null;" class="discard">Discard Changes</a>\n        <a href="javascript:null;" class="save">Save Changes</a>\n    </div>\n</div>\n\n<div class="wrap">\n\t<section class="one-column">\n\t    <article>\n\t        <h2>Editing <em>');
+        __out.push('<div class="tool-bar-wrap">\n  <div id="tool-bar" class="tk-museo-sans">\n    <a href="javascript:null;" class="discard">Discard Changes</a>\n    <a href="javascript:null;" class="save">Save Changes</a>\n  </div>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <article>\n      <h2>History of <em>');
       
         __out.push(__sanitize(this.doc.name));
       
-        __out.push('</em></h2>\n\t\n\t        <textarea id="editor" placeholder="Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun...">');
+        __out.push('</em></h2>\n  \n      <textarea id="editor" placeholder="Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun...">');
       
         __out.push(__sanitize(this.doc.base_text));
       
-        __out.push('</textarea>\n\t    </article>\n\t</section>\n</div>');
+        __out.push('</textarea>\n    </article>\n  </section>\n</div>');
+      
+      }).call(this);
+      
+    }).call(__obj);
+    __obj.safe = __objSafe, __obj.escape = __escape;
+    return __out.join('');
+  };
+}).call(this);
+
+});
+
+require.define("/controllers/history.js", function (require, module, exports, __dirname, __filename) {
+(function() {
+  var $, Document, Flakey, History, Showdown, apprise,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  Flakey = require('flakey');
+
+  $ = Flakey.$;
+
+  Showdown = require('../lib/showdown');
+
+  apprise = require('../lib/apprise-1.5.full');
+
+  Document = require('../models/Document');
+
+  History = (function(_super) {
+
+    __extends(History, _super);
+
+    function History(config) {
+      this.update = __bind(this.update, this);
+      this.render = __bind(this.render, this);      this.id = "history-view";
+      this.class_name = "history view";
+      this.actions = {
+        'change #version-input': 'update'
+      };
+      History.__super__.constructor.call(this, config);
+      this.tmpl = Flakey.templates.get_template('history', require('../views/history'));
+    }
+
+    History.prototype.render = function() {
+      var context, doc, latest, max_version, time;
+      if (!this.query_params.id) return;
+      doc = Document.get(this.query_params.id);
+      max_version = doc.versions.length - 1;
+      latest = doc.versions.length - 1;
+      time = doc.versions[latest].time;
+      context = {
+        doc: doc,
+        time: new Date(time),
+        max_version: max_version
+      };
+      this.html(this.tmpl.render(context));
+      this.unbind_actions();
+      return this.bind_actions();
+    };
+
+    History.prototype.update = function(event) {
+      var converter, doc, html, rev, time, version_index;
+      version_index = $('#version-input').val();
+      doc = Document.get(this.query_params.id);
+      time = new Date(doc.versions[version_index].time);
+      rev = doc.evolve(doc.versions[version_index].version_id);
+      converter = new Showdown.converter();
+      html = converter.makeHtml(rev.base_text);
+      $('#history-time').html(time.toLocaleString());
+      return $('#history-content').html(html);
+    };
+
+    return History;
+
+  })(Flakey.controllers.Controller);
+
+  module.exports = History;
+
+}).call(this);
+
+});
+
+require.define("/views/history.js", function (require, module, exports, __dirname, __filename) {
+(function() {
+  this.ecoTemplates || (this.ecoTemplates = {});
+  this.ecoTemplates["history"] = function(__obj) {
+    if (!__obj) __obj = {};
+    var __out = [], __capture = function(callback) {
+      var out = __out, result;
+      __out = [];
+      callback.call(this);
+      result = __out.join('');
+      __out = out;
+      return __safe(result);
+    }, __sanitize = function(value) {
+      if (value && value.ecoSafe) {
+        return value;
+      } else if (typeof value !== 'undefined' && value != null) {
+        return __escape(value);
+      } else {
+        return '';
+      }
+    }, __safe, __objSafe = __obj.safe, __escape = __obj.escape;
+    __safe = __obj.safe = function(value) {
+      if (value && value.ecoSafe) {
+        return value;
+      } else {
+        if (!(typeof value !== 'undefined' && value != null)) value = '';
+        var result = new String(value);
+        result.ecoSafe = true;
+        return result;
+      }
+    };
+    if (!__escape) {
+      __escape = __obj.escape = function(value) {
+        return ('' + value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      };
+    }
+    (function() {
+      (function() {
+      
+        __out.push('<div class="tool-bar-wrap">\n  <div id="tool-bar" class="tk-museo-sans">\n    <a href="#/detail?id=');
+      
+        __out.push(this.doc.id);
+      
+        __out.push('">Back to Normal View</a>\n    \n    <label for="version-input">Version:</label>\n    <input type="range" min="0" max="');
+      
+        __out.push(__sanitize(this.max_version));
+      
+        __out.push('" value="');
+      
+        __out.push(__sanitize(this.version || this.max_version));
+      
+        __out.push('" step="1" id="version-input" name="version-input" />\n  </div>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <article id="history-');
+      
+        __out.push(__sanitize(this.doc.slug));
+      
+        __out.push('">\n      <h4>Version from <em id="history-time">');
+      
+        __out.push(__sanitize(this.time.toLocaleString()));
+      
+        __out.push('</em></h4>\n      <hr />\n      \n      <h3>');
+      
+        __out.push(__sanitize(this.doc.name));
+      
+        __out.push('</h3>\n      <div id="history-content">\n        ');
+      
+        __out.push(this.html != null ? this.html : this.doc.render());
+      
+        __out.push('\n      </div>\n    </article>\n  </section>\n</div>');
       
       }).call(this);
       

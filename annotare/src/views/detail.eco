@@ -1,21 +1,22 @@
 <div class="tool-bar-wrap">
-    <div id="tool-bar" class="tk-museo-sans">
-        <a href="javascript:null;" class="edit">Edit</a>
-        <a href="javascript:null;" class="highlighter">Highlight</a>
-        <a href="javascript:null;" class="annotate">Create Note</a>
-        <a href="javascript:null;" class="delete">Delete</a>
-    </div>
+  <div id="tool-bar" class="tk-museo-sans">
+    <a href="javascript:null;" class="edit">Edit</a>
+    <a href="javascript:null;" class="highlighter">Highlight</a>
+    <a href="javascript:null;" class="annotate">Create Note</a>
+    <a href="#/history?id=<%- @doc.id %>" class="">History</a>
+    <a href="javascript:null;" class="delete">Delete</a>
+  </div>
 </div>
 
 <div class="wrap">
-	<section class="two-column">
-	    <article id="<%= @doc.slug %>">
-	        <h4 class="name"><%= @doc.name %></h4>
-	        <%- @doc.draw_annotations(@doc.render()) %>
-	    </article>
-	    
-	    <aside>
-	        &nbsp;
-	    </aside>
-	</section>
+  <section class="two-column">
+    <article id="detail-<%= @doc.slug %>">
+      <h4 class="name"><%= @doc.name %></h4>
+      <%- @doc.draw_annotations(@doc.render()) %>
+    </article>
+    
+    <aside>
+      &nbsp;
+    </aside>
+  </section>
 </div>

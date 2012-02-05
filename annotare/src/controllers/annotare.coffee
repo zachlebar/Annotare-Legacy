@@ -5,6 +5,7 @@ NewDocument = require('./new_document')
 List = require('./list')
 Detail = require('./detail')
 Edit = require('./edit')
+History = require('./history')
 
   
 class Main extends Flakey.controllers.Stack
@@ -16,13 +17,15 @@ class Main extends Flakey.controllers.Stack
       list: List
       detail: Detail
       edit: Edit
+      history: History
     }
 
     @routes = {
       '^/new$': 'new_document'
       '^/list$': 'list'
       '^/detail$': 'detail'
-      '^/edit': 'edit'
+      '^/edit$': 'edit'
+      '^/history$': 'history'
     }
     @default = '/list'
 

@@ -1,19 +1,19 @@
 <div class="tool-bar-wrap">
-    <div id="tool-bar" class="tk-museo-sans">
-        <p>"You have to be resourceful at Bethel." &mdash; Fred Rusk</p>
-    </div>
+  <div id="tool-bar" class="tk-museo-sans">
+    <p>"You have to be resourceful at Bethel." &mdash; Fred Rusk</p>
+  </div>
 </div>
 
 <div class="wrap">
-	<section class="one-column">
-	    <% if @list.length == 0: %>
-	        <h4>It doesn't look like you've made any notes yet. You should really get on that, Slacker.</h4>
-	    <% else: %>
-	        <% for doc in @list: %>
-	            <article class="document" id="document-<%= doc.id %>">
-	                <h1><%= doc.name %></h1>
-				</article>
-	        <% end %>
-	    <% end %>
-	</section>
+  <section class="one-column">
+    <% if @list.length == 0: %>
+      <h4>It doesn't look like you've made any notes yet. You should really get on that, Slacker.</h4>
+    <% else: %>
+      <% for doc in @list: %>
+        <article class="document" id="document-<%= doc.id %>">
+          <h1><%= doc.name %></h1>
+        </article>
+      <% end %>
+    <% end %>
+  </section>
 </div>
