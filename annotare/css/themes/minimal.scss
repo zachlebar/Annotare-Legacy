@@ -1,0 +1,112 @@
+// Minimal Annotare Theme
+
+$base-size: 11px;
+
+$page-background: #EEE url('/img/white_texture.png') repeat;
+$app-background: rgba(255, 255, 255, 0.6);
+
+$font-color: #444;
+
+$secondary: #999;
+$tertiary: #CC0000;
+
+$max-width: 960px;
+$border-radius: 10px;
+
+$sans: Verdana, 'Bitstream Vera Sans', sans-serif;
+$serif: Palatino, Georgia, serif;
+$code: Consolas, Inconsolata, monospace;
+
+body.minimal {
+  background: $page-background;
+  color: $font-color;
+  
+  width: 95%;
+  max-width: $max-width;
+  margin-right: auto;
+  margin-left: auto;
+  
+  font-size: modular-scale(0);
+  line-height: 1.5;
+  font-family: $sans;
+  
+  .sans { font-family: $sans; }
+  .serif { font-family: $serif; }
+  .bold { font-weight: bold; }
+  .normal { font-weight: normal; }
+  
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1;
+    margin: 10px 0 10px 0;
+  }
+  
+  h1 {
+    font-size: modular-scale(3);
+    @extend .normal;
+    @extend .serif;
+  }
+  h2 {
+    font-size: modular-scale(2);
+    @extend .normal;
+    @extend .sans;
+  }
+  h3 {
+    font-size: modular-scale(1);
+    @extend .bold;
+    @extend .sans;
+  }
+  h4 {
+    font-size: modular-scale(1);
+    @extend .bold;
+    @extend .sans;
+  }
+  h5 {
+    font-size: modular-scale(0);
+    @extend .bold;
+    @extend .sans;
+  }
+  h6 {
+    font-size: modular-scale(0);
+    @extend .bold;
+    @extend .sans;
+  }
+  
+  a {
+    text-decoration: none;
+    color: $font-color;
+    font-weight: bold;
+  }
+  
+  header {
+    margin: 20px 0 0 0;
+    padding: 10px 10px 0 10px;
+    h1 { float: left; }
+    ul {
+      float: right;
+      margin-top: 44px;
+      li {
+        margin-left: 15px;
+        display: inline;
+        a { font-weight: normal; }
+      }
+    }
+  }
+  
+  #application {
+    background: $app-background;
+    border: 1px solid $secondary;
+    border-radius: $border-radius;
+    box-shadow: 0 0 15px $secondary;
+  }
+  
+  #tool-bar {
+    a {
+      margin-right: 15px;
+    }
+    margin-bottom: 20px;
+  }
+  
+  footer, #application {
+    padding: 10px;
+  }
+}
