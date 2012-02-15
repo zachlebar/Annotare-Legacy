@@ -1,6 +1,7 @@
 *.scssc
 *.sassc
 *.pyc
-*.json
+annotare/server/*.json
 *.esproj
 .sass-cache
+.DS_Store
