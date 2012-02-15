@@ -45,7 +45,6 @@ task 'watch', 'Perform a default full build whenever a file in src/ or css/ chan
 # Build SASS or SCSS into CSS
 build_annotare_css = (input, output, style, callback) ->
   exec "sass --style #{ style } --update #{ input }:#{ output }", (err, stdout, stderr) ->
-    throw err if err
     console.log stdout + stderr
     console.log "Compiled #{ input } to #{ output }"
     if callback?

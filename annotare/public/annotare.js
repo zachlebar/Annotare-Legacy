@@ -346,7 +346,6 @@ module.exports = {"main":"./flakey.js"}
 
 require.define("/node_modules/flakey/flakey.js", function (require, module, exports, __dirname, __filename) {
 (function() {
-
   /**
  * Diff Match and Patch
  *
@@ -2534,7 +2533,6 @@ this['diff_match_patch'] = diff_match_patch;
 this['DIFF_DELETE'] = DIFF_DELETE;
 this['DIFF_INSERT'] = DIFF_INSERT;
 this['DIFF_EQUAL'] = DIFF_EQUAL;
-
   /*!
  * jQuery JavaScript Library v1.7.1
  * http://jquery.com/
@@ -11801,7 +11799,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 
 })( window );;
-
   /*
     http://www.JSON.org/json2.js
     2011-10-19
@@ -12289,9 +12286,11 @@ if (!JSON) {
         };
     }
 }());;
-
-  var $, Backend, BackendController, Controller, Events, Flakey, JSON, LocalBackend, MemoryBackend, Model, ServerBackend, SocketIOBackend, Stack, Template, get_template;
-  var __hasProp = Object.prototype.hasOwnProperty, __indexOf = Array.prototype.indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (__hasProp.call(this, i) && this[i] === item) return i; } return -1; }, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var $, Backend, BackendController, Controller, Events, Flakey, JSON, LocalBackend, MemoryBackend, Model, ServerBackend, SocketIOBackend, Stack, Template, get_template,
+    __hasProp = Object.prototype.hasOwnProperty,
+    __indexOf = Array.prototype.indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; },
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   Flakey = {
     diff_patch: new diff_match_patch(),
@@ -12323,8 +12322,6 @@ if (!JSON) {
     }
     return Flakey.models.backend_controller = new Flakey.models.BackendController();
   };
-
-  if (window) window.Flakey = Flakey;
 
   Flakey.util = {
     async: function(fn) {
@@ -12562,11 +12559,13 @@ if (!JSON) {
       return obj;
     };
 
-    Model.prototype.evolve = function(version_id) {
-      var key, obj, patches, rev, saved, value, versions, _i, _len, _ref;
+    Model.prototype.evolve = function(version_id, versions) {
+      var key, obj, patches, rev, saved, value, _i, _len, _ref;
       obj = {};
-      saved = Flakey.models.backend_controller.get(this.constructor.model_name, this.id);
-      versions = saved != null ? saved.versions : {};
+      if (versions === void 0 || versions.constructor !== Array) {
+        saved = Flakey.models.backend_controller.get(this.constructor.model_name, this.id);
+        versions = saved != null ? saved.versions : {};
+      }
       for (_i = 0, _len = versions.length; _i < _len; _i++) {
         rev = versions[_i];
         _ref = rev.fields;
@@ -12617,21 +12616,26 @@ if (!JSON) {
     };
 
     Model.prototype["import"] = function(obj) {
-      var key, value, _ref, _results;
+      var key, value, _i, _len, _ref, _ref2, _results;
       this.versions = obj.versions;
       this.id = obj.id;
-      _ref = this.evolve();
+      _ref = this.constructor.fields;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        key = _ref[_i];
+        this[key] = void 0;
+      }
+      _ref2 = this.evolve(void 0, this.versions);
       _results = [];
-      for (key in _ref) {
-        if (!__hasProp.call(_ref, key)) continue;
-        value = _ref[key];
+      for (key in _ref2) {
+        if (!__hasProp.call(_ref2, key)) continue;
+        value = _ref2[key];
         _results.push(this[key] = value);
       }
       return _results;
     };
 
     Model.prototype.pop_version = function() {
-      return this.versions.pop();
+      if (this.versions.length > 0) return this.versions.pop();
     };
 
     Model.prototype.push_version = function(diff) {
@@ -12644,6 +12648,36 @@ if (!JSON) {
       };
       Object.freeze(version);
       return this.versions.push(version);
+    };
+
+    Model.prototype.rollback = function(version_id) {
+      var exists, i, latest, version, _i, _j, _len, _len2, _ref, _ref2;
+      if (parseInt(version_id) < this.versions.length) {
+        _ref = Array(parseInt(version_id));
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          i = _ref[_i];
+          this.pop_version();
+        }
+      } else {
+        exists = false;
+        _ref2 = this.versions;
+        for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+          version = _ref2[_j];
+          if (version.version_id === version_id) exists = true;
+        }
+        if (!exists) {
+          throw new ReferenceError("Version " + version_id + " does not exist.");
+        }
+        latest = this.versions[this.versions.length - 1];
+        while (latest.version_id !== version_id && this.versions.length > 1) {
+          this.pop_version();
+        }
+      }
+      this["import"]({
+        id: this.id,
+        versions: this.versions
+      });
+      return this.write();
     };
 
     Model.prototype.save = function(callback) {
@@ -13000,9 +13034,9 @@ if (!JSON) {
 
   })();
 
-  MemoryBackend = (function() {
+  MemoryBackend = (function(_super) {
 
-    __extends(MemoryBackend, Backend);
+    __extends(MemoryBackend, _super);
 
     function MemoryBackend() {
       if (!window.memcache) window.memcache = {};
@@ -13019,11 +13053,11 @@ if (!JSON) {
 
     return MemoryBackend;
 
-  })();
+  })(Backend);
 
-  LocalBackend = (function() {
+  LocalBackend = (function(_super) {
 
-    __extends(LocalBackend, Backend);
+    __extends(LocalBackend, _super);
 
     function LocalBackend() {
       this.prefix = 'flakey-';
@@ -13045,11 +13079,11 @@ if (!JSON) {
 
     return LocalBackend;
 
-  })();
+  })(Backend);
 
-  ServerBackend = (function() {
+  ServerBackend = (function(_super) {
 
-    __extends(ServerBackend, Backend);
+    __extends(ServerBackend, _super);
 
     function ServerBackend() {
       this.server_cache = {};
@@ -13197,11 +13231,11 @@ if (!JSON) {
 
     return ServerBackend;
 
-  })();
+  })(Backend);
 
-  SocketIOBackend = (function() {
+  SocketIOBackend = (function(_super) {
 
-    __extends(SocketIOBackend, Backend);
+    __extends(SocketIOBackend, _super);
 
     function SocketIOBackend() {
       var _this = this;
@@ -13251,8 +13285,8 @@ if (!JSON) {
     };
 
     SocketIOBackend.prototype.save = function(name, id, versions, force_write) {
-      var cached_obj, proposed_obj;
-      var _this = this;
+      var cached_obj, proposed_obj,
+        _this = this;
       proposed_obj = {
         id: id,
         versions: versions
@@ -13311,7 +13345,7 @@ if (!JSON) {
 
     return SocketIOBackend;
 
-  })();
+  })(Backend);
 
   Flakey.models = {
     Model: Model,
@@ -13580,34 +13614,33 @@ if (!JSON) {
 
   module.exports = Flakey;
 
+  if (window) window.Flakey = Flakey;
+
 }).call(this);
 
 });
 
 require.define("/controllers/annotare.js", function (require, module, exports, __dirname, __filename) {
 (function() {
-  var $, Detail, Edit, Flakey, History, List, Main, NewDocument;
-  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+  var $, Flakey, Main,
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   Flakey = require('flakey');
 
   $ = Flakey.$;
 
-  NewDocument = require('./new_document');
+  Main = (function(_super) {
 
-  List = require('./list');
-
-  Detail = require('./detail');
-
-  Edit = require('./edit');
-
-  History = require('./history');
-
-  Main = (function() {
-
-    __extends(Main, Flakey.controllers.Stack);
+    __extends(Main, _super);
 
     function Main(config) {
+      var Detail, Edit, History, List, NewDocument;
+      NewDocument = require('./new_document');
+      List = require('./list');
+      Detail = require('./detail');
+      Edit = require('./edit');
+      History = require('./history');
       this.id = 'main-stack';
       this.class_name = 'stack';
       this.controllers = {
@@ -13630,7 +13663,7 @@ require.define("/controllers/annotare.js", function (require, module, exports, _
 
     return Main;
 
-  })();
+  })(Flakey.controllers.Stack);
 
   module.exports = Main;
 
@@ -13640,8 +13673,10 @@ require.define("/controllers/annotare.js", function (require, module, exports, _
 
 require.define("/controllers/new_document.js", function (require, module, exports, __dirname, __filename) {
 (function() {
-  var $, Document, Flakey, NewDocument, autoresize, settings, ui;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+  var $, Document, Flakey, NewDocument, autoresize, settings, ui,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   Flakey = require('flakey');
 
@@ -13655,9 +13690,9 @@ require.define("/controllers/new_document.js", function (require, module, export
 
   Document = require('../models/Document');
 
-  NewDocument = (function() {
+  NewDocument = (function(_super) {
 
-    __extends(NewDocument, Flakey.controllers.Controller);
+    __extends(NewDocument, _super);
 
     function NewDocument(config) {
       this.discard = __bind(this.discard, this);
@@ -13708,7 +13743,7 @@ require.define("/controllers/new_document.js", function (require, module, export
 
     return NewDocument;
 
-  })();
+  })(Flakey.controllers.Controller);
 
   module.exports = NewDocument;
 
@@ -15383,18 +15418,23 @@ Card.prototype.render = function(options){
 });
 
 require.define("/settings.js", function (require, module, exports, __dirname, __filename) {
+(function() {
 
   module.exports = {
     growl_hide_after: 5000,
     growl_effect: 'slide'
   };
 
+}).call(this);
+
 });
 
 require.define("/models/Document.js", function (require, module, exports, __dirname, __filename) {
 (function() {
-  var Annotation, Document, Flakey, Showdown;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+  var Annotation, Document, Flakey, Showdown,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   Flakey = require('flakey');
 
@@ -15402,9 +15442,9 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
 
   Annotation = require('./Annotation');
 
-  Document = (function() {
+  Document = (function(_super) {
 
-    __extends(Document, Flakey.models.Model);
+    __extends(Document, _super);
 
     function Document() {
       this.render = __bind(this.render, this);
@@ -15417,7 +15457,7 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
 
     Document.model_name = 'Document';
 
-    Document.fields = ['name', 'slug', 'base_text', 'annotations'];
+    Document.fields = ['id', 'name', 'slug', 'base_text', 'annotations'];
 
     Document.prototype.annotate = function(selection, html, attachment) {
       var note, type;
@@ -15475,14 +15515,15 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
     };
 
     Document.prototype.get_notes = function() {
-      var note, notes, _i, _len, _ref;
+      var id, note, notes, _i, _len, _ref;
       if (!this.annotations || this.annotations.constructor !== Array) {
         this.annotations = [];
       }
       notes = [];
       _ref = this.annotations;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        note = _ref[_i];
+        id = _ref[_i];
+        note = Annotation.get(id);
         if (note.type === "note") notes.push(note);
       }
       return notes;
@@ -15497,7 +15538,7 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
 
     return Document;
 
-  })();
+  })(Flakey.models.Model);
 
   module.exports = Document;
 
@@ -16812,14 +16853,16 @@ module.exports = Showdown;
 
 require.define("/models/Annotation.js", function (require, module, exports, __dirname, __filename) {
 (function() {
-  var Annotation, Flakey;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+  var Annotation, Flakey,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   Flakey = require('flakey');
 
-  Annotation = (function() {
+  Annotation = (function(_super) {
 
-    __extends(Annotation, Flakey.models.Model);
+    __extends(Annotation, _super);
 
     function Annotation() {
       this.apply = __bind(this.apply, this);
@@ -16828,7 +16871,7 @@ require.define("/models/Annotation.js", function (require, module, exports, __di
 
     Annotation.model_name = 'Annotation';
 
-    Annotation.fields = ['text', 'type', 'attachment', 'document'];
+    Annotation.fields = ['id', 'text', 'type', 'attachment', 'document'];
 
     Annotation.prototype.apply = function(html) {
       var note, parts, text, _i, _len;
@@ -16836,7 +16879,7 @@ require.define("/models/Annotation.js", function (require, module, exports, __di
       for (_i = 0, _len = parts.length; _i < _len; _i++) {
         text = parts[_i];
         if (this.type === "note") {
-          note = '<span id="note-' + this.id + '" class="' + this.type + '">' + text + '<span id="note-detail-' + this.id + '" class="note-detail">' + this.attachment + '</span></span>';
+          note = '<span id="note-' + this.id + '" class="' + this.type + '">' + text + '<span contenteditable="true" id="note-detail-' + this.id + '" class="note-detail">' + this.attachment + '</span></span>';
         } else {
           note = '<span id="note-' + this.id + '" class="' + this.type + '">' + text + '</span>';
         }
@@ -16847,7 +16890,7 @@ require.define("/models/Annotation.js", function (require, module, exports, __di
 
     return Annotation;
 
-  })();
+  })(Flakey.models.Model);
 
   module.exports = Annotation;
 
@@ -16912,8 +16955,10 @@ require.define("/views/new_document.js", function (require, module, exports, __d
 
 require.define("/controllers/list.js", function (require, module, exports, __dirname, __filename) {
 (function() {
-  var $, Document, Flakey, List;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+  var $, Document, Flakey, List,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   Flakey = require('flakey');
 
@@ -16921,9 +16966,9 @@ require.define("/controllers/list.js", function (require, module, exports, __dir
 
   Document = require('../models/Document');
 
-  List = (function() {
+  List = (function(_super) {
 
-    __extends(List, Flakey.controllers.Controller);
+    __extends(List, _super);
 
     function List(config) {
       this.render = __bind(this.render, this);      this.id = "list-view";
@@ -16956,7 +17001,7 @@ require.define("/controllers/list.js", function (require, module, exports, __dir
 
     return List;
 
-  })();
+  })(Flakey.controllers.Controller);
 
   module.exports = List;
 
@@ -17026,7 +17071,7 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
           __out.push('\n    ');
         }
       
-        __out.push('\n  </section>\n</div>');
+        __out.push('\n    <div class="clear"></div>\n  </section>\n</div>');
       
       }).call(this);
       
@@ -17040,14 +17085,14 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
 
 require.define("/controllers/detail.js", function (require, module, exports, __dirname, __filename) {
 (function() {
-  var $, Detail, Document, Flakey, apprise, settings, ui;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+  var $, Annotation, Detail, Document, Flakey, settings, ui,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   Flakey = require('flakey');
 
   $ = Flakey.$;
-
-  apprise = require('../lib/apprise-1.5.full');
 
   ui = require('../lib/uikit');
 
@@ -17055,14 +17100,17 @@ require.define("/controllers/detail.js", function (require, module, exports, __d
 
   Document = require('../models/Document');
 
-  Detail = (function() {
+  Annotation = require('../models/Annotation');
 
-    __extends(Detail, Flakey.controllers.Controller);
+  Detail = (function(_super) {
+
+    __extends(Detail, _super);
 
     function Detail(config) {
       this.annotate = __bind(this.annotate, this);
       this.highlight = __bind(this.highlight, this);
       this["delete"] = __bind(this["delete"], this);
+      this.edit_note = __bind(this.edit_note, this);
       this.edit = __bind(this.edit, this);
       this.render = __bind(this.render, this);      this.id = "detail-view";
       this.class_name = "detail view";
@@ -17070,7 +17118,8 @@ require.define("/controllers/detail.js", function (require, module, exports, __d
         'click .edit': 'edit',
         'click .highlighter': 'highlight',
         'click .annotate': 'annotate',
-        'click .delete': 'delete'
+        'click .delete': 'delete',
+        'blur .note-detail': 'edit_note'
       };
       Detail.__super__.constructor.call(this, config);
       this.tmpl = Flakey.templates.get_template('detail', require('../views/detail'));
@@ -17090,6 +17139,17 @@ require.define("/controllers/detail.js", function (require, module, exports, __d
 
     Detail.prototype.edit = function(event) {
       return window.location.hash = "#/edit?" + Flakey.util.querystring.build(this.query_params);
+    };
+
+    Detail.prototype.edit_note = function(event) {
+      var content, id, note, target;
+      target = $(event.target);
+      id = target.attr('id').replace('note-detail-', '');
+      content = target.html().replace(/\<br\/\>/, '\n\n').replace(/\<([\w\d\/]*)\>/g, ' ');
+      note = Annotation.get(id);
+      note.attachment = content;
+      note.type = "note";
+      return note.save();
     };
 
     Detail.prototype["delete"] = function(event) {
@@ -17114,15 +17174,14 @@ require.define("/controllers/detail.js", function (require, module, exports, __d
       if (selection.length === 0) {
         return ui.error('Well, you were right about this being a bad idea.', 'Please select some text first.').hide(settings.growl_hide_after).effect(settings.growl_effect);
       } else {
-        html = $("#" + this.doc.slug).html();
+        html = $("#detail-" + this.doc.slug).html();
         html = this.doc.annotate(selection, html);
-        return $("#" + this.doc.slug).html(html);
+        return $("#detail-" + this.doc.slug).html(html);
       }
     };
 
     Detail.prototype.annotate = function(event) {
       var html, options, selection;
-      var _this = this;
       selection = void 0;
       if (window.getSelection) {
         selection = window.getSelection();
@@ -17133,157 +17192,23 @@ require.define("/controllers/detail.js", function (require, module, exports, __d
       if (selection.length === 0) {
         return ui.error('Well, you were right about this being a bad idea.', 'Please select some text first.').hide(settings.growl_hide_after).effect(settings.growl_effect);
       } else {
-        html = $("#" + this.doc.slug).html();
+        html = $("#detail-" + this.doc.slug).html();
         options = {
           input: true,
           animate: true
         };
-        return apprise('Please enter a note', options, function(note) {
-          if (note) {
-            html = _this.doc.annotate(selection, html, note);
-            return $("#" + _this.doc.slug).html(html);
-          }
-        });
+        html = this.doc.annotate(selection, html, "Click here to edit this note.");
+        return $("#detail-" + this.doc.slug).html(html);
       }
     };
 
     return Detail;
 
-  })();
+  })(Flakey.controllers.Controller);
 
   module.exports = Detail;
 
 }).call(this);
-
-});
-
-require.define("/lib/apprise-1.5.full.js", function (require, module, exports, __dirname, __filename) {
-// Apprise 1.5 by Daniel Raftery
-// http://thrivingkings.com/apprise
-//
-// Button text added by Adam Bezulski
-//
-
-function apprise(string, args, callback)
-	{
-	var default_args =
-		{
-		'confirm'		:	false, 		// Ok and Cancel buttons
-		'verify'		:	false,		// Yes and No buttons
-		'input'			:	false, 		// Text input (can be true or string for default text)
-		'animate'		:	false,		// Groovy animation (can true or number, default is 400)
-		'textOk'		:	'Ok',		// Ok button default text
-		'textCancel'	:	'Cancel',	// Cancel button default text
-		'textYes'		:	'Yes',		// Yes button default text
-		'textNo'		:	'No'		// No button default text
-		}
-	
-	if(args) 
-		{
-		for(var index in default_args) 
-			{ if(typeof args[index] == "undefined") args[index] = default_args[index]; } 
-		}
-	
-	var aHeight = $(document).height();
-	var aWidth = $(document).width();
-	$('body').append('<div class="appriseOverlay" id="aOverlay"></div>');
-	$('.appriseOverlay').css('height', aHeight).css('width', aWidth).fadeIn(100);
-	$('body').append('<div class="appriseOuter"></div>');
-	$('.appriseOuter').append('<div class="appriseInner"></div>');
-	$('.appriseInner').append(string);
-    $('.appriseOuter').css("left", ( $(window).width() - $('.appriseOuter').width() ) / 2+$(window).scrollLeft() + "px");
-    
-    if(args)
-		{
-		if(args['animate'])
-			{ 
-			var aniSpeed = args['animate'];
-			if(isNaN(aniSpeed)) { aniSpeed = 400; }
-			$('.appriseOuter').css('top', '-200px').show().animate({top:"100px"}, aniSpeed);
-			}
-		else
-			{ $('.appriseOuter').css('top', '100px').fadeIn(200); }
-		}
-	else
-		{ $('.appriseOuter').css('top', '100px').fadeIn(200); }
-    
-    if(args)
-    	{
-    	if(args['input'])
-    		{
-    		if(typeof(args['input'])=='string')
-    			{
-    			$('.appriseInner').append('<div class="aInput"><textarea class="aTextbox" t="aTextbox">' + args['input'] + '</textarea></div>');
-    			}
-    		else
-    			{
-				$('.appriseInner').append('<div class="aInput"><textarea type="text" class="aTextbox" t="aTextbox"></textarea></div>');
-				}
-			$('.aTextbox').focus();
-    		}
-    	}
-    
-    $('.appriseInner').append('<div class="aButtons"></div>');
-    if(args)
-    	{
-		if(args['confirm'] || args['input'])
-			{ 
-			$('.aButtons').append('<button value="ok">'+args['textOk']+'</button>');
-			$('.aButtons').append('<button value="cancel">'+args['textCancel']+'</button>'); 
-			}
-		else if(args['verify'])
-			{
-			$('.aButtons').append('<button value="ok">'+args['textYes']+'</button>');
-			$('.aButtons').append('<button value="cancel">'+args['textNo']+'</button>');
-			}
-		else
-			{ $('.aButtons').append('<button value="ok">'+args['textOk']+'</button>'); }
-		}
-    else
-    	{ $('.aButtons').append('<button value="ok">Ok</button>'); }
-	
-	$(document).keydown(function(e) 
-		{
-		if($('.appriseOverlay').is(':visible'))
-			{
-			if(e.keyCode == 13) 
-				{ $('.aButtons > button[value="ok"]').click(); }
-			if(e.keyCode == 27) 
-				{ $('.aButtons > button[value="cancel"]').click(); }
-			}
-		});
-	
-	var aText = $('.aTextbox').val();
-	if(!aText) { aText = false; }
-	$('.aTextbox').keyup(function()
-    	{ aText = $(this).val(); });
-   
-    $('.aButtons > button').click(function()
-    	{
-    	$('.appriseOverlay').remove();
-		$('.appriseOuter').remove();
-    	if(callback)
-    		{
-			var wButton = $(this).attr("value");
-			if(wButton=='ok')
-				{ 
-				if(args)
-					{
-					if(args['input'])
-						{ callback(aText); }
-					else
-						{ callback(true); }
-					}
-				else
-					{ callback(true); }
-				}
-			else if(wButton=='cancel')
-				{ callback(false); }
-			}
-		});
-	}
-	
-module.exports = apprise;
 
 });
 
@@ -17338,11 +17263,11 @@ require.define("/views/detail.js", function (require, module, exports, __dirname
       
         __out.push(__sanitize(this.doc.slug));
       
-        __out.push('">\n      <h4 class="name">');
+        __out.push('">\n      <h1 class="name">');
       
         __out.push(__sanitize(this.doc.name));
       
-        __out.push('</h4>\n      ');
+        __out.push('</h1>\n      ');
       
         __out.push(this.doc.draw_annotations(this.doc.render()));
       
@@ -17360,8 +17285,10 @@ require.define("/views/detail.js", function (require, module, exports, __dirname
 
 require.define("/controllers/edit.js", function (require, module, exports, __dirname, __filename) {
 (function() {
-  var $, Document, Edit, Flakey, autoresize, settings, ui;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+  var $, Document, Edit, Flakey, autoresize, settings, ui,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   Flakey = require('flakey');
 
@@ -17375,9 +17302,9 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
 
   Document = require('../models/Document');
 
-  Edit = (function() {
+  Edit = (function(_super) {
 
-    __extends(Edit, Flakey.controllers.Controller);
+    __extends(Edit, _super);
 
     function Edit(config) {
       this.discard = __bind(this.discard, this);
@@ -17422,7 +17349,7 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
 
     return Edit;
 
-  })();
+  })(Flakey.controllers.Controller);
 
   module.exports = Edit;
 
@@ -17472,16 +17399,31 @@ require.define("/views/edit.js", function (require, module, exports, __dirname, 
     }
     (function() {
       (function() {
+        var annotation, _i, _len, _ref;
       
-        __out.push('<div class="tool-bar-wrap">\n  <div id="tool-bar" class="tk-museo-sans">\n    <a href="javascript:null;" class="discard">Discard Changes</a>\n    <a href="javascript:null;" class="save">Save Changes</a>\n  </div>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <article>\n      <h2>History of <em>');
+        __out.push('<div class="tool-bar-wrap">\n  <div id="tool-bar" class="tk-museo-sans">\n    <a href="javascript:null;" class="discard">Discard Changes</a>\n    <a href="javascript:null;" class="save">Save Changes</a>\n  </div>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <article>\n      <h1>History of <em>');
       
         __out.push(__sanitize(this.doc.name));
       
-        __out.push('</em></h2>\n  \n      <textarea id="editor" placeholder="Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun...">');
+        __out.push('</em></h1>\n      <textarea id="editor" placeholder="Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun...">');
       
         __out.push(__sanitize(this.doc.base_text));
       
-        __out.push('</textarea>\n    </article>\n  </section>\n</div>');
+        __out.push('</textarea>\n      <div class="annotations">\n        <h2>Notes & Highlights</h2>\n        ');
+      
+        _ref = this.doc.get_notes();
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          annotation = _ref[_i];
+          __out.push('\n          <div class="annotation" data-id="');
+          __out.push(__sanitize(annotation.id));
+          __out.push('">\n            <blockquote>&#8220;');
+          __out.push(__sanitize(annotation.text));
+          __out.push('&#8221;</blockquote>\n            <span class="attachment">');
+          __out.push(__sanitize(annotation.attachment));
+          __out.push('</span>\n            <a href="#" class="delete">Delete</a>\n          </div>\n        ');
+        }
+      
+        __out.push('\n      </div>\n    </article>\n    \n  </section>\n</div>');
       
       }).call(this);
       
@@ -17495,29 +17437,33 @@ require.define("/views/edit.js", function (require, module, exports, __dirname, 
 
 require.define("/controllers/history.js", function (require, module, exports, __dirname, __filename) {
 (function() {
-  var $, Document, Flakey, History, Showdown, apprise;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+  var $, Document, Flakey, History, Showdown, ui,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   Flakey = require('flakey');
 
   $ = Flakey.$;
 
-  Showdown = require('../lib/showdown');
+  ui = require('../lib/uikit');
 
-  apprise = require('../lib/apprise-1.5.full');
+  Showdown = require('../lib/showdown');
 
   Document = require('../models/Document');
 
-  History = (function() {
+  History = (function(_super) {
 
-    __extends(History, Flakey.controllers.Controller);
+    __extends(History, _super);
 
     function History(config) {
       this.update = __bind(this.update, this);
+      this.rollback = __bind(this.rollback, this);
       this.render = __bind(this.render, this);      this.id = "history-view";
       this.class_name = "history view";
       this.actions = {
-        'change #version-input': 'update'
+        'change #version-input': 'update',
+        'click #rollback': 'rollback'
       };
       History.__super__.constructor.call(this, config);
       this.tmpl = Flakey.templates.get_template('history', require('../views/history'));
@@ -17540,6 +17486,19 @@ require.define("/controllers/history.js", function (require, module, exports, __
       return this.bind_actions();
     };
 
+    History.prototype.rollback = function(event) {
+      var _this = this;
+      event.preventDefault();
+      return ui.confirm('Be careful!', 'Are you sure you want to rollback the latest version of this document? You can not undo this.').show(function(ok) {
+        var doc;
+        if (ok) {
+          doc = Document.get(_this.query_params.id);
+          doc.rollback(1);
+          return _this.render();
+        }
+      });
+    };
+
     History.prototype.update = function(event) {
       var converter, doc, html, rev, time, version_index;
       version_index = $('#version-input').val();
@@ -17554,7 +17513,7 @@ require.define("/controllers/history.js", function (require, module, exports, __
 
     return History;
 
-  })();
+  })(Flakey.controllers.Controller);
 
   module.exports = History;
 
@@ -17617,7 +17576,7 @@ require.define("/views/history.js", function (require, module, exports, __dirnam
       
         __out.push(__sanitize(this.version || this.max_version));
       
-        __out.push('" step="1" id="version-input" name="version-input" />\n  </div>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <article id="history-');
+        __out.push('" step="1" id="version-input" name="version-input" />\n    \n    <a href="#" id="rollback">Pop Latest Version</a>\n  </div>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <article id="history-');
       
         __out.push(__sanitize(this.doc.slug));
       
@@ -17647,18 +17606,19 @@ require.define("/views/history.js", function (require, module, exports, __dirnam
 
 require.define("/index.js", function (require, module, exports, __dirname, __filename) {
     (function() {
-  var $, Annotare, App, Flakey;
-  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+  var $, Annotare, App, Flakey,
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
-  Flakey = require('flakey');
+  Flakey = window.Flakey = require('flakey');
 
   $ = window.$ = Flakey.$;
 
   Annotare = require('./controllers/annotare');
 
-  App = (function() {
+  App = (function(_super) {
 
-    __extends(App, Flakey.controllers.Controller);
+    __extends(App, _super);
 
     function App() {
       App.__super__.constructor.apply(this, arguments);
@@ -17668,7 +17628,7 @@ require.define("/index.js", function (require, module, exports, __dirname, __fil
 
     return App;
 
-  })();
+  })(Flakey.controllers.Controller);
 
   $(document).ready(function() {
     var annotare, settings;
@@ -17679,6 +17639,7 @@ require.define("/index.js", function (require, module, exports, __dirname, __fil
     Flakey.init(settings);
     Flakey.models.backend_controller.sync('Document');
     Flakey.models.backend_controller.sync('Annotation');
+    Flakey.models.backend_controller.sync('Setting');
     annotare = window.Annotare = new Annotare();
     return annotare.make_active();
   });

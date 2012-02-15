@@ -5,7 +5,7 @@ Annotation = require('./Annotation')
 
 class Document extends Flakey.models.Model
   @model_name: 'Document'
-  @fields: ['name', 'slug', 'base_text', 'annotations']
+  @fields: ['id', 'name', 'slug', 'base_text', 'annotations']
   
   # Create a new highlght in this document
   annotate: (selection, html, attachment) =>
@@ -28,7 +28,7 @@ class Document extends Flakey.models.Model
     @annotations.push note.id
     
     @save()
-    return note.apply(html);
+    return note.apply(html)
     
   delete: ()->
     for note_id in @annotations
@@ -58,7 +58,8 @@ class Document extends Flakey.models.Model
     if not @annotations or @annotations.constructor != Array
       @annotations = []
     notes = []
-    for note in @annotations
+    for id in @annotations
+      note = Annotation.get(id)
       if note.type == "note"
         notes.push(note)
     return notes

@@ -1,4 +1,4 @@
-Flakey = require('flakey')
+Flakey = window.Flakey = require('flakey')
 $ = window.$ = Flakey.$
 
 Annotare = require('./controllers/annotare')
@@ -17,11 +17,12 @@ $(document).ready () ->
     base_model_endpoint: '/api'
   }
   Flakey.init(settings)
-
+  
   # Sync models
   Flakey.models.backend_controller.sync('Document')
   Flakey.models.backend_controller.sync('Annotation')
-
+  Flakey.models.backend_controller.sync('Setting')
+  
   annotare = window.Annotare = new Annotare()
   annotare.make_active()
 

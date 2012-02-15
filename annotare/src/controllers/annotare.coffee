@@ -1,15 +1,15 @@
 Flakey = require('flakey')
 $ = Flakey.$
 
-NewDocument = require('./new_document')
-List = require('./list')
-Detail = require('./detail')
-Edit = require('./edit')
-History = require('./history')
 
-  
 class Main extends Flakey.controllers.Stack
   constructor: (config) ->
+    NewDocument = require('./new_document')
+    List = require('./list')
+    Detail = require('./detail')
+    Edit = require('./edit')
+    History = require('./history')
+    
     @id = 'main-stack'
     @class_name = 'stack'
     @controllers = {

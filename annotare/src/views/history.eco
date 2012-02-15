@@ -4,6 +4,8 @@
     
     <label for="version-input">Version:</label>
     <input type="range" min="0" max="<%= @max_version %>" value="<%= @version or @max_version %>" step="1" id="version-input" name="version-input" />
+    
+    <a href="#" id="rollback">Pop Latest Version</a>
   </div>
 </div>
 

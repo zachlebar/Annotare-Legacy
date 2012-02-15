@@ -15,5 +15,6 @@
         </article>
       <% end %>
     <% end %>
+    <div class="clear"></div>
   </section>
 </div>

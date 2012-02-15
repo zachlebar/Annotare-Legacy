@@ -1,8 +1,8 @@
 Flakey = require('flakey')
 $ = Flakey.$
 
+ui = require('../lib/uikit')
 Showdown = require('../lib/showdown')
-apprise = require('../lib/apprise-1.5.full')
 Document = require('../models/Document')
 
 
@@ -13,6 +13,7 @@ class History extends Flakey.controllers.Controller
     
     @actions = {
       'change #version-input': 'update'
+      'click #rollback': 'rollback'
     }
     
     super(config)
@@ -36,11 +37,19 @@ class History extends Flakey.controllers.Controller
     @html @tmpl.render(context)
     @unbind_actions()
     @bind_actions()
+    
+  rollback: (event) =>
+    event.preventDefault()
+    ui.confirm('Be careful!', 'Are you sure you want to rollback the latest version of this document? You can not undo this.').show (ok) =>
+      if ok
+        doc = Document.get(@query_params.id)
+        doc.rollback(1)
+        @render()
   
   update: (event) =>
     version_index = $('#version-input').val()
     
-    doc = Document.get(@query_params.id)    
+    doc = Document.get(@query_params.id)
     time = new Date(doc.versions[version_index].time)
     rev = doc.evolve(doc.versions[version_index].version_id)
     

@@ -1,9 +1,6 @@
 /*------------------------------------------------------------------------------
 INDEX.CSS -- Annotare ❧ For Inquistive Minds
 ------------------------------------------------------------------------------*/
-/* =============================================================================
-   HTML5 Boilerplate CSS: h5bp.com/css
-   ========================================================================== */
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
   display: block; }
 
@@ -31,16 +28,6 @@ body {
   margin: 0;
   font-size: 1em;
   line-height: 1.4; }
-
-::-moz-selection {
-  background: #fe57a1;
-  color: #fff;
-  text-shadow: none; }
-
-::selection {
-  background: #fe57a1;
-  color: #fff;
-  text-shadow: none; }
 
 a {
   color: #00e; }
@@ -217,80 +204,6 @@ td {
   background: #ccc;
   color: black;
   padding: 0.2em 0; }
-
-/* ===== Primary Styles ========================================================
-   Author:
-   ========================================================================== */
-.appriseOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.3);
-  display: none; }
-
-.appriseOuter {
-  background: #eee;
-  border: 1px solid #fff;
-  box-shadow: 0px 3px 7px #333;
-  -moz-box-shadow: 0px 3px 7px #333;
-  -webkit-box-shadow: 0px 3px 7px #333;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-  -khtml-border-radius: 4px;
-  position: absolute;
-  z-index: 99999999;
-  min-width: 200px;
-  min-height: 50px;
-  max-width: 75%;
-  position: fixed;
-  display: none; }
-
-.appriseInner {
-  padding: 20px;
-  color: #333;
-  text-shadow: 0px 1px 0px #fff; }
-
-.appriseInner button {
-  border: 1px solid #bbb;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  border-radius: 3px;
-  -khtml-border-radius: 3px;
-  background: -moz-linear-gradient(100% 100% 90deg, #eeeeee, #d5d5d5);
-  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eeeeee), to(#d5d5d5));
-  background: -webkit-linear-gradient(#eeeeee, #d5d5d5);
-  background: -o-linear-gradient(#eeeeee, #d5d5d5);
-  color: #232d3d;
-  font-size: 12px;
-  font-weight: bold;
-  padding: 4px 10px;
-  margin: 0 3px;
-  text-shadow: 0px 1px 0px #fff;
-  cursor: pointer;
-  box-shadow: 0px 1px 2px #ccc;
-  -moz-box-shadow: 0px 1px 2px #ccc;
-  -webkit-box-shadow: 0px 1px 2px #ccc; }
-
-.appriseInner button:hover {
-  color: #d85054; }
-
-.aButtons, .aInput {
-  text-align: center; }
-
-.aTextbox {
-  border: 1px solid #aaa;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-  -khtml-border-radius: 4px;
-  box-shadow: 0px 1px 0px #fff;
-  -moz-box-shadow: 0px 1px 0px #fff;
-  -webkit-box-shadow: 0px 1px 0px #fff;
-  width: 180px;
-  font-size: 12px;
-  font-weight: bold;
-  padding: 5px 10px; }
 
 #dialog {
   position: fixed;
@@ -828,11 +741,11 @@ body.minimal {
   margin-right: auto;
   margin-left: auto;
   font-size: 11px;
-  line-height: 1.5;
+  line-height: 1.7;
   font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
-  body.minimal .sans, body.minimal h2, body.minimal h3, body.minimal h4, body.minimal h5, body.minimal h6 {
+  body.minimal .sans, body.minimal h5, body.minimal h6 {
     font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
-  body.minimal .serif, body.minimal h1 {
+  body.minimal .serif, body.minimal h1, body.minimal h2, body.minimal h3, body.minimal h4 {
     font-family: Palatino, Georgia, serif; }
   body.minimal .bold, body.minimal h3, body.minimal h4, body.minimal h5, body.minimal h6 {
     font-weight: bold; }
@@ -842,62 +755,164 @@ body.minimal {
     line-height: 1;
     margin: 10px 0 10px 0; }
   body.minimal h1 {
-    font-size: 47px; }
+    font-size: 2.618em; }
   body.minimal h2 {
-    font-size: 29px; }
+    font-size: 2.618em; }
   body.minimal h3 {
-    font-size: 18px; }
+    font-size: 1.618em; }
   body.minimal h4 {
-    font-size: 18px; }
+    font-size: 1.618em; }
   body.minimal h5 {
-    font-size: 11px; }
+    font-size: 1em; }
   body.minimal h6 {
-    font-size: 11px; }
+    font-size: 1em; }
   body.minimal a {
     text-decoration: none;
     color: #444444;
     font-weight: bold; }
   body.minimal header {
-    margin: 20px 0 0 0;
-    padding: 10px 10px 0 10px; }
-    body.minimal header h1 {
-      float: left; }
-    body.minimal header ul {
-      float: right;
-      margin-top: 44px; }
-      body.minimal header ul li {
-        margin-left: 15px;
-        display: inline; }
-        body.minimal header ul li a {
-          font-weight: normal; }
+    width: 95%;
+    max-width: 960px;
+    margin-right: auto;
+    margin-left: auto;
+    position: fixed;
+    top: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.8);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px; }
+    body.minimal header nav {
+      padding: 0 20px; }
+      body.minimal header nav h1 a, body.minimal header nav ul li a {
+        padding-top: 10px;
+        padding-bottom: 10px; }
+      body.minimal header nav h1, body.minimal header nav h1 a, body.minimal header nav ul, body.minimal header nav ul a, body.minimal header nav ul li, body.minimal header nav ul li a {
+        margin: 0;
+        font-size: 1em;
+        line-height: 1.7;
+        color: #EEE;
+        font-weight: bold;
+        display: inline-block; }
+      body.minimal header nav ul {
+        float: right; }
+        body.minimal header nav ul li {
+          margin: 0;
+          padding: 0 10px; }
+          body.minimal header nav ul li:not(:first-child) {
+            border-left: 1px solid rgba(38, 38, 38, 0.8); }
+  body.minimal section.two-column article {
+    width: 75%;
+    float: left; }
+  body.minimal section.two-column aside {
+    width: 20%;
+    float: left; }
+  body.minimal blockquote {
+    border-left: 8px solid #CCC;
+    margin-left: 10px;
+    padding-left: 7px; }
+  body.minimal .wrap {
+    display: block;
+    position: relative; }
+  body.minimal .note, body.minimal .highlight {
+    color: #FFF;
+    border-radius: 2px;
+    padding: 0 2px 0 2px; }
+  body.minimal .note:nth-child(even), body.minimal .note:nth-child(even) .note-detail {
+    background: #52abd1; }
+  body.minimal .note:nth-child(odd), body.minimal .note:nth-child(odd) .note-detail {
+    background: #68b364; }
+  body.minimal .note .note-detail {
+    display: inline-block;
+    max-width: 20%;
+    height: 1.7em;
+    padding: 1px 2px;
+    border-radius: 2px;
+    position: absolute;
+    right: 0px;
+    color: #FFF;
+    z-index: 5000; }
+  body.minimal .note:hover .note-detail, body.minimal .note .note-detail:focus {
+    height: auto;
+    z-index: 6000;
+    box-shadow: 0 0 10px #666;
+    outline: none; }
+  body.minimal .highlight {
+    background: #d15252; }
   body.minimal #application {
-    background: rgba(255, 255, 255, 0.6);
-    border: 1px solid #999999;
-    border-radius: 10px;
-    box-shadow: 0 0 15px #999999; }
+    margin-top: 56px;
+    margin-bottom: 56px; }
   body.minimal #tool-bar {
-    margin-bottom: 20px; }
-    body.minimal #tool-bar a {
-      margin-right: 15px; }
-  body.minimal footer, body.minimal #application {
-    padding: 10px; }
-
-.clear {
-  clear: both; }
-
-html, body {
-  height: 100%; }
+    width: 95%;
+    max-width: 960px;
+    margin-right: auto;
+    margin-left: auto;
+    position: fixed;
+    bottom: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.8);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px; }
+    body.minimal #tool-bar a, body.minimal #tool-bar label {
+      font-size: 1em;
+      line-height: 1.7;
+      color: #EEE;
+      font-weight: bold;
+      display: inline-block;
+      padding: 10px 20px; }
+    body.minimal #tool-bar input[type='range'] {
+      position: relative;
+      top: 5px; }
+  body.minimal #list-view article.document {
+    height: 200px;
+    float: left;
+    cursor: pointer;
+    width: 30%;
+    padding: 1%;
+    margin: 0 1% 1% 0;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #444444;
+    background: rgba(255, 255, 255, 0.6); }
+    body.minimal #list-view article.document h1 {
+      font-size: 2.618em; }
+  body.minimal #edit-view textarea, body.minimal #edit-view input[type="text"], body.minimal #new-document-view textarea, body.minimal #new-document-view input[type="text"] {
+    padding: 1%;
+    margin-bottom: 20px;
+    width: 98%;
+    border: none;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    box-shadow: 0 0 10px #999;
+    font-family: Monaco, Menlo, Consolas, Inconsolata, monospace;
+    line-height: 1.7;
+    font-size: 1.3em; }
+    body.minimal #edit-view textarea:focus, body.minimal #edit-view input[type="text"]:focus, body.minimal #new-document-view textarea:focus, body.minimal #new-document-view input[type="text"]:focus {
+      outline: none; }
+  body.minimal #edit-view .annotation, body.minimal #new-document-view .annotation {
+    padding: 10px;
+    margin: 20px 0;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 10px;
+    box-shadow: 0 0 10px #999;
+    position: relative; }
+    body.minimal #edit-view .annotation blockquote, body.minimal #edit-view .annotation .attachment, body.minimal #new-document-view .annotation blockquote, body.minimal #new-document-view .annotation .attachment {
+      font-size: 1.3em;
+      font-family: Monaco, Menlo, Consolas, Inconsolata, monospace; }
+    body.minimal #edit-view .annotation blockquote, body.minimal #new-document-view .annotation blockquote {
+      color: #777777; }
+    body.minimal #edit-view .annotation .delete, body.minimal #new-document-view .annotation .delete {
+      font-family: Verdana, "Bitstream Vera Sans", sans-serif;
+      font-size: 1em;
+      position: absolute;
+      bottom: 10px;
+      right: 10px; }
+  body.minimal footer, body.minimal #list-view #tool-bar {
+    display: none; }
 
 #application div.view {
   display: none; }
   #application div.view.active {
     display: block; }
 
-/* =============================================================================
-   Media Queries
-   ========================================================================== */
-@media only screen and (min-width: 35em) {
-  /* Style adjustments for viewports that meet the condition */ }
 /* =============================================================================
    Non-Semantic Helper Classes
    ========================================================================== */
@@ -940,15 +955,18 @@ html, body {
 .invisible {
   visibility: hidden; }
 
-.clearfix:before, .clearfix:after {
+.clearfix:before, body.minimal .wrap:before, .clearfix:after, body.minimal .wrap:after {
   content: "";
   display: table; }
 
-.clearfix:after {
+.clearfix:after, body.minimal .wrap:after {
   clear: both; }
 
-.clearfix {
+.clearfix, body.minimal .wrap {
   *zoom: 1; }
+
+.clear {
+  clear: both; }
 
 /* =============================================================================
    Print Styles

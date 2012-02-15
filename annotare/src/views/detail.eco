@@ -11,7 +11,7 @@
 <div class="wrap">
   <section class="two-column">
     <article id="detail-<%= @doc.slug %>">
-      <h4 class="name"><%= @doc.name %></h4>
+      <h1 class="name"><%= @doc.name %></h1>
       <%- @doc.draw_annotations(@doc.render()) %>
     </article>
     

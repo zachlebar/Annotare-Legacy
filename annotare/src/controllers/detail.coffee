@@ -1,10 +1,10 @@
 Flakey = require('flakey')
 $ = Flakey.$
 
-apprise = require('../lib/apprise-1.5.full')
 ui = require('../lib/uikit')
 settings = require('../settings')
 Document = require('../models/Document')
+Annotation = require('../models/Annotation')
 
 
 class Detail extends Flakey.controllers.Controller
@@ -17,6 +17,7 @@ class Detail extends Flakey.controllers.Controller
       'click .highlighter': 'highlight'
       'click .annotate': 'annotate'
       'click .delete': 'delete'
+      'blur .note-detail': 'edit_note'
     }
     
     super(config)
@@ -38,6 +39,15 @@ class Detail extends Flakey.controllers.Controller
   edit: (event) =>
     window.location.hash = "#/edit?" + Flakey.util.querystring.build(@query_params)
     
+  edit_note: (event) =>
+    target = $(event.target)
+    id = target.attr('id').replace('note-detail-', '')
+    content = target.html().replace(/\<br\/\>/, '\n\n').replace(/\<([\w\d\/]*)\>/g, ' ') # Strip HTML tags from content editable output
+    note = Annotation.get(id)
+    note.attachment = content
+    note.type = "note"
+    note.save()
+    
   delete: (event) =>
     ui.confirm('Be careful!', 'Are you sure you want to delete this document?').show (ok) =>
       if ok
@@ -56,9 +66,9 @@ class Detail extends Flakey.controllers.Controller
       ui.error('Well, you were right about this being a bad idea.', 'Please select some text first.').hide(settings.growl_hide_after).effect(settings.growl_effect)
     else
       # Save and Render highlight
-      html = $("#" + @doc.slug).html()
+      html = $("#detail-" + @doc.slug).html()
       html = @doc.annotate(selection, html)
-      $("#" + @doc.slug).html(html)
+      $("#detail-" + @doc.slug).html(html)
     
   annotate: (event) =>
     selection = undefined
@@ -71,17 +81,14 @@ class Detail extends Flakey.controllers.Controller
       ui.error('Well, you were right about this being a bad idea.', 'Please select some text first.').hide(settings.growl_hide_after).effect(settings.growl_effect)
     else
       # Save and Render highlight
-      html = $("#" + @doc.slug).html()
+      html = $("#detail-" + @doc.slug).html()
       # Note modal
       options = {
         input: true,
         animate: true
       }
-      apprise('Please enter a note', options, (note) =>
-        if note
-          html = @doc.annotate(selection, html, note)
-          $("#" + @doc.slug).html(html)
-      )
+      html = @doc.annotate(selection, html, "Click here to edit this note.")
+      $("#detail-" + @doc.slug).html(html)
     
     
 module.exports = Detail
