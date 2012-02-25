@@ -5,19 +5,23 @@
     <label for="version-input">Version:</label>
     <input type="range" min="0" max="<%= @max_version %>" value="<%= @version or @max_version %>" step="1" id="version-input" name="version-input" />
     
-    <a href="#" id="rollback">Pop Latest Version</a>
+    <a href="#" id="rollback">Rollback to this Version</a>
   </nav>
 </div>
 
 <div class="wrap">
-  <section class="one-column">
+  <section class="two-column">
     <article id="history-<%= @doc.slug %>">
       <h4>Version from <em id="history-time"><%= @time.toLocaleString() %></em></h4>
-      <h1><%= @doc.name %></h1>
-      
+      <h1 class="name"><%= @doc.name %></h1>
+      <% html = if @html? then @html else @doc.render() %>
       <section id="history-content">
-        <%- if @html? then @html else @doc.render() %>
+         <%- @doc.draw_annotations(html) %>
       </section>
     </article>
+    
+    <aside>
+      &nbsp;
+    </aside>
   </section>
 </div>

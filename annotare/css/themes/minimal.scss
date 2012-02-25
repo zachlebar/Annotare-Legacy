@@ -15,6 +15,7 @@ $quaternary: #68B364;
 $black: rgba(0, 0, 0, 0.8);
 
 $max-width: 1200px;
+$mobile-width: 400px;
 $border-radius: 2px;
 $gutter: 10px;
 
@@ -235,10 +236,15 @@ body.minimal {
       width: 30%;
       min-width: 308px;
       padding: 1%;
-      margin: 0 1% 1% 0;
+      margin: 0 1% 20px 0;
       border-radius: $border-radius;
       box-shadow: 0 0 5px $font-color;
       overflow: hidden;
+      
+      @media handheld and (max-width: 690px), screen and (max-width: 690px) {
+        width: 98%;
+        margin: 0 0 20px 0;
+      }
       
       &:nth-child(odd) {
         $temp_red: red($secondary);

@@ -12507,11 +12507,79 @@ if (!JSON) {
       return set;
     };
 
+    Model.find = function(query) {
+      var ar, item, m, set, _i, _len;
+      ar = Flakey.models.backend_controller.find(this.model_name, query);
+      if (!ar.length) return [];
+      set = [];
+      for (_i = 0, _len = ar.length; _i < _len; _i++) {
+        item = ar[_i];
+        m = new this();
+        m["import"](item);
+        set.push(m);
+      }
+      return set;
+    };
+
+    Model.get = function(id) {
+      var m, obj;
+      obj = Flakey.models.backend_controller.get(this.model_name, id);
+      if (!obj) return;
+      m = new this();
+      m["import"](obj);
+      return m;
+    };
+
     Model.prototype["delete"] = function() {
       var event_key;
       Flakey.models.backend_controller["delete"](this.constructor.model_name, this.id);
       event_key = "model_" + (this.constructor.model_name.toLowerCase()) + "_updated";
       return Flakey.events.trigger(event_key, void 0);
+    };
+
+    Model.prototype.rollback = function(version_id) {
+      var exists, i, latest, version, _i, _j, _len, _len2, _ref, _ref2;
+      if (parseInt(version_id) < this.versions.length) {
+        _ref = Array(parseInt(version_id));
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          i = _ref[_i];
+          this.pop_version();
+        }
+      } else {
+        exists = false;
+        _ref2 = this.versions;
+        for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+          version = _ref2[_j];
+          if (version.version_id === version_id) exists = true;
+        }
+        if (!exists) {
+          throw new ReferenceError("Version " + version_id + " does not exist.");
+        }
+        latest = this.versions[this.versions.length - 1];
+        while (latest.version_id !== version_id && this.versions.length > 1) {
+          this.pop_version();
+          latest = this.versions[this.versions.length - 1];
+        }
+      }
+      this["import"]({
+        id: this.id,
+        versions: this.versions
+      });
+      return this.write();
+    };
+
+    Model.prototype.save = function(callback) {
+      var diff, new_obj, old_obj;
+      new_obj = this["export"]();
+      old_obj = this.evolve();
+      diff = this.diff(new_obj, old_obj);
+      if (Object.keys(diff).length > 0) {
+        this.push_version(diff);
+        this.write(callback);
+      } else if (callback != null) {
+        callback();
+      }
+      return true;
     };
 
     Model.prototype.diff = function(new_obj, old_obj) {
@@ -12592,29 +12660,6 @@ if (!JSON) {
       return obj;
     };
 
-    Model.find = function(query) {
-      var ar, item, m, set, _i, _len;
-      ar = Flakey.models.backend_controller.find(this.model_name, query);
-      if (!ar.length) return [];
-      set = [];
-      for (_i = 0, _len = ar.length; _i < _len; _i++) {
-        item = ar[_i];
-        m = new this();
-        m["import"](item);
-        set.push(m);
-      }
-      return set;
-    };
-
-    Model.get = function(id) {
-      var m, obj;
-      obj = Flakey.models.backend_controller.get(this.model_name, id);
-      if (!obj) return;
-      m = new this();
-      m["import"](obj);
-      return m;
-    };
-
     Model.prototype["import"] = function(obj) {
       var key, value, _i, _len, _ref, _ref2, _results;
       this.versions = obj.versions;
@@ -12648,50 +12693,6 @@ if (!JSON) {
       };
       Object.freeze(version);
       return this.versions.push(version);
-    };
-
-    Model.prototype.rollback = function(version_id) {
-      var exists, i, latest, version, _i, _j, _len, _len2, _ref, _ref2;
-      if (parseInt(version_id) < this.versions.length) {
-        _ref = Array(parseInt(version_id));
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          i = _ref[_i];
-          this.pop_version();
-        }
-      } else {
-        exists = false;
-        _ref2 = this.versions;
-        for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
-          version = _ref2[_j];
-          if (version.version_id === version_id) exists = true;
-        }
-        if (!exists) {
-          throw new ReferenceError("Version " + version_id + " does not exist.");
-        }
-        latest = this.versions[this.versions.length - 1];
-        while (latest.version_id !== version_id && this.versions.length > 1) {
-          this.pop_version();
-        }
-      }
-      this["import"]({
-        id: this.id,
-        versions: this.versions
-      });
-      return this.write();
-    };
-
-    Model.prototype.save = function(callback) {
-      var diff, new_obj, old_obj;
-      new_obj = this["export"]();
-      old_obj = this.evolve();
-      diff = this.diff(new_obj, old_obj);
-      if (Object.keys(diff).length > 0) {
-        this.push_version(diff);
-        this.write(callback);
-      } else if (callback != null) {
-        callback();
-      }
-      return true;
     };
 
     Model.prototype.write = function(callback) {
@@ -13612,7 +13613,7 @@ if (!JSON) {
     Template: Template
   };
 
-  module.exports = Flakey;
+  if (typeof module !== "undefined" && module !== null) module.exports = Flakey;
 
   if (window) window.Flakey = Flakey;
 
@@ -15492,16 +15493,23 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
       return Document.__super__["delete"].call(this);
     };
 
-    Document.prototype.draw_annotations = function(html) {
-      var note, note_id, _i, _len, _ref;
-      if (!this.annotations || this.annotations.constructor !== Array) {
-        this.annotations = [];
+    Document.prototype.delete_annotation = function(id) {
+      var index;
+      index = this.annotations.indexOf(id);
+      if (index !== -1) {
+        this.annotations.splice(index, 1);
+        return this.save();
       }
-      _ref = this.annotations;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        note_id = _ref[_i];
+    };
+
+    Document.prototype.draw_annotations = function(html, annotations) {
+      var note, note_id, _i, _len;
+      if (annotations == null) annotations = this.annotations;
+      if (!annotations || annotations.constructor !== Array) annotations = [];
+      for (_i = 0, _len = annotations.length; _i < _len; _i++) {
+        note_id = annotations[_i];
         note = Annotation.get(note_id);
-        html = note.apply(html);
+        if (note != null) html = note.apply(html);
       }
       return html;
     };
@@ -15524,7 +15532,7 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         id = _ref[_i];
         note = Annotation.get(id);
-        if (note.type === "note") notes.push(note);
+        if (note != null) notes.push(note);
       }
       return notes;
     };
@@ -17309,25 +17317,45 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
     __extends(Edit, _super);
 
     function Edit(config) {
+      this.delete_note = __bind(this.delete_note, this);
       this.discard = __bind(this.discard, this);
-      this.save = __bind(this.save, this);      this.id = "edit-view";
+      this.save = __bind(this.save, this);
+      this.render = __bind(this.render, this);
+      this.autosave = __bind(this.autosave, this);      this.id = "edit-view";
       this.class_name = "edit_document view";
       this.actions = {
         'click .save': 'save',
-        'click .discard': 'discard'
+        'click .discard': 'discard',
+        'click .delete': 'delete_note',
+        'keyup #editor': 'autosave'
       };
       Edit.__super__.constructor.call(this, config);
       this.tmpl = Flakey.templates.get_template('edit', require('../views/edit'));
     }
 
+    Edit.prototype.autosave = function(event) {
+      event.preventDefault();
+      return localStorage[this.autosave_key()] = $('#editor').val();
+    };
+
+    Edit.prototype.autosave_key = function() {
+      return "autosave-draft-" + this.id;
+    };
+
     Edit.prototype.render = function() {
-      var context;
+      var context,
+        _this = this;
       if (!this.query_params.id) return;
       this.doc = Document.get(this.query_params.id);
       context = {
         doc: this.doc
       };
       this.html(this.tmpl.render(context));
+      if ((localStorage[this.autosave_key()] != null) && localStorage[this.autosave_key()].length > 0) {
+        ui.confirm('Restore?', 'An unsaved draft of this note was found. Would you like to restore it to the editor?').show(function(ok) {
+          if (ok) return $('#editor').val(localStorage[_this.autosave_key()]);
+        });
+      }
       this.unbind_actions();
       this.bind_actions();
       return $('#editor').autoResize({
@@ -17345,9 +17373,26 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
     };
 
     Edit.prototype.discard = function(event) {
+      var _this = this;
       event.preventDefault();
       return ui.confirm('There be Monsters!', 'Careful there Captain; are you sure you want to discard all changes to this document?').show(function(ok) {
-        if (ok) return window.location.hash = "#/list";
+        if (ok) {
+          delete localStorage[_this.autosave_key()];
+          return window.location.hash = "#/list";
+        }
+      });
+    };
+
+    Edit.prototype.delete_note = function(event) {
+      var _this = this;
+      event.preventDefault();
+      return ui.confirm('There be Monsters!', 'Are you sure you want to delete this annotation?').show(function(ok) {
+        var id;
+        if (ok) {
+          id = $(event.target).parent().attr('data-id');
+          _this.doc.delete_annotation(id);
+          return $(event.target).parent().slideUp();
+        }
       });
     };
 
@@ -17471,6 +17516,7 @@ require.define("/controllers/history.js", function (require, module, exports, __
       };
       History.__super__.constructor.call(this, config);
       this.tmpl = Flakey.templates.get_template('history', require('../views/history'));
+      Flakey.events.register('model_document_updated', this.render);
     }
 
     History.prototype.render = function() {
@@ -17491,15 +17537,14 @@ require.define("/controllers/history.js", function (require, module, exports, __
     };
 
     History.prototype.rollback = function(event) {
-      var _this = this;
+      var doc, time, version_index,
+        _this = this;
       event.preventDefault();
-      return ui.confirm('Be careful!', 'Are you sure you want to rollback the latest version of this document? You can not undo this.').show(function(ok) {
-        var doc;
-        if (ok) {
-          doc = Document.get(_this.query_params.id);
-          doc.rollback(1);
-          return _this.render();
-        }
+      version_index = $('#version-input').val();
+      doc = Document.get(this.query_params.id);
+      time = new Date(doc.versions[version_index].time);
+      return ui.confirm('Be careful!', "Are you sure you want to rollback to the version saved at " + (time.toLocaleString())).show(function(ok) {
+        if (ok) return doc.rollback(doc.versions[version_index].version_id);
       });
     };
 
@@ -17512,7 +17557,7 @@ require.define("/controllers/history.js", function (require, module, exports, __
       converter = new Showdown.converter();
       html = converter.makeHtml(rev.base_text);
       $('#history-time').html(time.toLocaleString());
-      return $('#history-content').html(html);
+      return $('#history-content').html(doc.draw_annotations(html, rev.annotations));
     };
 
     return History;
@@ -17567,6 +17612,7 @@ require.define("/views/history.js", function (require, module, exports, __dirnam
     }
     (function() {
       (function() {
+        var html;
       
         __out.push('<div class="tool-bar-wrap">\n  <nav id="tool-bar">\n    <a href="#/detail?id=');
       
@@ -17580,7 +17626,7 @@ require.define("/views/history.js", function (require, module, exports, __dirnam
       
         __out.push(__sanitize(this.version || this.max_version));
       
-        __out.push('" step="1" id="version-input" name="version-input" />\n    \n    <a href="#" id="rollback">Pop Latest Version</a>\n  </nav>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <article id="history-');
+        __out.push('" step="1" id="version-input" name="version-input" />\n    \n    <a href="#" id="rollback">Rollback to this Version</a>\n  </nav>\n</div>\n\n<div class="wrap">\n  <section class="two-column">\n    <article id="history-');
       
         __out.push(__sanitize(this.doc.slug));
       
@@ -17588,15 +17634,19 @@ require.define("/views/history.js", function (require, module, exports, __dirnam
       
         __out.push(__sanitize(this.time.toLocaleString()));
       
-        __out.push('</em></h4>\n      <h1>');
+        __out.push('</em></h4>\n      <h1 class="name">');
       
         __out.push(__sanitize(this.doc.name));
       
-        __out.push('</h1>\n      \n      <section id="history-content">\n        ');
+        __out.push('</h1>\n      ');
       
-        __out.push(this.html != null ? this.html : this.doc.render());
+        html = this.html != null ? this.html : this.doc.render();
       
-        __out.push('\n      </section>\n    </article>\n  </section>\n</div>');
+        __out.push('\n      <section id="history-content">\n         ');
+      
+        __out.push(this.doc.draw_annotations(html));
+      
+        __out.push('\n      </section>\n    </article>\n    \n    <aside>\n      &nbsp;\n    </aside>\n  </section>\n</div>');
       
       }).call(this);
       

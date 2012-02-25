@@ -36,14 +36,21 @@ class Document extends Flakey.models.Model
       note.delete()
     super()
     
-  # Draw annotations on document
-  draw_annotations: (html) =>
-    if not @annotations or @annotations.constructor != Array
-      @annotations = []
+  delete_annotation: (id) ->
+    index = @annotations.indexOf(id)
+    if index != -1
+      @annotations.splice(index, 1)
+      @save()
     
-    for note_id in @annotations
+  # Draw annotations on document
+  draw_annotations: (html, annotations = @annotations) =>
+    if not annotations or annotations.constructor != Array
+      annotations = []
+    
+    for note_id in annotations
       note = Annotation.get(note_id)
-      html = note.apply(html)
+      if note?
+        html = note.apply(html)
     return html
   
   # Generate the doc slug based on the name
@@ -60,7 +67,7 @@ class Document extends Flakey.models.Model
     notes = []
     for id in @annotations
       note = Annotation.get(id)
-      if note.type == "note"
+      if note?
         notes.push(note)
     return notes
     

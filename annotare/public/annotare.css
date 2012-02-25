@@ -873,10 +873,14 @@ body.minimal {
     width: 30%;
     min-width: 308px;
     padding: 1%;
-    margin: 0 1% 1% 0;
+    margin: 0 1% 20px 0;
     border-radius: 2px;
     box-shadow: 0 0 5px #444444;
     overflow: hidden; }
+    @media handheld and (max-width: 690px), screen and (max-width: 690px) {
+      body.minimal #list-view article.document {
+        width: 98%;
+        margin: 0 0 20px 0; } }
     body.minimal #list-view article.document:nth-child(odd) {
       background: rgba(82, 171, 209, 0.5);
       border: 1px solid rgba(40, 117, 149, 0.5);

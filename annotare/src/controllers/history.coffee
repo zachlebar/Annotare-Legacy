@@ -18,6 +18,7 @@ class History extends Flakey.controllers.Controller
     
     super(config)
     @tmpl =  Flakey.templates.get_template('history', require('../views/history'))
+    Flakey.events.register('model_document_updated', @render)
   
   render: () =>
     if not @query_params.id
@@ -40,24 +41,26 @@ class History extends Flakey.controllers.Controller
     
   rollback: (event) =>
     event.preventDefault()
-    ui.confirm('Be careful!', 'Are you sure you want to rollback the latest version of this document? You can not undo this.').show (ok) =>
+    
+    version_index = $('#version-input').val()
+    doc = Document.get(@query_params.id)
+    time = new Date(doc.versions[version_index].time)
+    
+    ui.confirm('Be careful!', "Are you sure you want to rollback to the version saved at #{time.toLocaleString()}").show (ok) =>
       if ok
-        doc = Document.get(@query_params.id)
-        doc.rollback(1)
-        @render()
+        doc.rollback(doc.versions[version_index].version_id)
   
   update: (event) =>
     version_index = $('#version-input').val()
-    
     doc = Document.get(@query_params.id)
     time = new Date(doc.versions[version_index].time)
     rev = doc.evolve(doc.versions[version_index].version_id)
     
     converter = new Showdown.converter()
     html = converter.makeHtml(rev.base_text)
-    
+        
     $('#history-time').html(time.toLocaleString())
-    $('#history-content').html(html)
+    $('#history-content').html(doc.draw_annotations(html, rev.annotations))
     
     
 module.exports = History

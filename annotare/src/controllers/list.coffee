@@ -3,6 +3,7 @@ $ = Flakey.$
 
 Document = require('../models/Document')
 
+
 class List extends Flakey.controllers.Controller
   constructor: (config) ->
     @id = "list-view"
