@@ -1,24 +1,23 @@
 <div class="tool-bar-wrap">
-  <div id="tool-bar" class="tk-museo-sans">
+  <nav id="tool-bar">
     <a href="#/detail?id=<%- @doc.id %>">Back to Normal View</a>
     
     <label for="version-input">Version:</label>
     <input type="range" min="0" max="<%= @max_version %>" value="<%= @version or @max_version %>" step="1" id="version-input" name="version-input" />
     
     <a href="#" id="rollback">Pop Latest Version</a>
-  </div>
+  </nav>
 </div>
 
 <div class="wrap">
   <section class="one-column">
     <article id="history-<%= @doc.slug %>">
       <h4>Version from <em id="history-time"><%= @time.toLocaleString() %></em></h4>
-      <hr />
+      <h1><%= @doc.name %></h1>
       
-      <h3><%= @doc.name %></h3>
-      <div id="history-content">
+      <section id="history-content">
         <%- if @html? then @html else @doc.render() %>
-      </div>
+      </section>
     </article>
   </section>
 </div>

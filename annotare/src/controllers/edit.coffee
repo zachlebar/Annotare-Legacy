@@ -34,16 +34,18 @@ class Edit extends Flakey.controllers.Controller
     
     $('#editor').autoResize({
       extraSpace: 100,
-      maxHeight: 10000
-    }).blur()
+      maxHeight: 9000
+    })
   
-  save: () =>
+  save: (event) =>
+    event.preventDefault()
     @doc.base_text = $('#editor').val()
     @doc.save()
     ui.info('Everything\'s Shiny Capt\'n!', "\"#{ @doc.name }\" was successfully saved.").hide(settings.growl_hide_after).effect(settings.growl_effect)
     window.location.hash = "#/detail?" + Flakey.util.querystring.build(@query_params)
   
-  discard: (params) =>
+  discard: (event) =>
+    event.preventDefault()
     ui.confirm('There be Monsters!', 'Careful there Captain; are you sure you want to discard all changes to this document?').show (ok) ->
       if ok
         window.location.hash = "#/list"
