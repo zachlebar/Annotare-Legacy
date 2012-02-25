@@ -17064,9 +17064,11 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
             doc = _ref[_i];
             __out.push('\n        <article class="document" id="document-');
             __out.push(__sanitize(doc.id));
-            __out.push('">\n          <h1>');
+            __out.push('">\n          <section class="name"><h1>');
             __out.push(__sanitize(doc.name));
-            __out.push('</h1>\n        </article>\n      ');
+            __out.push('</h1></section>\n          <section class="content">\n            ');
+            __out.push(doc.render());
+            __out.push('\n          </section>\n        </article>\n      ');
           }
           __out.push('\n    ');
         }
@@ -17331,7 +17333,7 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
       return $('#editor').autoResize({
         extraSpace: 100,
         maxHeight: 9000
-      });
+      }).blur();
     };
 
     Edit.prototype.save = function(event) {
@@ -17419,9 +17421,9 @@ require.define("/views/edit.js", function (require, module, exports, __dirname, 
           __out.push('\n          <div class="annotation" data-id="');
           __out.push(__sanitize(annotation.id));
           __out.push('">\n            <blockquote>&#8220;');
-          __out.push(__sanitize(annotation.text));
+          __out.push(annotation.text);
           __out.push('&#8221;</blockquote>\n            <span class="attachment">');
-          __out.push(__sanitize(annotation.attachment));
+          __out.push(annotation.attachment);
           __out.push('</span>\n            <a href="#" class="delete">Delete</a>\n          </div>\n        ');
         }
       

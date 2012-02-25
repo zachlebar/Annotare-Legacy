@@ -35,7 +35,7 @@ class Edit extends Flakey.controllers.Controller
     $('#editor').autoResize({
       extraSpace: 100,
       maxHeight: 9000
-    })
+    }).blur()
   
   save: (event) =>
     event.preventDefault()

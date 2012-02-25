@@ -11,7 +11,10 @@
     <% else: %>
       <% for doc in @list: %>
         <article class="document" id="document-<%= doc.id %>">
-          <h1><%= doc.name %></h1>
+          <section class="name"><h1><%= doc.name %></h1></section>
+          <section class="content">
+            <%- doc.render() %>
+          </section>
         </article>
       <% end %>
     <% end %>

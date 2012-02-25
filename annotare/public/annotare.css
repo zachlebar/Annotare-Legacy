@@ -737,7 +737,7 @@ body.minimal {
   background: #eeeeee url("/img/white_texture.png") repeat;
   color: #444444;
   width: 95%;
-  max-width: 960px;
+  max-width: 1200px;
   margin-right: auto;
   margin-left: auto;
   font-size: 11px;
@@ -772,15 +772,15 @@ body.minimal {
     font-weight: bold; }
   body.minimal header {
     width: 95%;
-    max-width: 960px;
+    max-width: 1200px;
     margin-right: auto;
     margin-left: auto;
     position: fixed;
     top: 0;
     z-index: 9999;
     background: rgba(0, 0, 0, 0.8);
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px; }
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px; }
     body.minimal header nav {
       padding: 0 20px; }
       body.minimal header nav h1 a, body.minimal header nav ul li a {
@@ -818,15 +818,18 @@ body.minimal {
     border-radius: 2px;
     padding: 0 2px 0 2px; }
   body.minimal .note:nth-child(even), body.minimal .note:nth-child(even) .note-detail {
-    background: #52abd1; }
+    background: #52abd1;
+    border: 1px solid #287595;
+    border-radius: 2px; }
   body.minimal .note:nth-child(odd), body.minimal .note:nth-child(odd) .note-detail {
-    background: #68b364; }
+    background: #68b364;
+    border: 1px solid #3d773a;
+    border-radius: 2px; }
   body.minimal .note .note-detail {
     display: inline-block;
     max-width: 20%;
     height: 1.7em;
     padding: 1px 2px;
-    border-radius: 2px;
     position: absolute;
     right: 0px;
     color: #FFF;
@@ -834,8 +837,9 @@ body.minimal {
   body.minimal .note:hover .note-detail, body.minimal .note .note-detail:focus {
     height: auto;
     z-index: 6000;
-    box-shadow: 0 0 10px #666;
     outline: none; }
+  body.minimal .note .note-detail:focus {
+    box-shadow: inset 0 0 2px #666; }
   body.minimal .highlight {
     background: #d15252; }
   body.minimal #application {
@@ -843,15 +847,15 @@ body.minimal {
     margin-bottom: 56px; }
   body.minimal #tool-bar {
     width: 95%;
-    max-width: 960px;
+    max-width: 1200px;
     margin-right: auto;
     margin-left: auto;
     position: fixed;
     bottom: 0;
     z-index: 9999;
     background: rgba(0, 0, 0, 0.8);
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px; }
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px; }
     body.minimal #tool-bar a, body.minimal #tool-bar label {
       font-size: 1em;
       line-height: 1.7;
@@ -867,11 +871,20 @@ body.minimal {
     float: left;
     cursor: pointer;
     width: 30%;
+    min-width: 308px;
     padding: 1%;
     margin: 0 1% 1% 0;
-    border-radius: 10px;
-    box-shadow: 0 0 15px #444444;
-    background: rgba(255, 255, 255, 0.6); }
+    border-radius: 2px;
+    box-shadow: 0 0 5px #444444;
+    overflow: hidden; }
+    body.minimal #list-view article.document:nth-child(odd) {
+      background: rgba(82, 171, 209, 0.5);
+      border: 1px solid rgba(40, 117, 149, 0.5);
+      border-radius: 2px; }
+    body.minimal #list-view article.document:nth-child(even) {
+      background: rgba(104, 179, 100, 0.5);
+      border: 1px solid rgba(61, 119, 58, 0.5);
+      border-radius: 2px; }
     body.minimal #list-view article.document h1 {
       font-size: 2.618em; }
   body.minimal #edit-view textarea, body.minimal #edit-view input[type="text"], body.minimal #new-document-view textarea, body.minimal #new-document-view input[type="text"] {
@@ -880,7 +893,7 @@ body.minimal {
     width: 98%;
     border: none;
     background: rgba(255, 255, 255, 0.6);
-    border-radius: 10px;
+    border-radius: 2px;
     box-shadow: 0 0 10px #999;
     font-family: Monaco, Menlo, Consolas, Inconsolata, monospace;
     line-height: 1.7;
@@ -891,7 +904,7 @@ body.minimal {
     padding: 10px;
     margin: 20px 0;
     background: rgba(255, 255, 255, 0.6);
-    border-radius: 10px;
+    border-radius: 2px;
     box-shadow: 0 0 10px #999;
     position: relative; }
     body.minimal #edit-view .annotation blockquote, body.minimal #edit-view .annotation .attachment, body.minimal #new-document-view .annotation blockquote, body.minimal #new-document-view .annotation .attachment {

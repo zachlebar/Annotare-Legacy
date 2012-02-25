@@ -14,13 +14,19 @@ $quaternary: #68B364;
 
 $black: rgba(0, 0, 0, 0.8);
 
-$max-width: 960px;
-$border-radius: 10px;
+$max-width: 1200px;
+$border-radius: 2px;
 $gutter: 10px;
 
 $sans: Verdana, 'Bitstream Vera Sans', sans-serif;
 $serif: Palatino, Georgia, serif;
 $code: Monaco, Menlo, Consolas, Inconsolata, monospace;
+
+@mixin box($color) {
+  background: $color;
+  border: 1px solid darken($color, 20%);
+  border-radius: 2px;
+}
 
 body.minimal {
   background: $page-background;
@@ -160,17 +166,16 @@ body.minimal {
   
   .note {
     &:nth-child(even), &:nth-child(even) .note-detail {
-      background: $secondary;
+      @include box($secondary);
     }
     &:nth-child(odd), &:nth-child(odd) .note-detail {
-      background: $quaternary;
+      @include box($quaternary);
     }    
     .note-detail {
       display: inline-block;
       max-width: 20%;
       height: $base-size * $line-height;
       padding: 1px 2px;
-      border-radius: 2px;
       position: absolute;
       right: 0px;
       color: #FFF;
@@ -179,8 +184,10 @@ body.minimal {
     &:hover .note-detail, .note-detail:focus {
       height: auto;
       z-index: 6000;
-      box-shadow: 0 0 10px #666;
       outline: none;
+    }
+    .note-detail:focus {
+      box-shadow: inset 0 0 2px #666;
     }
   }
   .highlight {
@@ -226,12 +233,27 @@ body.minimal {
       float: left;
       cursor: pointer;
       width: 30%;
+      min-width: 308px;
       padding: 1%;
       margin: 0 1% 1% 0;
       border-radius: $border-radius;
-      box-shadow: 0 0 15px $font-color;
-      background: $app-background;
+      box-shadow: 0 0 5px $font-color;
+      overflow: hidden;
       
+      &:nth-child(odd) {
+        $temp_red: red($secondary);
+        $temp_green: green($secondary);
+        $temp_blue: blue($secondary);
+        $temp: rgba($temp_red, $temp_green, $temp_blue, 0.5);
+        @include box($temp);
+      }
+      &:nth-child(even) {
+        $temp_red: red($quaternary);
+        $temp_green: green($quaternary);
+        $temp_blue: blue($quaternary);
+        $temp: rgba($temp_red, $temp_green, $temp_blue, 0.5);
+        @include box($temp);
+      }
       h1 {
         font-size: modular-scale(2);
       }
