@@ -17204,11 +17204,13 @@ require.define("/controllers/detail.js", function (require, module, exports, __d
     };
 
     Detail.prototype.edit = function(event) {
+      event.preventDefault();
       return window.location.hash = "#/edit?" + Flakey.util.querystring.build(this.query_params);
     };
 
     Detail.prototype.edit_note = function(event) {
       var content, id, note, target;
+      event.preventDefault();
       target = $(event.target);
       id = target.attr('id').replace('note-detail-', '');
       content = target.html().replace(/\<br\/\>/, '\n\n').replace(/\<([\w\d\/]*)\>/g, ' ');
@@ -17220,6 +17222,7 @@ require.define("/controllers/detail.js", function (require, module, exports, __d
 
     Detail.prototype["delete"] = function(event) {
       var _this = this;
+      event.preventDefault();
       return ui.confirm('Be careful!', 'Are you sure you want to delete this document?').show(function(ok) {
         if (ok) {
           _this.doc["delete"]();
@@ -17230,6 +17233,7 @@ require.define("/controllers/detail.js", function (require, module, exports, __d
 
     Detail.prototype.highlight = function(event) {
       var html, selection;
+      event.preventDefault();
       selection = void 0;
       if (window.getSelection) {
         selection = window.getSelection();
@@ -17248,6 +17252,7 @@ require.define("/controllers/detail.js", function (require, module, exports, __d
 
     Detail.prototype.annotate = function(event) {
       var html, options, selection;
+      event.preventDefault();
       selection = void 0;
       if (window.getSelection) {
         selection = window.getSelection();

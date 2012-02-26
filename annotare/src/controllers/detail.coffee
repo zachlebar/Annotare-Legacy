@@ -37,9 +37,11 @@ class Detail extends Flakey.controllers.Controller
     @bind_actions()
     
   edit: (event) =>
+    event.preventDefault()
     window.location.hash = "#/edit?" + Flakey.util.querystring.build(@query_params)
     
   edit_note: (event) =>
+    event.preventDefault()
     target = $(event.target)
     id = target.attr('id').replace('note-detail-', '')
     content = target.html().replace(/\<br\/\>/, '\n\n').replace(/\<([\w\d\/]*)\>/g, ' ') # Strip HTML tags from content editable output
@@ -49,12 +51,14 @@ class Detail extends Flakey.controllers.Controller
     note.save()
     
   delete: (event) =>
+    event.preventDefault()
     ui.confirm('Be careful!', 'Are you sure you want to delete this document?').show (ok) =>
       if ok
         @doc.delete()
         window.location.hash = "#/list"
     
   highlight: (event) =>
+    event.preventDefault()
     selection = undefined
     if window.getSelection
       selection = window.getSelection()
@@ -71,6 +75,7 @@ class Detail extends Flakey.controllers.Controller
       $("#detail-" + @doc.slug).html(html)
     
   annotate: (event) =>
+    event.preventDefault()
     selection = undefined
     if window.getSelection
       selection = window.getSelection()
