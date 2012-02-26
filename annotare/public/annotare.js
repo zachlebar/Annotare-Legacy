@@ -17269,7 +17269,9 @@ require.define("/controllers/detail.js", function (require, module, exports, __d
           animate: true
         };
         html = this.doc.annotate(selection, html, "Click here to edit this note.");
-        return $("#detail-" + this.doc.slug).html(html);
+        $("#detail-" + this.doc.slug).html(html);
+        this.unbind_actions();
+        return this.bind_actions();
       }
     };
 

@@ -94,6 +94,8 @@ class Detail extends Flakey.controllers.Controller
       }
       html = @doc.annotate(selection, html, "Click here to edit this note.")
       $("#detail-" + @doc.slug).html(html)
+      @unbind_actions()
+      @bind_actions()
     
     
 module.exports = Detail
