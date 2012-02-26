@@ -1,6 +1,10 @@
 Flakey = require('flakey')
 $ = Flakey.$
 
+Setting = require('../models/Setting')
+default_settings = require('../settings')
+default_settings = default_settings['default_settings']
+
 
 class Main extends Flakey.controllers.Stack
   constructor: (config) ->
@@ -9,6 +13,7 @@ class Main extends Flakey.controllers.Stack
     Detail = require('./detail')
     Edit = require('./edit')
     History = require('./history')
+    Settings = require('./settings')
     
     @id = 'main-stack'
     @class_name = 'stack'
@@ -18,6 +23,7 @@ class Main extends Flakey.controllers.Stack
       detail: Detail
       edit: Edit
       history: History
+      settings: Settings
     }
 
     @routes = {
@@ -26,9 +32,18 @@ class Main extends Flakey.controllers.Stack
       '^/detail$': 'detail'
       '^/edit$': 'edit'
       '^/history$': 'history'
+      '^/settings$': 'settings'
     }
     @default = '/list'
 
     super(config)
+    
+    # Theme Setting
+    theme = Setting.find({slug: 'theme'})
+    theme = theme[0]
+    if theme? and theme.value?
+      document.body.className = theme.value
+    else
+      document.body.className = default_settings['Theme']
 
 module.exports = Main

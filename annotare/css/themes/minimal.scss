@@ -105,6 +105,10 @@ body.minimal {
     nav {
       padding: 0 $gutter*2;
       
+      h1 {
+        float: left;
+      }
+      
       h1 a, ul li a {
         padding-top: $gutter;
         padding-bottom: $gutter;
@@ -238,7 +242,6 @@ body.minimal {
       padding: 1%;
       margin: 0 1% 20px 0;
       border-radius: $border-radius;
-      box-shadow: 0 0 5px $font-color;
       overflow: hidden;
       
       @media handheld and (max-width: 690px), screen and (max-width: 690px) {
@@ -250,14 +253,14 @@ body.minimal {
         $temp_red: red($secondary);
         $temp_green: green($secondary);
         $temp_blue: blue($secondary);
-        $temp: rgba($temp_red, $temp_green, $temp_blue, 0.5);
+        $temp: rgba($temp_red, $temp_green, $temp_blue, 0.3);
         @include box($temp);
       }
       &:nth-child(even) {
         $temp_red: red($quaternary);
         $temp_green: green($quaternary);
         $temp_blue: blue($quaternary);
-        $temp: rgba($temp_red, $temp_green, $temp_blue, 0.5);
+        $temp: rgba($temp_red, $temp_green, $temp_blue, 0.3);
         @include box($temp);
       }
       h1 {

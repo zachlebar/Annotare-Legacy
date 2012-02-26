@@ -1,35 +1,45 @@
 Flakey = require('flakey')
 $ = Flakey.$
 
-settings = require('../settings')
-Document = require('../models/Document')
+setting_types = require('../settings')
+
+Setting = require('../models/Setting')
 
 
 class Settings extends Flakey.controllers.Controller
   constructor: (config) ->
-    @id = "new-document-view"
-    @class_name = "new_document view"
+    @id = "settings-view"
+    @class_name = "settings view"
 
     @actions = {
-      'click .save': 'save'
-      'click .discard': 'discard'
+      'change .user-setting': 'save'
     }
 
     super(config)
-    @tmpl =  Flakey.templates.get_template('new_document', require('../views/new_document'))
+    @tmpl =  Flakey.templates.get_template('settings', require('../views/settings'))
 
   render: ->
-    # Render a template, replacing the 
-    # controller's HTML
-    @html @tmpl.render({})
+    context = {
+      types: setting_types,
+      Setting: Setting
+    }
+    @html @tmpl.render(context)
     @unbind_actions()
     @bind_actions()
     
-    $('#editor').autoResize({
-      extraSpace: 100,
-      maxHeight: 2000
-    })
-    $('#name, #editor').blur()
-    
+  save: (event) =>
+    event.preventDefault()
+    $('.user-setting').each () ->
+      settings = Setting.find({slug: $(this).attr('data-slug')})
+      if settings.length == 0
+        setting = new Setting {
+          slug: $(this).attr('data-slug')
+        }
+      else
+        setting = settings[0]
+      
+      setting.value = $(this).val()
+      setting.save()
+
     
 module.exports = Settings

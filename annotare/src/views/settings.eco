@@ -1,0 +1,45 @@
+<div class="tool-bar-wrap">
+  <nav id="tool-bar">
+    <a href="/" class="apply">Apply</a>
+  </nav>
+</div>
+
+<div class="wrap">
+  <section class="one-column">
+    <h1>Settings</h1>
+    <form action="#" method="POST">
+      <% for own category, settings of @types.user_settings: %>
+        <h3><%= category %></h3>
+        <% for own name, setting of settings: %>
+          <div class="setting">
+            <label for="setting-<%= name.replace(' ', '') %>"><%= name %></label>
+            
+            <% slug = name.replace(' ', '-').toLowerCase() %>
+            <% current = @Setting.find({slug: slug}) %>
+            <% current = current[0] %>
+            <% current = if current? and current.value? then current.value else @types.default_settings[name] %>
+            <% current = if current? then current else "" %>
+            
+            <% if setting[0] == "select": %>
+            
+              <select id="setting-<%= name.replace(' ', '') %>" name="setting-<%= name.replace(' ', '') %>" data-slug="<%= slug %>" class="user-setting">
+                <% for option in setting[1]: %>
+                  <% if current == option: %>
+                    <option value="<%= option %>" selected="selected"><%= option %></option>
+                  <% else : %>
+                    <option value="<%= option %>"><%= option %></option>
+                  <% end %>
+                <% end %>
+              </select>
+              
+            <% else: %>
+            
+              <input type="<%= setting[0] %>" id="setting-<%= name.replace(' ', '') %>" name="setting-<%= name.replace(' ', '') %>" data-slug="<%= slug %>" class="user-setting" value="<%= current %>" />
+              
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </form>
+  </section>
+</div>

@@ -13623,7 +13623,7 @@ if (!JSON) {
 
 require.define("/controllers/annotare.js", function (require, module, exports, __dirname, __filename) {
 (function() {
-  var $, Flakey, Main,
+  var $, Flakey, Main, Setting, default_settings,
     __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
@@ -13631,17 +13631,24 @@ require.define("/controllers/annotare.js", function (require, module, exports, _
 
   $ = Flakey.$;
 
+  Setting = require('../models/Setting');
+
+  default_settings = require('../settings');
+
+  default_settings = default_settings['default_settings'];
+
   Main = (function(_super) {
 
     __extends(Main, _super);
 
     function Main(config) {
-      var Detail, Edit, History, List, NewDocument;
+      var Detail, Edit, History, List, NewDocument, Settings, theme;
       NewDocument = require('./new_document');
       List = require('./list');
       Detail = require('./detail');
       Edit = require('./edit');
       History = require('./history');
+      Settings = require('./settings');
       this.id = 'main-stack';
       this.class_name = 'stack';
       this.controllers = {
@@ -13649,17 +13656,28 @@ require.define("/controllers/annotare.js", function (require, module, exports, _
         list: List,
         detail: Detail,
         edit: Edit,
-        history: History
+        history: History,
+        settings: Settings
       };
       this.routes = {
         '^/new$': 'new_document',
         '^/list$': 'list',
         '^/detail$': 'detail',
         '^/edit$': 'edit',
-        '^/history$': 'history'
+        '^/history$': 'history',
+        '^/settings$': 'settings'
       };
       this["default"] = '/list';
       Main.__super__.constructor.call(this, config);
+      theme = Setting.find({
+        slug: 'theme'
+      });
+      theme = theme[0];
+      if ((theme != null) && (theme.value != null)) {
+        document.body.className = theme.value;
+      } else {
+        document.body.className = default_settings['Theme'];
+      }
     }
 
     return Main;
@@ -13667,6 +13685,56 @@ require.define("/controllers/annotare.js", function (require, module, exports, _
   })(Flakey.controllers.Stack);
 
   module.exports = Main;
+
+}).call(this);
+
+});
+
+require.define("/models/Setting.js", function (require, module, exports, __dirname, __filename) {
+(function() {
+  var Flakey, Setting,
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  Flakey = require('flakey');
+
+  Setting = (function(_super) {
+
+    __extends(Setting, _super);
+
+    function Setting() {
+      Setting.__super__.constructor.apply(this, arguments);
+    }
+
+    Setting.model_name = 'Setting';
+
+    Setting.fields = ['id', 'slug', 'value'];
+
+    return Setting;
+
+  })(Flakey.models.Model);
+
+  module.exports = Setting;
+
+}).call(this);
+
+});
+
+require.define("/settings.js", function (require, module, exports, __dirname, __filename) {
+(function() {
+
+  module.exports = {
+    growl_hide_after: 5000,
+    growl_effect: 'slide',
+    default_settings: {
+      'Theme': 'minimal'
+    },
+    user_settings: {
+      'Appearance Settings': {
+        'Theme': ['select', ['book', 'minimal']]
+      }
+    }
+  };
 
 }).call(this);
 
@@ -15416,18 +15484,6 @@ Card.prototype.render = function(options){
   });
 };
 })(ui, "<div class=\"card\">\n  <div class=\"wrapper\">\n    <div class=\"face front\">1</div>\n    <div class=\"face back\">2</div>\n  </div>\n</div>");
-});
-
-require.define("/settings.js", function (require, module, exports, __dirname, __filename) {
-(function() {
-
-  module.exports = {
-    growl_hide_after: 5000,
-    growl_effect: 'slide'
-  };
-
-}).call(this);
-
 });
 
 require.define("/models/Document.js", function (require, module, exports, __dirname, __filename) {
@@ -17265,11 +17321,11 @@ require.define("/views/detail.js", function (require, module, exports, __dirname
     (function() {
       (function() {
       
-        __out.push('<div class="tool-bar-wrap">\n  <nav id="tool-bar">\n    <a href="javascript:null;" class="edit">Edit</a>\n    <a href="javascript:null;" class="highlighter">Highlight</a>\n    <a href="javascript:null;" class="annotate">Create Note</a>\n    <a href="#/history?id=');
+        __out.push('<div class="tool-bar-wrap">\n  <nav id="tool-bar">\n    <a href="#" class="edit">Edit</a>\n    <a href="#" class="highlighter">Highlight</a>\n    <a href="#" class="annotate">Create Note</a>\n    <a href="#/history?id=');
       
         __out.push(this.doc.id);
       
-        __out.push('" class="">History</a>\n    <a href="javascript:null;" class="delete">Delete</a>\n  </nav>\n</div>\n\n<div class="wrap">\n  <section class="two-column">\n    <article id="detail-');
+        __out.push('" class="">History</a>\n    <a href="#" class="delete">Delete</a>\n  </nav>\n</div>\n\n<div class="wrap">\n  <section class="two-column">\n    <article id="detail-');
       
         __out.push(__sanitize(this.doc.slug));
       
@@ -17647,6 +17703,207 @@ require.define("/views/history.js", function (require, module, exports, __dirnam
         __out.push(this.doc.draw_annotations(html));
       
         __out.push('\n      </section>\n    </article>\n    \n    <aside>\n      &nbsp;\n    </aside>\n  </section>\n</div>');
+      
+      }).call(this);
+      
+    }).call(__obj);
+    __obj.safe = __objSafe, __obj.escape = __escape;
+    return __out.join('');
+  };
+}).call(this);
+
+});
+
+require.define("/controllers/settings.js", function (require, module, exports, __dirname, __filename) {
+(function() {
+  var $, Flakey, Setting, Settings, setting_types,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  Flakey = require('flakey');
+
+  $ = Flakey.$;
+
+  setting_types = require('../settings');
+
+  Setting = require('../models/Setting');
+
+  Settings = (function(_super) {
+
+    __extends(Settings, _super);
+
+    function Settings(config) {
+      this.save = __bind(this.save, this);      this.id = "settings-view";
+      this.class_name = "settings view";
+      this.actions = {
+        'change .user-setting': 'save'
+      };
+      Settings.__super__.constructor.call(this, config);
+      this.tmpl = Flakey.templates.get_template('settings', require('../views/settings'));
+    }
+
+    Settings.prototype.render = function() {
+      var context;
+      context = {
+        types: setting_types,
+        Setting: Setting
+      };
+      this.html(this.tmpl.render(context));
+      this.unbind_actions();
+      return this.bind_actions();
+    };
+
+    Settings.prototype.save = function(event) {
+      event.preventDefault();
+      return $('.user-setting').each(function() {
+        var setting, settings;
+        settings = Setting.find({
+          slug: $(this).attr('data-slug')
+        });
+        if (settings.length === 0) {
+          setting = new Setting({
+            slug: $(this).attr('data-slug')
+          });
+        } else {
+          setting = settings[0];
+        }
+        setting.value = $(this).val();
+        return setting.save();
+      });
+    };
+
+    return Settings;
+
+  })(Flakey.controllers.Controller);
+
+  module.exports = Settings;
+
+}).call(this);
+
+});
+
+require.define("/views/settings.js", function (require, module, exports, __dirname, __filename) {
+(function() {
+  this.ecoTemplates || (this.ecoTemplates = {});
+  this.ecoTemplates["settings"] = function(__obj) {
+    if (!__obj) __obj = {};
+    var __out = [], __capture = function(callback) {
+      var out = __out, result;
+      __out = [];
+      callback.call(this);
+      result = __out.join('');
+      __out = out;
+      return __safe(result);
+    }, __sanitize = function(value) {
+      if (value && value.ecoSafe) {
+        return value;
+      } else if (typeof value !== 'undefined' && value != null) {
+        return __escape(value);
+      } else {
+        return '';
+      }
+    }, __safe, __objSafe = __obj.safe, __escape = __obj.escape;
+    __safe = __obj.safe = function(value) {
+      if (value && value.ecoSafe) {
+        return value;
+      } else {
+        if (!(typeof value !== 'undefined' && value != null)) value = '';
+        var result = new String(value);
+        result.ecoSafe = true;
+        return result;
+      }
+    };
+    if (!__escape) {
+      __escape = __obj.escape = function(value) {
+        return ('' + value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      };
+    }
+    (function() {
+      (function() {
+        var category, current, name, option, setting, settings, slug, _i, _len, _ref, _ref2,
+          __hasProp = Object.prototype.hasOwnProperty;
+      
+        __out.push('<div class="tool-bar-wrap">\n  <nav id="tool-bar">\n    <a href="/" class="apply">Apply</a>\n  </nav>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <h1>Settings</h1>\n    <form action="#" method="POST">\n      ');
+      
+        _ref = this.types.user_settings;
+        for (category in _ref) {
+          if (!__hasProp.call(_ref, category)) continue;
+          settings = _ref[category];
+          __out.push('\n        <h3>');
+          __out.push(__sanitize(category));
+          __out.push('</h3>\n        ');
+          for (name in settings) {
+            if (!__hasProp.call(settings, name)) continue;
+            setting = settings[name];
+            __out.push('\n          <div class="setting">\n            <label for="setting-');
+            __out.push(__sanitize(name.replace(' ', '')));
+            __out.push('">');
+            __out.push(__sanitize(name));
+            __out.push('</label>\n            \n            ');
+            slug = name.replace(' ', '-').toLowerCase();
+            __out.push('\n            ');
+            current = this.Setting.find({
+              slug: slug
+            });
+            __out.push('\n            ');
+            current = current[0];
+            __out.push('\n            ');
+            current = (current != null) && (current.value != null) ? current.value : this.types.default_settings[name];
+            __out.push('\n            ');
+            current = current != null ? current : "";
+            __out.push('\n            \n            ');
+            if (setting[0] === "select") {
+              __out.push('\n            \n              <select id="setting-');
+              __out.push(__sanitize(name.replace(' ', '')));
+              __out.push('" name="setting-');
+              __out.push(__sanitize(name.replace(' ', '')));
+              __out.push('" data-slug="');
+              __out.push(__sanitize(slug));
+              __out.push('" class="user-setting">\n                ');
+              _ref2 = setting[1];
+              for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+                option = _ref2[_i];
+                __out.push('\n                  ');
+                if (current === option) {
+                  __out.push('\n                    <option value="');
+                  __out.push(__sanitize(option));
+                  __out.push('" selected="selected">');
+                  __out.push(__sanitize(option));
+                  __out.push('</option>\n                  ');
+                } else {
+                  __out.push('\n                    <option value="');
+                  __out.push(__sanitize(option));
+                  __out.push('">');
+                  __out.push(__sanitize(option));
+                  __out.push('</option>\n                  ');
+                }
+                __out.push('\n                ');
+              }
+              __out.push('\n              </select>\n              \n            ');
+            } else {
+              __out.push('\n            \n              <input type="');
+              __out.push(__sanitize(setting[0]));
+              __out.push('" id="setting-');
+              __out.push(__sanitize(name.replace(' ', '')));
+              __out.push('" name="setting-');
+              __out.push(__sanitize(name.replace(' ', '')));
+              __out.push('" data-slug="');
+              __out.push(__sanitize(slug));
+              __out.push('" class="user-setting" value="');
+              __out.push(__sanitize(current));
+              __out.push('" />\n              \n            ');
+            }
+            __out.push('\n          </div>\n        ');
+          }
+          __out.push('\n      ');
+        }
+      
+        __out.push('\n    </form>\n  </section>\n</div>');
       
       }).call(this);
       
