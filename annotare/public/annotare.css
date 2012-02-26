@@ -211,10 +211,10 @@ td {
   top: 150px;
   max-width: 600px;
   min-width: 250px;
-  border: 1px solid #eee;
+  border: 1px solid #DDD;
   border-bottom-color: #cacaca;
   -webkit-border-radius: 3px;
-  -webkit-box-shadow: 0 1px 4px 0 #ddd;
+  -webkit-box-shadow: 0 1px 15px #666;
   background: white;
   z-index: 1000; }
 
@@ -341,10 +341,10 @@ td {
   position: relative;
   max-width: 600px;
   min-width: 250px;
-  border: 1px solid #eee;
+  border: 1px solid #DDD;
   border-bottom-color: #cacaca;
   -webkit-border-radius: 3px;
-  -webkit-box-shadow: 0 1px 4px 0 #ddd;
+  -webkit-box-shadow: 0 1px 15px #666;
   background: white;
   z-index: 9999; }
 
@@ -743,9 +743,9 @@ body.minimal {
   font-size: 11px;
   line-height: 1.7;
   font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
-  body.minimal .sans, body.minimal h5, body.minimal h6 {
+  body.minimal .sans, body.minimal h5, body.minimal h6, body.minimal #dialog, body.minimal .notification {
     font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
-  body.minimal .serif, body.minimal h1, body.minimal h2, body.minimal h3, body.minimal h4 {
+  body.minimal .serif, body.minimal h1, body.minimal h2, body.minimal h3, body.minimal h4, body.minimal #dialog h1, body.minimal #dialog h2, body.minimal #dialog h3, body.minimal #dialog h4, body.minimal #dialog h5, body.minimal #dialog h6, body.minimal .notification h1, body.minimal .notification h2, body.minimal .notification h3, body.minimal .notification h4, body.minimal .notification h5, body.minimal .notification h6 {
     font-family: Palatino, Georgia, serif; }
   body.minimal .bold, body.minimal h3, body.minimal h4, body.minimal h5, body.minimal h6 {
     font-weight: bold; }
@@ -770,6 +770,11 @@ body.minimal {
     text-decoration: none;
     color: #444444;
     font-weight: bold; }
+  body.minimal #dialog, body.minimal .notification {
+    font-size: 1.1em; }
+    body.minimal #dialog h1, body.minimal #dialog h2, body.minimal #dialog h3, body.minimal #dialog h4, body.minimal #dialog h5, body.minimal #dialog h6, body.minimal .notification h1, body.minimal .notification h2, body.minimal .notification h3, body.minimal .notification h4, body.minimal .notification h5, body.minimal .notification h6 {
+      font-size: 1.3em;
+      font-weight: bold; }
   body.minimal header {
     width: 95%;
     max-width: 1200px;

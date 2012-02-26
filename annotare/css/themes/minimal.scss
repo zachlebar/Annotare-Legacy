@@ -89,6 +89,16 @@ body.minimal {
     font-weight: bold;
   }
   
+  #dialog, .notification {
+    h1, h2, h3, h4, h5, h6 {
+      @extend .serif;
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+    @extend .sans;
+    font-size: 1.1em;
+  }
+  
   header {
     width: 95%;
     max-width: $max-width;
