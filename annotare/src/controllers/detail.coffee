@@ -29,6 +29,9 @@ class Detail extends Flakey.controllers.Controller
       
     # Render Document
     @doc = Document.get(@query_params.id)
+    if not @doc?
+      return
+    
     context = {
       doc: @doc
     }

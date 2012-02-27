@@ -863,7 +863,7 @@ body.minimal {
     width: 20%;
     float: left; }
   body.minimal blockquote {
-    border-left: 8px solid #CCC;
+    border-left: 8px solid #444444;
     margin-left: 10px;
     padding-left: 7px; }
   body.minimal .wrap {
@@ -880,6 +880,14 @@ body.minimal {
     background: rgba(104, 179, 100, 0.3);
     border: 1px solid rgba(61, 119, 58, 0.3);
     border-radius: 2px; }
+  body.minimal .note:nth-child(even):hover .note-detail, body.minimal .note:nth-child(even) .note-detail:hover, body.minimal .note:nth-child(even) .note-detail:focus {
+    background: rgba(82, 171, 209, 0.9);
+    border: 1px solid rgba(40, 117, 149, 0.9);
+    border-radius: 2px; }
+  body.minimal .note:nth-child(odd):hover .note-detail, body.minimal .note:nth-child(odd) .note-detail:hover, body.minimal .note:nth-child(odd) .note-detail:focus {
+    background: rgba(104, 179, 100, 0.9);
+    border: 1px solid rgba(61, 119, 58, 0.9);
+    border-radius: 2px; }
   body.minimal .note .note-detail {
     display: inline-block;
     max-width: 20%;
@@ -894,7 +902,8 @@ body.minimal {
     z-index: 6000;
     outline: none; }
   body.minimal .note .note-detail:focus {
-    box-shadow: inset 0 0 2px #666; }
+    box-shadow: inset 0 0 2px #666;
+    outline: none; }
   body.minimal .highlight {
     background: rgba(209, 82, 82, 0.3);
     border: 1px solid rgba(149, 40, 40, 0.3);

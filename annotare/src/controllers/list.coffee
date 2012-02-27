@@ -17,8 +17,10 @@ class List extends Flakey.controllers.Controller
     super(config)
     @tmpl =  Flakey.templates.get_template('list', require('../views/list'))
     
-  render: (documents) =>
-    if not documents? or documents.constructor != Array
+  render: () =>
+    if @query_params.q? and @query_params.q.length > 0
+      documents = Document.search(@query_params.q)
+    else
       documents = Document.all()
     
     context = {
@@ -27,6 +29,7 @@ class List extends Flakey.controllers.Controller
     @html @tmpl.render(context)
     @unbind_actions()
     @bind_actions()
+    $('#search-box').val(@query_params.q).focus()
     
   select_doc: (event) ->
     id = $(event.currentTarget).attr('id').replace('document-', '')
@@ -34,10 +37,7 @@ class List extends Flakey.controllers.Controller
     
   search: (event) =>
     event.preventDefault()
-    query = $('#search-box').val()
-    docs = Document.search(query)
-    @render(docs)
-    $('#search-box').val(query).focus()
+    Flakey.util.querystring.update({q: $('#search-box').val()}, true)
     
     
 module.exports = List

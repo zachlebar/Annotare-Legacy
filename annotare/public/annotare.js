@@ -12539,7 +12539,6 @@ if (!JSON) {
         key = fields[_i];
         query[key] = re;
       }
-      console.log(query);
       ar = Flakey.models.backend_controller.search(this.model_name, query);
       if (!ar.length) return [];
       set = [];
@@ -13043,15 +13042,23 @@ if (!JSON) {
         for (key in _ref2) {
           if (!__hasProp.call(_ref2, key)) continue;
           value = _ref2[key];
-          if (value.constructor === 'Patch') {
-            patches = Flakey.diff_patch.patch_fromText(value.patch_text);
-            output[key] = Flakey.diff_patch.patch_apply(patches, obj[key] || '')[0];
-          } else {
-            output[key] = value;
+          switch (value.constructor) {
+            case 'Patch':
+              patches = Flakey.diff_patch.patch_fromText(value.patch_text);
+              obj[key] = Flakey.diff_patch.patch_apply(patches, obj[key] || '')[0];
+              break;
+            case Object:
+              obj[key] = $.extend(true, {}, value);
+              break;
+            case Array:
+              obj[key] = $.extend(true, [], value);
+              break;
+            default:
+              obj[key] = value;
           }
         }
       }
-      return output;
+      return obj;
     };
 
     Backend.prototype._search = function(name, query) {
@@ -13067,12 +13074,11 @@ if (!JSON) {
       for (_i = 0, _len = store.length; _i < _len; _i++) {
         obj = store[_i];
         rendered = this._render_obj(obj);
-        console.log(rendered);
         match = false;
         for (key in query) {
           if (!__hasProp.call(query, key)) continue;
           value = query[key];
-          match = true;
+          if (value.exec(rendered[key])) match = true;
         }
         if (match) set.push(obj);
       }
@@ -17081,9 +17087,11 @@ require.define("/controllers/list.js", function (require, module, exports, __dir
       this.tmpl = Flakey.templates.get_template('list', require('../views/list'));
     }
 
-    List.prototype.render = function(documents) {
-      var context;
-      if (!(documents != null) || documents.constructor !== Array) {
+    List.prototype.render = function() {
+      var context, documents;
+      if ((this.query_params.q != null) && this.query_params.q.length > 0) {
+        documents = Document.search(this.query_params.q);
+      } else {
         documents = Document.all();
       }
       context = {
@@ -17091,7 +17099,8 @@ require.define("/controllers/list.js", function (require, module, exports, __dir
       };
       this.html(this.tmpl.render(context));
       this.unbind_actions();
-      return this.bind_actions();
+      this.bind_actions();
+      return $('#search-box').val(this.query_params.q).focus();
     };
 
     List.prototype.select_doc = function(event) {
@@ -17103,12 +17112,10 @@ require.define("/controllers/list.js", function (require, module, exports, __dir
     };
 
     List.prototype.search = function(event) {
-      var docs, query;
       event.preventDefault();
-      query = $('#search-box').val();
-      docs = Document.search(query);
-      this.render(docs);
-      return $('#search-box').val(query).focus();
+      return Flakey.util.querystring.update({
+        q: $('#search-box').val()
+      }, true);
     };
 
     return List;
@@ -17168,7 +17175,7 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
         __out.push('<div class="tool-bar-wrap">\n  <div id="tool-bar">\n    <p>"You have to be resourceful at Bethel." &mdash; Fred Rusk</p>\n  </div>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <form id="search-form" action="#" method="GET">\n        <input type="text" id="search-box" name="search-box" placeholder="Search Notes" />\n      </form>\n    ');
       
         if (this.list.length === 0) {
-          __out.push('\n      <h4>No documents found :(</h4>\n    ');
+          __out.push('\n      <h4>No Notes found.</h4>\n    ');
         } else {
           __out.push('\n      ');
           _ref = this.list;
@@ -17241,6 +17248,7 @@ require.define("/controllers/detail.js", function (require, module, exports, __d
       var context;
       if (!this.query_params.id) return;
       this.doc = Document.get(this.query_params.id);
+      if (!(this.doc != null)) return;
       context = {
         doc: this.doc
       };

@@ -9,22 +9,22 @@ $app-background: rgba(255, 255, 255, 0.6);
 $font-color: #444;
 
 $secondary: #52ABD1;
-$temp_red: red($secondary);
-$temp_green: green($secondary);
-$temp_blue: blue($secondary);
-$secondary: rgba($temp_red, $temp_green, $temp_blue, 0.3);
+$secondary_red: red($secondary);
+$secondary_green: green($secondary);
+$secondary_blue: blue($secondary);
+$secondary: rgba($secondary_red, $secondary_green, $secondary_blue, 0.3);
 
 $tertiary: #D15252;
-$temp_red: red($tertiary);
-$temp_green: green($tertiary);
-$temp_blue: blue($tertiary);
-$tertiary: rgba($temp_red, $temp_green, $temp_blue, 0.3);
+$tertiary_red: red($tertiary);
+$tertiary_green: green($tertiary);
+$tertiary_blue: blue($tertiary);
+$tertiary: rgba($tertiary_red, $tertiary_green, $tertiary_green, 0.3);
 
 $quaternary: #68B364;
-$temp_red: red($quaternary);
-$temp_green: green($quaternary);
-$temp_blue: blue($quaternary);
-$quaternary: rgba($temp_red, $temp_green, $temp_blue, 0.3);
+$quaternary_red: red($quaternary);
+$quaternary_green: green($quaternary);
+$quaternary_blue: blue($quaternary);
+$quaternary: rgba($quaternary_red, $quaternary_green, $quaternary_blue, 0.3);
 
 $black: rgba(0, 0, 0, 0.8);
 
@@ -176,7 +176,7 @@ body.minimal {
   }
   
   blockquote {
-    border-left: 8px solid #CCC;
+    border-left: 8px solid $font-color;
     margin-left: 10px;
     padding-left: 7px;
   }
@@ -198,7 +198,13 @@ body.minimal {
     }
     &:nth-child(odd), &:nth-child(odd) .note-detail {
       @include box($quaternary);
-    }    
+    }
+    &:nth-child(even):hover .note-detail, &:nth-child(even) .note-detail:hover, &:nth-child(even) .note-detail:focus {
+      @include box(rgba($secondary_red, $secondary_green, $secondary_blue, 0.9));
+    }
+    &:nth-child(odd):hover .note-detail, &:nth-child(odd) .note-detail:hover, &:nth-child(odd) .note-detail:focus {
+      @include box(rgba($quaternary_red, $quaternary_green, $quaternary_blue, 0.9));
+    }
     .note-detail {
       display: inline-block;
       max-width: 20%;
@@ -216,6 +222,7 @@ body.minimal {
     }
     .note-detail:focus {
       box-shadow: inset 0 0 2px #666;
+      outline: none;
     }
   }
   .highlight {
