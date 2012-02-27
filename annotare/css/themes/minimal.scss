@@ -43,6 +43,16 @@ $code: Monaco, Menlo, Consolas, Inconsolata, monospace;
   border-radius: 2px;
 }
 
+@mixin input() {
+  margin: 0 0 0 -1px;
+  border: 1px solid #999;
+  padding: 10px 1% 10px 1%;
+  font-size: 1.3em;
+  @extend .sans;
+  border-radius: $border-radius;
+  background: rgba(255, 255, 255, 0.4);
+}
+
 body.minimal {
   background: $page-background;
   color: $font-color;
@@ -269,13 +279,7 @@ body.minimal {
       padding: 0;
       input {
         width: 98%;
-        margin: 0 0 0 -1px;
-        border: 1px solid #999;
-        padding: 10px 1% 10px 1%;
-        font-size: 1.3em;
-        @extend .sans;
-        border-radius: $border-radius;
-        background: rgba(255, 255, 255, 0.4);
+        @include input();
         &:focus { outline: none; }
       }
     }
@@ -313,13 +317,9 @@ body.minimal {
   
   #edit-view, #new-document-view {
     textarea, input[type="text"] {
-      padding: 1%;
+      @include input();
       margin-bottom: 20px;
       width: 98%;
-      border: none;
-      background: $app-background;
-      border-radius: $border-radius;
-      box-shadow: 0 0 10px #999;
       
       font-family: $code;
       line-height: $line-height;

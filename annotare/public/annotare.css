@@ -792,7 +792,7 @@ body.minimal {
   font-size: 11px;
   line-height: 1.7;
   font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
-  body.minimal .sans, body.minimal h5, body.minimal h6, body.minimal #dialog, body.minimal .notification, body.minimal #list-view form#search-form input {
+  body.minimal .sans, body.minimal h5, body.minimal h6, body.minimal #dialog, body.minimal .notification, body.minimal #list-view form#search-form input, body.minimal #edit-view textarea, body.minimal #edit-view input[type="text"], body.minimal #new-document-view textarea, body.minimal #new-document-view input[type="text"] {
     font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
   body.minimal .serif, body.minimal h1, body.minimal h2, body.minimal h3, body.minimal h4, body.minimal #dialog h1, body.minimal #dialog h2, body.minimal #dialog h3, body.minimal #dialog h4, body.minimal #dialog h5, body.minimal #dialog h6, body.minimal .notification h1, body.minimal .notification h2, body.minimal .notification h3, body.minimal .notification h4, body.minimal .notification h5, body.minimal .notification h6 {
     font-family: "Neuton", Palatino, Georgia, serif; }
@@ -971,13 +971,14 @@ body.minimal {
     body.minimal #list-view article.document h1 {
       font-size: 2.618em; }
   body.minimal #edit-view textarea, body.minimal #edit-view input[type="text"], body.minimal #new-document-view textarea, body.minimal #new-document-view input[type="text"] {
-    padding: 1%;
+    margin: 0 0 0 -1px;
+    border: 1px solid #999;
+    padding: 10px 1% 10px 1%;
+    font-size: 1.3em;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.4);
     margin-bottom: 20px;
     width: 98%;
-    border: none;
-    background: rgba(255, 255, 255, 0.6);
-    border-radius: 2px;
-    box-shadow: 0 0 10px #999;
     font-family: Monaco, Menlo, Consolas, Inconsolata, monospace;
     line-height: 1.7;
     font-size: 1.3em; }

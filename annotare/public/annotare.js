@@ -17476,13 +17476,14 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
       return $('#editor').autoResize({
         extraSpace: 100,
         maxHeight: 9000
-      }).blur();
+      });
     };
 
     Edit.prototype.save = function(event) {
       event.preventDefault();
       this.doc.base_text = $('#editor').val();
       this.doc.save();
+      delete localStorage[this.autosave_key()];
       ui.info('Everything\'s Shiny Capt\'n!', "\"" + this.doc.name + "\" was successfully saved.").hide(settings.growl_hide_after).effect(settings.growl_effect);
       return window.location.hash = "#/detail?" + Flakey.util.querystring.build(this.query_params);
     };

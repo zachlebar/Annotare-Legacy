@@ -54,12 +54,13 @@ class Edit extends Flakey.controllers.Controller
     $('#editor').autoResize({
       extraSpace: 100,
       maxHeight: 9000
-    }).blur()
+    })
   
   save: (event) =>
     event.preventDefault()
     @doc.base_text = $('#editor').val()
     @doc.save()
+    delete localStorage[@autosave_key()]
     ui.info('Everything\'s Shiny Capt\'n!', "\"#{ @doc.name }\" was successfully saved.").hide(settings.growl_hide_after).effect(settings.growl_effect)
     window.location.hash = "#/detail?" + Flakey.util.querystring.build(@query_params)
   
