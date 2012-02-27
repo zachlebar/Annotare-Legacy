@@ -480,6 +480,55 @@ td {
 .card.sideflip.flipped .wrapper {
   -webkit-transform: translateX(-100%) rotateY(180deg); }
 
+@font-face {
+  font-family: 'Neuton';
+  src: url("/type/Neuton/neuton-regular-webfont.eot");
+  src: url("/type/Neuton/neuton-regular-webfont.eot?#iefix") format("embedded-opentype"), url("/type/Neuton/neuton-regular-webfont.woff") format("woff"), url("/type/Neuton/neuton-regular-webfont.ttf") format("truetype"), url("/type/Neuton/neuton-regular-webfont.svg#NeutonRegular") format("svg");
+  font-weight: 400;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Neuton';
+  src: url("/type/Neuton/neuton-bold-webfont.eot");
+  src: url("/type/Neuton/neuton-bold-webfont.eot?#iefix") format("embedded-opentype"), url("/type/Neuton/neuton-bold-webfont.woff") format("woff"), url("/type/Neuton/neuton-bold-webfont.ttf") format("truetype"), url("/type/Neuton/neuton-bold-webfont.svg#NeutonBold") format("svg");
+  font-weight: 700;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Neuton';
+  src: url("/type/Neuton/neuton-extrabold-webfont.eot");
+  src: url("/type/Neuton/neuton-extrabold-webfont.eot?#iefix") format("embedded-opentype"), url("/type/Neuton/neuton-extrabold-webfont.woff") format("woff"), url("/type/Neuton/neuton-extrabold-webfont.ttf") format("truetype"), url("/type/Neuton/neuton-extrabold-webfont.svg#NeutonExtrabold") format("svg");
+  font-weight: 900;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Neuton';
+  src: url("/type/Neuton/neuton-extralight-webfont.eot");
+  src: url("/type/Neuton/neuton-extralight-webfont.eot?#iefix") format("embedded-opentype"), url("/type/Neuton/neuton-extralight-webfont.woff") format("woff"), url("/type/Neuton/neuton-extralight-webfont.ttf") format("truetype"), url("/type/Neuton/neuton-extralight-webfont.svg#NeutonExtralight") format("svg");
+  font-weight: 100;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Neuton';
+  src: url("/type/Neuton/neuton-italic-webfont.eot");
+  src: url("/type/Neuton/neuton-italic-webfont.eot?#iefix") format("embedded-opentype"), url("/type/Neuton/neuton-italic-webfont.woff") format("woff"), url("/type/Neuton/neuton-italic-webfont.ttf") format("truetype"), url("/type/Neuton/neuton-italic-webfont.svg#NeutonItalic") format("svg");
+  font-weight: 400;
+  font-style: italic; }
+
+@font-face {
+  font-family: 'Neuton';
+  src: url("/type/Neuton/neuton-light-webfont.eot");
+  src: url("/type/Neuton/neuton-light-webfont.eot?#iefix") format("embedded-opentype"), url("/type/Neuton/neuton-light-webfont.woff") format("woff"), url("/type/Neuton/neuton-light-webfont.ttf") format("truetype"), url("/type/Neuton/neuton-light-webfont.svg#NeutonLight") format("svg");
+  font-weight: 200;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'Neuton';
+  src: url("/type/Neuton/neutoncursive-regular-webfont.eot");
+  src: url("/type/Neuton/neutoncursive-regular-webfont.eot?#iefix") format("embedded-opentype"), url("/type/Neuton/neutoncursive-regular-webfont.woff") format("woff"), url("/type/Neuton/neutoncursive-regular-webfont.ttf") format("truetype"), url("/type/Neuton/neutoncursive-regular-webfont.svg#NeutonCursiveRegular") format("svg");
+  font-weight: 400;
+  font-style: oblique; }
+
 body.book {
   background: #e8e1d3 url("/img/bg.png") repeat;
   color: #444444;
@@ -743,10 +792,10 @@ body.minimal {
   font-size: 11px;
   line-height: 1.7;
   font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
-  body.minimal .sans, body.minimal h5, body.minimal h6, body.minimal #dialog, body.minimal .notification {
+  body.minimal .sans, body.minimal h5, body.minimal h6, body.minimal #dialog, body.minimal .notification, body.minimal #list-view form#search-form input {
     font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
   body.minimal .serif, body.minimal h1, body.minimal h2, body.minimal h3, body.minimal h4, body.minimal #dialog h1, body.minimal #dialog h2, body.minimal #dialog h3, body.minimal #dialog h4, body.minimal #dialog h5, body.minimal #dialog h6, body.minimal .notification h1, body.minimal .notification h2, body.minimal .notification h3, body.minimal .notification h4, body.minimal .notification h5, body.minimal .notification h6 {
-    font-family: Palatino, Georgia, serif; }
+    font-family: "Neuton", Palatino, Georgia, serif; }
   body.minimal .bold, body.minimal h3, body.minimal h4, body.minimal h5, body.minimal h6 {
     font-weight: bold; }
   body.minimal .normal, body.minimal h1, body.minimal h2 {
@@ -821,16 +870,15 @@ body.minimal {
     display: block;
     position: relative; }
   body.minimal .note, body.minimal .highlight {
-    color: #FFF;
     border-radius: 2px;
     padding: 0 2px 0 2px; }
   body.minimal .note:nth-child(even), body.minimal .note:nth-child(even) .note-detail {
-    background: #52abd1;
-    border: 1px solid #287595;
+    background: rgba(82, 171, 209, 0.3);
+    border: 1px solid rgba(40, 117, 149, 0.3);
     border-radius: 2px; }
   body.minimal .note:nth-child(odd), body.minimal .note:nth-child(odd) .note-detail {
-    background: #68b364;
-    border: 1px solid #3d773a;
+    background: rgba(104, 179, 100, 0.3);
+    border: 1px solid rgba(61, 119, 58, 0.3);
     border-radius: 2px; }
   body.minimal .note .note-detail {
     display: inline-block;
@@ -839,8 +887,8 @@ body.minimal {
     padding: 1px 2px;
     position: absolute;
     right: 0px;
-    color: #FFF;
-    z-index: 5000; }
+    z-index: 5000;
+    overflow: hidden; }
   body.minimal .note:hover .note-detail, body.minimal .note .note-detail:focus {
     height: auto;
     z-index: 6000;
@@ -848,7 +896,9 @@ body.minimal {
   body.minimal .note .note-detail:focus {
     box-shadow: inset 0 0 2px #666; }
   body.minimal .highlight {
-    background: #d15252; }
+    background: rgba(209, 82, 82, 0.3);
+    border: 1px solid rgba(149, 40, 40, 0.3);
+    border-radius: 2px; }
   body.minimal #application {
     margin-top: 56px;
     margin-bottom: 56px; }
@@ -873,6 +923,20 @@ body.minimal {
     body.minimal #tool-bar input[type='range'] {
       position: relative;
       top: 5px; }
+  body.minimal #list-view form#search-form {
+    width: 100%;
+    margin: 10px 0 20px 0;
+    padding: 0; }
+    body.minimal #list-view form#search-form input {
+      width: 98%;
+      margin: 0 0 0 -1px;
+      border: 1px solid #999;
+      padding: 10px 1% 10px 1%;
+      font-size: 1.3em;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.4); }
+      body.minimal #list-view form#search-form input:focus {
+        outline: none; }
   body.minimal #list-view article.document {
     height: 200px;
     float: left;

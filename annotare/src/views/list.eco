@@ -6,8 +6,11 @@
 
 <div class="wrap">
   <section class="one-column">
+    <form id="search-form" action="#" method="GET">
+        <input type="text" id="search-box" name="search-box" placeholder="Search Notes" />
+      </form>
     <% if @list.length == 0: %>
-      <h4>It doesn't look like you've made any notes yet. You should really get on that, Slacker.</h4>
+      <h4>No documents found :(</h4>
     <% else: %>
       <% for doc in @list: %>
         <article class="document" id="document-<%= doc.id %>">

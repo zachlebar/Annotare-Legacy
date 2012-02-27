@@ -9,8 +9,22 @@ $app-background: rgba(255, 255, 255, 0.6);
 $font-color: #444;
 
 $secondary: #52ABD1;
+$temp_red: red($secondary);
+$temp_green: green($secondary);
+$temp_blue: blue($secondary);
+$secondary: rgba($temp_red, $temp_green, $temp_blue, 0.3);
+
 $tertiary: #D15252;
+$temp_red: red($tertiary);
+$temp_green: green($tertiary);
+$temp_blue: blue($tertiary);
+$tertiary: rgba($temp_red, $temp_green, $temp_blue, 0.3);
+
 $quaternary: #68B364;
+$temp_red: red($quaternary);
+$temp_green: green($quaternary);
+$temp_blue: blue($quaternary);
+$quaternary: rgba($temp_red, $temp_green, $temp_blue, 0.3);
 
 $black: rgba(0, 0, 0, 0.8);
 
@@ -20,7 +34,7 @@ $border-radius: 2px;
 $gutter: 10px;
 
 $sans: Verdana, 'Bitstream Vera Sans', sans-serif;
-$serif: Palatino, Georgia, serif;
+$serif: 'Neuton', Palatino, Georgia, serif;
 $code: Monaco, Menlo, Consolas, Inconsolata, monospace;
 
 @mixin box($color) {
@@ -174,7 +188,6 @@ body.minimal {
   }
   
   .note, .highlight {
-    color: #FFF;
     border-radius: 2px;
     padding: 0 2px 0 2px;
   }
@@ -193,8 +206,8 @@ body.minimal {
       padding: 1px 2px;
       position: absolute;
       right: 0px;
-      color: #FFF;
       z-index: 5000;
+      overflow: hidden;
     }
     &:hover .note-detail, .note-detail:focus {
       height: auto;
@@ -206,7 +219,7 @@ body.minimal {
     }
   }
   .highlight {
-    background: $tertiary;
+    @include box($tertiary);
   }
   
   #application {
@@ -243,6 +256,22 @@ body.minimal {
   }
   
   #list-view {
+    form#search-form {
+      width: 100%;
+      margin: 10px 0 20px 0;
+      padding: 0;
+      input {
+        width: 98%;
+        margin: 0 0 0 -1px;
+        border: 1px solid #999;
+        padding: 10px 1% 10px 1%;
+        font-size: 1.3em;
+        @extend .sans;
+        border-radius: $border-radius;
+        background: rgba(255, 255, 255, 0.4);
+        &:focus { outline: none; }
+      }
+    }
     article.document {
       height: 200px;
       float: left;
@@ -260,11 +289,7 @@ body.minimal {
       }
       
       &:nth-child(odd) {
-        $temp_red: red($secondary);
-        $temp_green: green($secondary);
-        $temp_blue: blue($secondary);
-        $temp: rgba($temp_red, $temp_green, $temp_blue, 0.3);
-        @include box($temp);
+        @include box($secondary);
       }
       &:nth-child(even) {
         $temp_red: red($quaternary);
