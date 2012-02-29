@@ -8,6 +8,9 @@ Hi, my name is Zach LeBar. And I am a nerd. Not simply a geek, but a full on, ha
 
 All of those are contributing factors to Annotare's creation. Annotare exists because I need a project. It's goals and purpose are tied up in my intense nerdiness. Annotare, at its heart, is simply a digital notebook. The concept is nothing new. It's been around since digital things were first created. But I've never been satisfied with any of the iterations out there of this idea, a "digital notebook". Because I'm a nerd, I've chosen to build my own version of the digital notebook. And I'm calling it Annotare.
 
+## Try Annotare
+A localStorage only version of Annotare is located at http://annotare.crgwbr.com/. There you can try out all the features of annotare without having to install or compile anything. Since it uses only localStorage as its only storage backend, you don't need to worry about your notes being read by anyone else.
+
 ## Getting Started
 ##### Users and Security
 Annotare is designed to be run locally, for a single user. Because of that, authentication, users, and permissions don't actually exist. If, however, you wanted to install Annotare on a server, HTTPBasicAuth would be an effective means of security.
