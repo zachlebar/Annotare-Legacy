@@ -346,7 +346,6 @@ module.exports = {"main":"./flakey.js"}
 
 require.define("/node_modules/flakey/flakey.js", function (require, module, exports, __dirname, __filename) {
 (function() {
-
   /**
  * Diff Match and Patch
  *
@@ -2534,7 +2533,6 @@ this['diff_match_patch'] = diff_match_patch;
 this['DIFF_DELETE'] = DIFF_DELETE;
 this['DIFF_INSERT'] = DIFF_INSERT;
 this['DIFF_EQUAL'] = DIFF_EQUAL;
-
   /*!
  * jQuery JavaScript Library v1.7.1
  * http://jquery.com/
@@ -11801,7 +11799,6 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 
 })( window );;
-
   /*
     http://www.JSON.org/json2.js
     2011-10-19
@@ -12289,9 +12286,11 @@ if (!JSON) {
         };
     }
 }());;
-
-  var $, Backend, BackendController, Controller, Events, Flakey, JSON, LocalBackend, MemoryBackend, Model, ServerBackend, SocketIOBackend, Stack, Template, get_template;
-  var __hasProp = Object.prototype.hasOwnProperty, __indexOf = Array.prototype.indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (__hasProp.call(this, i) && this[i] === item) return i; } return -1; }, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var $, Backend, BackendController, Controller, Events, Flakey, JSON, LocalBackend, MemoryBackend, Model, ServerBackend, SocketIOBackend, Stack, Template, get_template,
+    __hasProp = Object.prototype.hasOwnProperty,
+    __indexOf = Array.prototype.indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; },
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   Flakey = {
     diff_patch: new diff_match_patch(),
@@ -12967,12 +12966,16 @@ if (!JSON) {
     };
 
     Backend.prototype.find = function(name, query, full_text) {
+      var i, out, set, store, _i, _len;
       if (full_text == null) full_text = false;
-      if (full_text) {
-        return this._search(name, query);
-      } else {
-        return this._query(name, query);
+      store = this._read(name);
+      set = full_text ? this._search(name, query) : this._query(name, query);
+      out = [];
+      for (_i = 0, _len = set.length; _i < _len; _i++) {
+        i = set[_i];
+        out.push(store[i]);
       }
+      return out;
     };
 
     Backend.prototype.get = function(name, id) {
@@ -13001,10 +13004,11 @@ if (!JSON) {
     };
 
     Backend.prototype._query = function(name, query) {
-      var key, match, obj, rendered, set, store, value, _i, _len;
+      var i, key, match, obj, rendered, set, store, value, _i, _len;
       store = this._read(name);
       if (!store) return [];
       set = [];
+      i = 0;
       for (_i = 0, _len = store.length; _i < _len; _i++) {
         obj = store[_i];
         rendered = this._render_obj(obj);
@@ -13014,7 +13018,8 @@ if (!JSON) {
           value = query[key];
           if (rendered[key] !== value) match = false;
         }
-        if (match) set.push(obj);
+        if (match) set.push(i);
+        i++;
       }
       return set;
     };
@@ -13062,7 +13067,7 @@ if (!JSON) {
     };
 
     Backend.prototype._search = function(name, query) {
-      var key, match, obj, rendered, set, store, value, _i, _len;
+      var i, key, match, obj, rendered, set, store, value, _i, _len;
       store = this._read(name);
       if (!store) return [];
       for (key in query) {
@@ -13071,6 +13076,7 @@ if (!JSON) {
         query[key] = new RegExp(value, "g");
       }
       set = [];
+      i = 0;
       for (_i = 0, _len = store.length; _i < _len; _i++) {
         obj = store[_i];
         rendered = this._render_obj(obj);
@@ -13080,7 +13086,8 @@ if (!JSON) {
           value = query[key];
           if (value.exec(rendered[key])) match = true;
         }
-        if (match) set.push(obj);
+        if (match) set.push(i);
+        i++;
       }
       return set;
     };
@@ -13089,30 +13096,30 @@ if (!JSON) {
 
   })();
 
-  MemoryBackend = (function() {
+  MemoryBackend = (function(_super) {
 
-    __extends(MemoryBackend, Backend);
+    __extends(MemoryBackend, _super);
 
     function MemoryBackend() {
       if (!window.memcache) window.memcache = {};
     }
 
     MemoryBackend.prototype._read = function(name) {
-      return window.memcache[name];
+      return $.extend(true, [], window.memcache[name]);
     };
 
     MemoryBackend.prototype._write = function(name, store) {
-      window.memcache[name] = store;
+      window.memcache[name] = $.extend(true, [], store);
       return true;
     };
 
     return MemoryBackend;
 
-  })();
+  })(Backend);
 
-  LocalBackend = (function() {
+  LocalBackend = (function(_super) {
 
-    __extends(LocalBackend, Backend);
+    __extends(LocalBackend, _super);
 
     function LocalBackend() {
       this.prefix = 'flakey-';
@@ -13134,11 +13141,11 @@ if (!JSON) {
 
     return LocalBackend;
 
-  })();
+  })(Backend);
 
-  ServerBackend = (function() {
+  ServerBackend = (function(_super) {
 
-    __extends(ServerBackend, Backend);
+    __extends(ServerBackend, _super);
 
     function ServerBackend() {
       this.server_cache = {};
@@ -13286,11 +13293,11 @@ if (!JSON) {
 
     return ServerBackend;
 
-  })();
+  })(Backend);
 
-  SocketIOBackend = (function() {
+  SocketIOBackend = (function(_super) {
 
-    __extends(SocketIOBackend, Backend);
+    __extends(SocketIOBackend, _super);
 
     function SocketIOBackend() {
       var _this = this;
@@ -13340,8 +13347,8 @@ if (!JSON) {
     };
 
     SocketIOBackend.prototype.save = function(name, id, versions, force_write) {
-      var cached_obj, proposed_obj;
-      var _this = this;
+      var cached_obj, proposed_obj,
+        _this = this;
       proposed_obj = {
         id: id,
         versions: versions
@@ -13400,7 +13407,7 @@ if (!JSON) {
 
     return SocketIOBackend;
 
-  })();
+  })(Backend);
 
   Flakey.models = {
     Model: Model,
@@ -13823,7 +13830,9 @@ require.define("/controllers/new_document.js", function (require, module, export
     }
 
     NewDocument.prototype.render = function() {
-      this.html(this.tmpl.render({}));
+      this.html(this.tmpl.render({
+        title: this.query_params.title
+      }));
       this.unbind_actions();
       this.bind_actions();
       $('#editor').autoResize({
@@ -15585,11 +15594,13 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
 
     Document.prototype["delete"] = function() {
       var note, note_id, _i, _len, _ref;
-      _ref = this.annotations;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        note_id = _ref[_i];
-        note = Annotation.get(note_id);
-        note["delete"]();
+      if (this.annotations != null) {
+        _ref = this.annotations;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          note_id = _ref[_i];
+          note = Annotation.get(note_id);
+          note["delete"]();
+        }
       }
       return Document.__super__["delete"].call(this);
     };
@@ -17048,7 +17059,11 @@ require.define("/views/new_document.js", function (require, module, exports, __d
     (function() {
       (function() {
       
-        __out.push('<div class="tool-bar-wrap">\n  <nav id="tool-bar">\n    <a href="#" class="discard">Discard Changes</a>\n    <a href="#" class="save">Save Changes</a>\n  </nav>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <article>\n      <h1>Create a New Document</h1>\n  \n      <input type="text" id="name" name="name" placeholder="The Hitchhiker\'s Guide to the Galaxy" />\n  \n      <textarea id="editor" placeholder="Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun..."></textarea>\n    </article>\n  </section>\n</div>');
+        __out.push('<div class="tool-bar-wrap">\n  <nav id="tool-bar">\n    <a href="#" class="discard">Discard Changes</a>\n    <a href="#" class="save">Save Changes</a>\n  </nav>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <article>\n      <h1>Create a New Document</h1>\n  \n      <input type="text" id="name" name="name" placeholder="The Hitchhiker\'s Guide to the Galaxy" value="');
+      
+        __out.push(__sanitize(this.title));
+      
+        __out.push('" />\n  \n      <textarea id="editor" placeholder="Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun..."></textarea>\n    </article>\n  </section>\n</div>');
       
       }).call(this);
       
@@ -17077,10 +17092,12 @@ require.define("/controllers/list.js", function (require, module, exports, __dir
 
     function List(config) {
       this.search = __bind(this.search, this);
+      this.new_document = __bind(this.new_document, this);
       this.render = __bind(this.render, this);      this.id = "list-view";
       this.class_name = "list view";
       this.actions = {
         'click .document': 'select_doc',
+        'click .new-document': 'new_document',
         'keyup #search-box': 'search'
       };
       List.__super__.constructor.call(this, config);
@@ -17095,12 +17112,20 @@ require.define("/controllers/list.js", function (require, module, exports, __dir
         documents = Document.all();
       }
       context = {
-        list: documents
+        list: documents,
+        query: this.query_params.q
       };
       this.html(this.tmpl.render(context));
       this.unbind_actions();
       this.bind_actions();
       return $('#search-box').val(this.query_params.q).focus();
+    };
+
+    List.prototype.new_document = function(event) {
+      event.preventDefault();
+      return window.location.hash = "#/new?" + (this.query_params.q != null ? Flakey.util.querystring.build({
+        title: this.query_params.q
+      }) : "");
     };
 
     List.prototype.select_doc = function(event) {
@@ -17172,27 +17197,25 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
       (function() {
         var doc, _i, _len, _ref;
       
-        __out.push('<div class="tool-bar-wrap">\n  <div id="tool-bar">\n    <p>"You have to be resourceful at Bethel." &mdash; Fred Rusk</p>\n  </div>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <form id="search-form" action="#" method="GET">\n        <input type="text" id="search-box" name="search-box" placeholder="Search Notes" />\n      </form>\n    ');
+        __out.push('<div class="tool-bar-wrap">\n  <div id="tool-bar">\n    <p>"You have to be resourceful at Bethel." &mdash; Fred Rusk</p>\n  </div>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <form id="search-form" action="#" method="GET">\n        <input type="text" id="search-box" name="search-box" placeholder="Search Notes" />\n    </form>\n    ');
       
-        if (this.list.length === 0) {
-          __out.push('\n      <h4>No Notes found.</h4>\n    ');
-        } else {
-          __out.push('\n      ');
-          _ref = this.list;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            doc = _ref[_i];
-            __out.push('\n        <article class="document" id="document-');
-            __out.push(__sanitize(doc.id));
-            __out.push('">\n          <section class="name"><h1>');
-            __out.push(__sanitize(doc.name));
-            __out.push('</h1></section>\n          <section class="content">\n            ');
-            __out.push(doc.render());
-            __out.push('\n          </section>\n        </article>\n      ');
-          }
-          __out.push('\n    ');
+        _ref = this.list;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          doc = _ref[_i];
+          __out.push('\n      <article class="document" id="document-');
+          __out.push(__sanitize(doc.id));
+          __out.push('">\n        <section class="name"><h1>');
+          __out.push(__sanitize(doc.name));
+          __out.push('</h1></section>\n        <section class="content">\n          ');
+          __out.push(doc.render());
+          __out.push('\n        </section>\n      </article>\n    ');
         }
       
-        __out.push('\n    <div class="clear"></div>\n  </section>\n</div>');
+        __out.push('\n    \n    <article class="new-document">\n      <section class="name"><h1>');
+      
+        __out.push(__sanitize(this.query || "New Document"));
+      
+        __out.push('</h1></section>\n      <section class="content">Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun&hellip;</section>\n    </article>\n    \n    <div class="clear"></div>\n  </section>\n</div>');
       
       }).call(this);
       
@@ -17468,7 +17491,11 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
       this.html(this.tmpl.render(context));
       if ((localStorage[this.autosave_key()] != null) && localStorage[this.autosave_key()].length > 0) {
         ui.confirm('Restore?', 'An unsaved draft of this note was found. Would you like to restore it to the editor?').show(function(ok) {
-          if (ok) return $('#editor').val(localStorage[_this.autosave_key()]);
+          if (ok) {
+            return $('#editor').val(localStorage[_this.autosave_key()]);
+          } else {
+            return delete localStorage[_this.autosave_key()];
+          }
         });
       }
       this.unbind_actions();

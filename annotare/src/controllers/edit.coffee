@@ -45,6 +45,8 @@ class Edit extends Flakey.controllers.Controller
       ui.confirm('Restore?', 'An unsaved draft of this note was found. Would you like to restore it to the editor?').show (ok) =>
         if ok
           $('#editor').val(localStorage[@autosave_key()])
+        else
+          delete localStorage[@autosave_key()]
     
     # Make sure actions work
     @unbind_actions()

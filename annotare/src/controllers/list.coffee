@@ -11,6 +11,7 @@ class List extends Flakey.controllers.Controller
 
     @actions = {
       'click .document': 'select_doc'
+      'click .new-document': 'new_document'
       'keyup #search-box': 'search'
     }
 
@@ -24,12 +25,17 @@ class List extends Flakey.controllers.Controller
       documents = Document.all()
     
     context = {
-      list: documents
+      list: documents,
+      query: @query_params.q
     }
     @html @tmpl.render(context)
     @unbind_actions()
     @bind_actions()
     $('#search-box').val(@query_params.q).focus()
+    
+  new_document: (event) =>
+    event.preventDefault()
+    window.location.hash = "#/new?" + (if @query_params.q? then Flakey.util.querystring.build({title: @query_params.q}) else "")
     
   select_doc: (event) ->
     id = $(event.currentTarget).attr('id').replace('document-', '')

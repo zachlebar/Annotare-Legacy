@@ -23,7 +23,9 @@ class NewDocument extends Flakey.controllers.Controller
   render: ->
     # Render a template, replacing the 
     # controller's HTML
-    @html @tmpl.render({})
+    @html @tmpl.render({
+      title: @query_params.title
+    })
     @unbind_actions()
     @bind_actions()
     

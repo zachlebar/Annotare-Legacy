@@ -8,19 +8,21 @@
   <section class="one-column">
     <form id="search-form" action="#" method="GET">
         <input type="text" id="search-box" name="search-box" placeholder="Search Notes" />
-      </form>
-    <% if @list.length == 0: %>
-      <h4>No Notes found.</h4>
-    <% else: %>
-      <% for doc in @list: %>
-        <article class="document" id="document-<%= doc.id %>">
-          <section class="name"><h1><%= doc.name %></h1></section>
-          <section class="content">
-            <%- doc.render() %>
-          </section>
-        </article>
-      <% end %>
+    </form>
+    <% for doc in @list: %>
+      <article class="document" id="document-<%= doc.id %>">
+        <section class="name"><h1><%= doc.name %></h1></section>
+        <section class="content">
+          <%- doc.render() %>
+        </section>
+      </article>
     <% end %>
+    
+    <article class="new-document">
+      <section class="name"><h1><%= @query or "New Document" %></h1></section>
+      <section class="content">Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun&hellip;</section>
+    </article>
+    
     <div class="clear"></div>
   </section>
 </div>

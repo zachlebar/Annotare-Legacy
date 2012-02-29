@@ -4,9 +4,9 @@ $base-size: 1em;
 $line-height: 1.7;
 
 $page-background: #EEE url('/img/white_texture.png') repeat;
-$app-background: rgba(255, 255, 255, 0.6);
+$app-background: rgba(255, 255, 255, 0.4);
 
-$font-color: #444;
+$font-color: #222;
 
 $secondary: #52ABD1;
 $secondary_red: red($secondary);
@@ -35,7 +35,7 @@ $gutter: 10px;
 
 $sans: Verdana, 'Bitstream Vera Sans', sans-serif;
 $serif: 'Neuton', Palatino, Georgia, serif;
-$code: Monaco, Menlo, Consolas, Inconsolata, monospace;
+$code: Menlo, Consolas, Inconsolata, monospace;
 
 @mixin box($color) {
   background: $color;
@@ -50,7 +50,7 @@ $code: Monaco, Menlo, Consolas, Inconsolata, monospace;
   font-size: 1.3em;
   @extend .sans;
   border-radius: $border-radius;
-  background: rgba(255, 255, 255, 0.4);
+  background: $app-background;
 }
 
 body.minimal {
@@ -74,10 +74,11 @@ body.minimal {
   h1, h2, h3, h4, h5, h6 {
     line-height: 1;
     margin: 10px 0 10px 0;
+    color: lighten($font-color, 10%);
   }
   
   h1 {
-    font-size: modular-scale(2);
+    font-size: modular-scale(4);
     @extend .normal;
     @extend .serif;
   }
@@ -92,18 +93,19 @@ body.minimal {
     @extend .serif;
   }
   h4 {
-    font-size: modular-scale(1);
-    @extend .bold;
-    @extend .serif;
-  }
-  h5 {
-    font-size: modular-scale(0);
+    font-size: 1.1em;
     @extend .bold;
     @extend .sans;
   }
+  h5 {
+    font-size: 1.1em;
+    @extend .normal;
+    font-style: oblique;
+    @extend .sans;
+  }
   h6 {
-    font-size: modular-scale(0);
-    @extend .bold;
+    font-size: 1.1em;
+    @extend .normal;
     @extend .sans;
   }
   
@@ -111,6 +113,10 @@ body.minimal {
     text-decoration: none;
     color: $font-color;
     font-weight: bold;
+  }
+  
+  code {
+    font-family: $code;
   }
   
   #dialog, .notification {
@@ -221,7 +227,7 @@ body.minimal {
       height: $base-size * $line-height;
       padding: 1px 2px;
       position: absolute;
-      right: 0px;
+      right: 1%;
       z-index: 5000;
       overflow: hidden;
     }
@@ -272,6 +278,13 @@ body.minimal {
     }
   }
   
+  #detail-view {
+    .wrap {
+      @include box($app-background);
+      padding: 1%;
+    }
+  }
+  
   #list-view {
     form#search-form {
       width: 100%;
@@ -283,7 +296,7 @@ body.minimal {
         &:focus { outline: none; }
       }
     }
-    article.document {
+    article {
       height: 200px;
       float: left;
       cursor: pointer;
@@ -320,6 +333,7 @@ body.minimal {
       @include input();
       margin-bottom: 20px;
       width: 98%;
+      min-height: 90%;
       
       font-family: $code;
       line-height: $line-height;
@@ -331,17 +345,26 @@ body.minimal {
     }
     
     .annotation {
+      width: 47.5%;
+      &:nth-child(odd) {
+        float: right;
+        @include box($secondary);
+      }
+      &:nth-child(even) {
+        float: left;
+        @include box($quaternary);
+      }
       padding: $gutter;
-      margin: 20px 0;
-      background: $app-background;
+      margin-top: 10px;
+      margin-bottom: 10px;
       border-radius: $border-radius;
-      box-shadow: 0 0 10px #999;
       position: relative;
       blockquote, .attachment {
         font-size: 1.3em;
         font-family: $code;
       }
       blockquote {
+        border-left: 3px solid lighten($font-color, 20%);
         color: lighten($font-color, 20%);
       }
       .delete {

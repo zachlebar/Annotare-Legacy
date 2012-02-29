@@ -784,7 +784,7 @@ body.book {
 
 body.minimal {
   background: #eeeeee url("/img/white_texture.png") repeat;
-  color: #444444;
+  color: #222222;
   width: 95%;
   max-width: 1200px;
   margin-right: auto;
@@ -792,33 +792,37 @@ body.minimal {
   font-size: 11px;
   line-height: 1.7;
   font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
-  body.minimal .sans, body.minimal h5, body.minimal h6, body.minimal #dialog, body.minimal .notification, body.minimal #list-view form#search-form input, body.minimal #edit-view textarea, body.minimal #edit-view input[type="text"], body.minimal #new-document-view textarea, body.minimal #new-document-view input[type="text"] {
+  body.minimal .sans, body.minimal h4, body.minimal h5, body.minimal h6, body.minimal #dialog, body.minimal .notification, body.minimal #list-view form#search-form input, body.minimal #edit-view textarea, body.minimal #edit-view input[type="text"], body.minimal #new-document-view textarea, body.minimal #new-document-view input[type="text"] {
     font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
-  body.minimal .serif, body.minimal h1, body.minimal h2, body.minimal h3, body.minimal h4, body.minimal #dialog h1, body.minimal #dialog h2, body.minimal #dialog h3, body.minimal #dialog h4, body.minimal #dialog h5, body.minimal #dialog h6, body.minimal .notification h1, body.minimal .notification h2, body.minimal .notification h3, body.minimal .notification h4, body.minimal .notification h5, body.minimal .notification h6 {
+  body.minimal .serif, body.minimal h1, body.minimal h2, body.minimal h3, body.minimal #dialog h1, body.minimal #dialog h2, body.minimal #dialog h3, body.minimal #dialog h4, body.minimal #dialog h5, body.minimal #dialog h6, body.minimal .notification h1, body.minimal .notification h2, body.minimal .notification h3, body.minimal .notification h4, body.minimal .notification h5, body.minimal .notification h6 {
     font-family: "Neuton", Palatino, Georgia, serif; }
-  body.minimal .bold, body.minimal h3, body.minimal h4, body.minimal h5, body.minimal h6 {
+  body.minimal .bold, body.minimal h3, body.minimal h4 {
     font-weight: bold; }
-  body.minimal .normal, body.minimal h1, body.minimal h2 {
+  body.minimal .normal, body.minimal h1, body.minimal h2, body.minimal h5, body.minimal h6 {
     font-weight: normal; }
   body.minimal h1, body.minimal h2, body.minimal h3, body.minimal h4, body.minimal h5, body.minimal h6 {
     line-height: 1;
-    margin: 10px 0 10px 0; }
+    margin: 10px 0 10px 0;
+    color: #3c3c3c; }
   body.minimal h1 {
-    font-size: 2.618em; }
+    font-size: 6.854em; }
   body.minimal h2 {
     font-size: 2.618em; }
   body.minimal h3 {
     font-size: 1.618em; }
   body.minimal h4 {
-    font-size: 1.618em; }
+    font-size: 1.1em; }
   body.minimal h5 {
-    font-size: 1em; }
+    font-size: 1.1em;
+    font-style: oblique; }
   body.minimal h6 {
-    font-size: 1em; }
+    font-size: 1.1em; }
   body.minimal a {
     text-decoration: none;
-    color: #444444;
+    color: #222222;
     font-weight: bold; }
+  body.minimal code {
+    font-family: Menlo, Consolas, Inconsolata, monospace; }
   body.minimal #dialog, body.minimal .notification {
     font-size: 1.1em; }
     body.minimal #dialog h1, body.minimal #dialog h2, body.minimal #dialog h3, body.minimal #dialog h4, body.minimal #dialog h5, body.minimal #dialog h6, body.minimal .notification h1, body.minimal .notification h2, body.minimal .notification h3, body.minimal .notification h4, body.minimal .notification h5, body.minimal .notification h6 {
@@ -863,7 +867,7 @@ body.minimal {
     width: 20%;
     float: left; }
   body.minimal blockquote {
-    border-left: 8px solid #444444;
+    border-left: 8px solid #222222;
     margin-left: 10px;
     padding-left: 7px; }
   body.minimal .wrap {
@@ -894,7 +898,7 @@ body.minimal {
     height: 1.7em;
     padding: 1px 2px;
     position: absolute;
-    right: 0px;
+    right: 1%;
     z-index: 5000;
     overflow: hidden; }
   body.minimal .note:hover .note-detail, body.minimal .note .note-detail:focus {
@@ -932,6 +936,11 @@ body.minimal {
     body.minimal #tool-bar input[type='range'] {
       position: relative;
       top: 5px; }
+  body.minimal #detail-view .wrap {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(204, 204, 204, 0.4);
+    border-radius: 2px;
+    padding: 1%; }
   body.minimal #list-view form#search-form {
     width: 100%;
     margin: 10px 0 20px 0;
@@ -946,7 +955,7 @@ body.minimal {
       background: rgba(255, 255, 255, 0.4); }
       body.minimal #list-view form#search-form input:focus {
         outline: none; }
-  body.minimal #list-view article.document {
+  body.minimal #list-view article {
     height: 200px;
     float: left;
     cursor: pointer;
@@ -957,18 +966,18 @@ body.minimal {
     border-radius: 2px;
     overflow: hidden; }
     @media handheld and (max-width: 690px), screen and (max-width: 690px) {
-      body.minimal #list-view article.document {
+      body.minimal #list-view article {
         width: 98%;
         margin: 0 0 20px 0; } }
-    body.minimal #list-view article.document:nth-child(odd) {
+    body.minimal #list-view article:nth-child(odd) {
       background: rgba(82, 171, 209, 0.3);
       border: 1px solid rgba(40, 117, 149, 0.3);
       border-radius: 2px; }
-    body.minimal #list-view article.document:nth-child(even) {
+    body.minimal #list-view article:nth-child(even) {
       background: rgba(104, 179, 100, 0.3);
       border: 1px solid rgba(61, 119, 58, 0.3);
       border-radius: 2px; }
-    body.minimal #list-view article.document h1 {
+    body.minimal #list-view article h1 {
       font-size: 2.618em; }
   body.minimal #edit-view textarea, body.minimal #edit-view input[type="text"], body.minimal #new-document-view textarea, body.minimal #new-document-view input[type="text"] {
     margin: 0 0 0 -1px;
@@ -979,23 +988,35 @@ body.minimal {
     background: rgba(255, 255, 255, 0.4);
     margin-bottom: 20px;
     width: 98%;
-    font-family: Monaco, Menlo, Consolas, Inconsolata, monospace;
+    min-height: 90%;
+    font-family: Menlo, Consolas, Inconsolata, monospace;
     line-height: 1.7;
     font-size: 1.3em; }
     body.minimal #edit-view textarea:focus, body.minimal #edit-view input[type="text"]:focus, body.minimal #new-document-view textarea:focus, body.minimal #new-document-view input[type="text"]:focus {
       outline: none; }
   body.minimal #edit-view .annotation, body.minimal #new-document-view .annotation {
+    width: 47.5%;
     padding: 10px;
-    margin: 20px 0;
-    background: rgba(255, 255, 255, 0.6);
+    margin-top: 10px;
+    margin-bottom: 10px;
     border-radius: 2px;
-    box-shadow: 0 0 10px #999;
     position: relative; }
+    body.minimal #edit-view .annotation:nth-child(odd), body.minimal #new-document-view .annotation:nth-child(odd) {
+      float: right;
+      background: rgba(82, 171, 209, 0.3);
+      border: 1px solid rgba(40, 117, 149, 0.3);
+      border-radius: 2px; }
+    body.minimal #edit-view .annotation:nth-child(even), body.minimal #new-document-view .annotation:nth-child(even) {
+      float: left;
+      background: rgba(104, 179, 100, 0.3);
+      border: 1px solid rgba(61, 119, 58, 0.3);
+      border-radius: 2px; }
     body.minimal #edit-view .annotation blockquote, body.minimal #edit-view .annotation .attachment, body.minimal #new-document-view .annotation blockquote, body.minimal #new-document-view .annotation .attachment {
       font-size: 1.3em;
-      font-family: Monaco, Menlo, Consolas, Inconsolata, monospace; }
+      font-family: Menlo, Consolas, Inconsolata, monospace; }
     body.minimal #edit-view .annotation blockquote, body.minimal #new-document-view .annotation blockquote {
-      color: #777777; }
+      border-left: 3px solid #555555;
+      color: #555555; }
     body.minimal #edit-view .annotation .delete, body.minimal #new-document-view .annotation .delete {
       font-family: Verdana, "Bitstream Vera Sans", sans-serif;
       font-size: 1em;

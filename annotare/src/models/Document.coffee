@@ -31,9 +31,10 @@ class Document extends Flakey.models.Model
     return note.apply(html)
     
   delete: ()->
-    for note_id in @annotations
-      note = Annotation.get(note_id)
-      note.delete()
+    if @annotations?
+      for note_id in @annotations
+        note = Annotation.get(note_id)
+        note.delete()
     super()
     
   delete_annotation: (id) ->
