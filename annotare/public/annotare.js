@@ -18026,8 +18026,7 @@ require.define("/index.js", function (require, module, exports, __dirname, __fil
   $(document).ready(function() {
     var annotare, settings;
     settings = {
-      container: $('#application'),
-      base_model_endpoint: '/api'
+      container: $('#application')
     };
     Flakey.init(settings);
     Flakey.models.backend_controller.sync('Document');
