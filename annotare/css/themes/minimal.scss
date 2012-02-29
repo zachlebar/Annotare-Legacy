@@ -71,9 +71,15 @@ body.minimal {
   .bold { font-weight: bold; }
   .normal { font-weight: normal; }
   
+  p {
+    margin: 0 0 10px 0;
+  }
   h1, h2, h3, h4, h5, h6 {
+    &:not(:first-child) {
+      margin-top: 20px;
+    }
     line-height: 1;
-    margin: 10px 0 10px 0;
+    margin: 10px 0 0 0;
     color: lighten($font-color, 10%);
   }
   
@@ -115,6 +121,10 @@ body.minimal {
     font-weight: bold;
   }
   
+  pre {
+    padding: $gutter;
+    @include box(lighten($secondary, 10%));
+  }
   code {
     font-family: $code;
   }

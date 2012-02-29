@@ -800,10 +800,14 @@ body.minimal {
     font-weight: bold; }
   body.minimal .normal, body.minimal h1, body.minimal h2, body.minimal h5, body.minimal h6 {
     font-weight: normal; }
+  body.minimal p {
+    margin: 0 0 10px 0; }
   body.minimal h1, body.minimal h2, body.minimal h3, body.minimal h4, body.minimal h5, body.minimal h6 {
     line-height: 1;
-    margin: 10px 0 10px 0;
+    margin: 10px 0 0 0;
     color: #3c3c3c; }
+    body.minimal h1:not(:first-child), body.minimal h2:not(:first-child), body.minimal h3:not(:first-child), body.minimal h4:not(:first-child), body.minimal h5:not(:first-child), body.minimal h6:not(:first-child) {
+      margin-top: 20px; }
   body.minimal h1 {
     font-size: 6.854em; }
   body.minimal h2 {
@@ -821,6 +825,11 @@ body.minimal {
     text-decoration: none;
     color: #222222;
     font-weight: bold; }
+  body.minimal pre {
+    padding: 10px;
+    background: rgba(122, 191, 220, 0.3);
+    border: 1px solid rgba(50, 148, 190, 0.3);
+    border-radius: 2px; }
   body.minimal code {
     font-family: Menlo, Consolas, Inconsolata, monospace; }
   body.minimal #dialog, body.minimal .notification {
