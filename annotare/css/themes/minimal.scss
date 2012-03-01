@@ -26,6 +26,12 @@ $quaternary_green: green($quaternary);
 $quaternary_blue: blue($quaternary);
 $quaternary: rgba($quaternary_red, $quaternary_green, $quaternary_blue, 0.3);
 
+$alert: #f8d779;
+$alert_red: red($alert);
+$alert_green: green($alert);
+$alert_blue: blue($alert);
+$alert: rgba($alert_red, $alert_green, $alert_blue, 0.3);
+
 $black: rgba(0, 0, 0, 0.8);
 
 $max-width: 1200px;
@@ -306,6 +312,32 @@ body.minimal {
         &:focus { outline: none; }
       }
     }
+    
+    p.new-document {
+    	cursor: pointer;
+    	padding: 1%;
+    	margin: 1% 0;
+    	
+    	border-radius: $border-radius;
+    	@include box($secondary);
+    }
+    
+    p.alert {
+    	padding: 1%;
+    	margin: 1% 0;
+    	
+    	font-family: Inconsolata, Consolas, monospace;
+    	font-size: 13px;
+    	
+    	border-radius: $border-radius;
+    	@include box($alert);
+    }
+    
+    p.alert:before {
+    	content: "!";
+    	padding: 0 1em;
+    }
+    
     article {
       height: 200px;
       float: left;

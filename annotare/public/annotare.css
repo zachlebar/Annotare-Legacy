@@ -964,6 +964,26 @@ body.minimal {
       background: rgba(255, 255, 255, 0.4); }
       body.minimal #list-view form#search-form input:focus {
         outline: none; }
+  body.minimal #list-view p.new-document {
+    cursor: pointer;
+    padding: 1%;
+    margin: 1% 0;
+    border-radius: 2px;
+    background: rgba(82, 171, 209, 0.3);
+    border: 1px solid rgba(40, 117, 149, 0.3);
+    border-radius: 2px; }
+  body.minimal #list-view p.alert {
+    padding: 1%;
+    margin: 1% 0;
+    font-family: Inconsolata, Consolas, monospace;
+    font-size: 13px;
+    border-radius: 2px;
+    background: rgba(248, 215, 121, 0.3);
+    border: 1px solid rgba(243, 186, 24, 0.3);
+    border-radius: 2px; }
+  body.minimal #list-view p.alert:before {
+    content: "!";
+    padding: 0 1em; }
   body.minimal #list-view article {
     height: 200px;
     float: left;
