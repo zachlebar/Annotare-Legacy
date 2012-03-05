@@ -17220,9 +17220,7 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
             __out.push(__sanitize(this.query));
             __out.push('</h1></section>\n    \t  ');
           } else {
-            __out.push('\n    \t    <section class="name"><h1>New Document: ');
-            __out.push(__sanitize(this.query));
-            __out.push('</h1></section>\n    \t  ');
+            __out.push('\n    \t    <section class="name"><h1>New Document</h1></section>\n    \t  ');
           }
           __out.push('\n    \t</article>\n    ');
         }

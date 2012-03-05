@@ -24,7 +24,7 @@
     	  <% if @query?: %>
     	    <section class="name"><h1>New Document: <%= @query %></h1></section>
     	  <% else: %>
-    	    <section class="name"><h1>New Document: <%= @query %></h1></section>
+    	    <section class="name"><h1>New Document</h1></section>
     	  <% end %>
     	</article>
     <% end %>
