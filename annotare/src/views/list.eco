@@ -9,6 +9,7 @@
     <form id="search-form" action="#" method="GET">
         <input type="text" id="search-box" name="search-box" placeholder="Search Notes" />
     </form>
+    
     <% for doc in @list: %>
       <article class="document" id="document-<%= doc.id %>">
         <section class="name"><h1><%= doc.name %></h1></section>
@@ -18,10 +19,16 @@
       </article>
     <% end %>
     
-    <article class="new-document">
-      <section class="name"><h1><%= @query or "New Document" %></h1></section>
-      <section class="content">Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun&hellip;</section>
-    </article>
+<<<<<<< HEAD
+    <% if @query? and @list.length == 0: %>
+    	<article class="new_document">
+    	  <section class="name"><h1>New Document: <%= @query %></h1></section>
+    	</article>
+=======
+    <% if @list.length == 0: %>
+    	<p class="alert">Looks like there aren't any documents. You can create them by using the navigation above.</p>
+>>>>>>> 3c12a16f77bf3c849691f14c96795015302a32b6
+    <% end %>
     
     <div class="clear"></div>
   </section>

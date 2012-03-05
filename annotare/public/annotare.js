@@ -17197,7 +17197,7 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
       (function() {
         var doc, _i, _len, _ref;
       
-        __out.push('<div class="tool-bar-wrap">\n  <div id="tool-bar">\n    <p>"You have to be resourceful at Bethel." &mdash; Fred Rusk</p>\n  </div>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <form id="search-form" action="#" method="GET">\n        <input type="text" id="search-box" name="search-box" placeholder="Search Notes" />\n    </form>\n    ');
+        __out.push('<div class="tool-bar-wrap">\n  <div id="tool-bar">\n    <p>"You have to be resourceful at Bethel." &mdash; Fred Rusk</p>\n  </div>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <form id="search-form" action="#" method="GET">\n        <input type="text" id="search-box" name="search-box" placeholder="Search Notes" />\n    </form>\n    \n    ');
       
         _ref = this.list;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -17211,11 +17211,17 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
           __out.push('\n        </section>\n      </article>\n    ');
         }
       
-        __out.push('\n    \n    <article class="new-document">\n      <section class="name"><h1>');
+        __out.push('\n    \n<<<<<<< HEAD\n    ');
       
-        __out.push(__sanitize(this.query || "New Document"));
-      
-        __out.push('</h1></section>\n      <section class="content">Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun&hellip;</section>\n    </article>\n    \n    <div class="clear"></div>\n  </section>\n</div>');
+        if ((this.query != null) && this.list.length === 0) {
+          __out.push('\n    \t<article class="new_document">\n    \t  <section class="name"><h1>New Document: ');
+          __out.push(__sanitize(this.query));
+          __out.push('</h1></section>\n    \t</article>\n=======\n    ');
+          if (this.list.length === 0) {
+            __out.push('\n    \t<p class="alert">Looks like there aren\'t any documents. You can create them by using the navigation above.</p>\n>>>>>>> 3c12a16f77bf3c849691f14c96795015302a32b6\n    ');
+          }
+          __out.push('\n    \n    <div class="clear"></div>\n  </section>\n</div>');
+        }
       
       }).call(this);
       
