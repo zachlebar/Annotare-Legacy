@@ -24,7 +24,7 @@
     <% end %>
     
     <% if @list.length == 0: %>
-    	<p class="alert">There don't seem to be any documents. You can create them by using the navigation above.</p>
+    	<p class="alert">Looks like there aren't any documents. You can create them by using the navigation above.</p>
     <% end %>
     
     <div class="clear"></div>

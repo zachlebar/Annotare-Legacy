@@ -17235,7 +17235,7 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
         __out.push('\n    \n    ');
       
         if (this.list.length === 0) {
-          __out.push('\n    \t<p class="alert">There don\'t seem to be any documents. You can create them by using the navigation above.</p>\n    ');
+          __out.push('\n    \t<p class="alert">Looks like there aren\'t any documents. You can create them by using the navigation above.</p>\n    ');
         }
       
         __out.push('\n    \n    <div class="clear"></div>\n  </section>\n</div>');
