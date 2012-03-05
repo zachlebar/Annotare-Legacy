@@ -526,8 +526,8 @@ td {
   font-family: 'Neuton';
   src: url("/type/Neuton/neutoncursive-regular-webfont.eot");
   src: url("/type/Neuton/neutoncursive-regular-webfont.eot?#iefix") format("embedded-opentype"), url("/type/Neuton/neutoncursive-regular-webfont.woff") format("woff"), url("/type/Neuton/neutoncursive-regular-webfont.ttf") format("truetype"), url("/type/Neuton/neutoncursive-regular-webfont.svg#NeutonCursiveRegular") format("svg");
-  font-weight: 400;
-  font-style: oblique; }
+  font-weight: 200;
+  font-style: italic; }
 
 body.book {
   background: #e8e1d3 url("/img/bg.png") repeat;
@@ -785,76 +785,90 @@ body.book {
 body.minimal {
   background: #eeeeee url("/img/white_texture.png") repeat;
   color: #222222;
-  width: 95%;
-  max-width: 1200px;
-  margin-right: auto;
-  margin-left: auto;
   font-size: 11px;
   line-height: 1.7;
-  font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
-  body.minimal .sans, body.minimal h4, body.minimal h5, body.minimal h6, body.minimal #dialog, body.minimal .notification, body.minimal #list-view form#search-form input, body.minimal #edit-view textarea, body.minimal #edit-view input[type="text"], body.minimal #new-document-view textarea, body.minimal #new-document-view input[type="text"] {
-    font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
-  body.minimal .serif, body.minimal h1, body.minimal h2, body.minimal h3, body.minimal #dialog h1, body.minimal #dialog h2, body.minimal #dialog h3, body.minimal #dialog h4, body.minimal #dialog h5, body.minimal #dialog h6, body.minimal .notification h1, body.minimal .notification h2, body.minimal .notification h3, body.minimal .notification h4, body.minimal .notification h5, body.minimal .notification h6 {
-    font-family: "Neuton", Palatino, Georgia, serif; }
-  body.minimal .bold, body.minimal h3, body.minimal h4 {
-    font-weight: bold; }
-  body.minimal .normal, body.minimal h1, body.minimal h2, body.minimal h5, body.minimal h6 {
-    font-weight: normal; }
-  body.minimal p {
-    margin: 0 0 10px 0; }
+  font-family: Verdana, "Bitstream Vera Sans", sans-serif;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0; }
+  body.minimal * {
+    box-sizing: border-box; }
+  body.minimal #stickey-footer-wrap {
+    margin: 0 auto;
+    padding: 0;
+    width: 95%;
+    max-width: 960px;
+    position: relative; }
   body.minimal h1, body.minimal h2, body.minimal h3, body.minimal h4, body.minimal h5, body.minimal h6 {
+    font-family: "Neuton", Palatino, Georgia, serif;
     line-height: 1;
-    margin: 10px 0 0 0;
-    color: #3c3c3c; }
-    body.minimal h1:not(:first-child), body.minimal h2:not(:first-child), body.minimal h3:not(:first-child), body.minimal h4:not(:first-child), body.minimal h5:not(:first-child), body.minimal h6:not(:first-child) {
-      margin-top: 20px; }
+    color: #3c3c3c;
+    margin: 0; }
+    body.minimal h1 a, body.minimal h2 a, body.minimal h3 a, body.minimal h4 a, body.minimal h5 a, body.minimal h6 a {
+      color: #3c3c3c; }
   body.minimal h1 {
-    font-size: 6.854em; }
+    font-size: 4.236em;
+    font-weight: 400; }
   body.minimal h2 {
-    font-size: 2.618em; }
+    font-size: 2.618em;
+    font-weight: 200; }
   body.minimal h3 {
-    font-size: 1.618em; }
+    font-size: 2.618em;
+    font-weight: 100; }
   body.minimal h4 {
-    font-size: 1.1em; }
+    font-size: 2.618em;
+    font-weight: 800; }
   body.minimal h5 {
-    font-size: 1.1em;
-    font-style: oblique; }
+    font-size: 1.2em;
+    font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
   body.minimal h6 {
-    font-size: 1.1em; }
+    font-size: 1.1em;
+    font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
   body.minimal a {
     text-decoration: none;
     color: #222222;
     font-weight: bold; }
   body.minimal pre {
-    padding: 10px;
     background: rgba(122, 191, 220, 0.3);
     border: 1px solid rgba(50, 148, 190, 0.3);
-    border-radius: 2px; }
+    border-radius: 2px;
+    padding: 1.042%; }
   body.minimal code {
     font-family: Menlo, Consolas, Inconsolata, monospace; }
+  body.minimal #application {
+    margin-top: 56px;
+    margin-bottom: 56px; }
   body.minimal #dialog, body.minimal .notification {
+    font-family: Verdana, "Bitstream Vera Sans", sans-serif;
     font-size: 1.1em; }
     body.minimal #dialog h1, body.minimal #dialog h2, body.minimal #dialog h3, body.minimal #dialog h4, body.minimal #dialog h5, body.minimal #dialog h6, body.minimal .notification h1, body.minimal .notification h2, body.minimal .notification h3, body.minimal .notification h4, body.minimal .notification h5, body.minimal .notification h6 {
+      font-family: "Neuton", Palatino, Georgia, serif;
       font-size: 1.3em;
       font-weight: bold; }
   body.minimal header {
-    width: 95%;
-    max-width: 1200px;
-    margin-right: auto;
-    margin-left: auto;
     position: fixed;
     top: 0;
     z-index: 9999;
-    background: rgba(0, 0, 0, 0.8);
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 2px; }
+    margin: 0 auto;
+    padding: 0;
+    width: 95%;
+    max-width: 960px; }
     body.minimal header nav {
-      padding: 0 20px; }
+      float: left;
+      margin: 1.042%;
+      width: 97.917%;
+      box-sizing: border-box;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.8);
+      border-radius: 2px;
+      padding: 1.042%;
+      border-top: none;
+      margin-top: 0;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0; }
       body.minimal header nav h1 {
         float: left; }
-      body.minimal header nav h1 a, body.minimal header nav ul li a {
-        padding-top: 10px;
-        padding-bottom: 10px; }
       body.minimal header nav h1, body.minimal header nav h1 a, body.minimal header nav ul, body.minimal header nav ul a, body.minimal header nav ul li, body.minimal header nav ul li a {
         margin: 0;
         font-size: 1em;
@@ -865,181 +879,184 @@ body.minimal {
       body.minimal header nav ul {
         float: right; }
         body.minimal header nav ul li {
-          margin: 0;
-          padding: 0 10px; }
-          body.minimal header nav ul li:not(:first-child) {
-            border-left: 1px solid rgba(38, 38, 38, 0.8); }
-  body.minimal section.two-column article {
-    width: 75%;
-    float: left; }
-  body.minimal section.two-column aside {
-    width: 20%;
-    float: left; }
-  body.minimal blockquote {
-    border-left: 8px solid #222222;
-    margin-left: 10px;
-    padding-left: 7px; }
-  body.minimal .wrap {
-    display: block;
-    position: relative; }
-  body.minimal .note, body.minimal .highlight {
-    border-radius: 2px;
-    padding: 0 2px 0 2px; }
-  body.minimal .note:nth-child(even), body.minimal .note:nth-child(even) .note-detail {
-    background: rgba(82, 171, 209, 0.3);
-    border: 1px solid rgba(40, 117, 149, 0.3);
-    border-radius: 2px; }
-  body.minimal .note:nth-child(odd), body.minimal .note:nth-child(odd) .note-detail {
-    background: rgba(104, 179, 100, 0.3);
-    border: 1px solid rgba(61, 119, 58, 0.3);
-    border-radius: 2px; }
-  body.minimal .note:nth-child(even):hover .note-detail, body.minimal .note:nth-child(even) .note-detail:hover, body.minimal .note:nth-child(even) .note-detail:focus {
-    background: rgba(82, 171, 209, 0.9);
-    border: 1px solid rgba(40, 117, 149, 0.9);
-    border-radius: 2px; }
-  body.minimal .note:nth-child(odd):hover .note-detail, body.minimal .note:nth-child(odd) .note-detail:hover, body.minimal .note:nth-child(odd) .note-detail:focus {
-    background: rgba(104, 179, 100, 0.9);
-    border: 1px solid rgba(61, 119, 58, 0.9);
-    border-radius: 2px; }
-  body.minimal .note .note-detail {
-    display: inline-block;
-    max-width: 20%;
-    height: 1.7em;
-    padding: 1px 2px;
-    position: absolute;
-    right: 1%;
-    z-index: 5000;
-    overflow: hidden; }
-  body.minimal .note:hover .note-detail, body.minimal .note .note-detail:focus {
-    height: auto;
-    z-index: 6000;
-    outline: none; }
-  body.minimal .note .note-detail:focus {
-    box-shadow: inset 0 0 2px #666;
-    outline: none; }
-  body.minimal .highlight {
-    background: rgba(209, 82, 82, 0.3);
-    border: 1px solid rgba(149, 40, 40, 0.3);
-    border-radius: 2px; }
-  body.minimal #application {
-    margin-top: 56px;
-    margin-bottom: 56px; }
-  body.minimal #tool-bar {
-    width: 95%;
-    max-width: 1200px;
-    margin-right: auto;
-    margin-left: auto;
+          display: inline-block;
+          margin: 0 0 0 20px; }
+  body.minimal .tool-bar-wrap {
     position: fixed;
     bottom: 0;
     z-index: 9999;
-    background: rgba(0, 0, 0, 0.8);
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px; }
-    body.minimal #tool-bar a, body.minimal #tool-bar label {
-      font-size: 1em;
-      line-height: 1.7;
-      color: #EEE;
-      font-weight: bold;
+    margin: 0 auto;
+    padding: 0;
+    width: 95%;
+    max-width: 960px; }
+    body.minimal .tool-bar-wrap nav {
+      float: left;
+      margin: 1.042%;
+      width: 97.917%;
+      box-sizing: border-box;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.8);
+      border-radius: 2px;
+      padding: 1.042%;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      margin-bottom: 0; }
+      body.minimal .tool-bar-wrap nav a, body.minimal .tool-bar-wrap nav label {
+        font-size: 1em;
+        line-height: 1.7;
+        color: #EEE;
+        font-weight: bold;
+        display: inline-block;
+        margin-right: 20px; }
+      body.minimal .tool-bar-wrap nav input[type='range'] {
+        position: relative;
+        top: 5px; }
+  body.minimal section.one-column article {
+    float: left;
+    margin: 1.042%;
+    width: 97.917%;
+    box-sizing: border-box; }
+  body.minimal section.one-column aside {
+    display: none; }
+  body.minimal section.two-column article {
+    float: left;
+    margin: 1.042%;
+    width: 64.583%;
+    box-sizing: border-box; }
+  body.minimal section.two-column aside {
+    float: left;
+    margin: 1.042%;
+    width: 31.25%;
+    box-sizing: border-box; }
+  body.minimal blockquote {
+    margin-left: 8px;
+    padding-left: 8px;
+    border-left: 8px solid rgba(82, 171, 209, 0.3); }
+  body.minimal .wrap {
+    display: block;
+    position: relative; }
+  body.minimal .note {
+    padding: 0 0.5% !important; }
+    body.minimal .note:nth-child(even), body.minimal .note:nth-child(even) .note-detail {
+      background: rgba(82, 171, 209, 0.3);
+      border: 1px solid rgba(40, 117, 149, 0.3);
+      border-radius: 2px;
+      padding: 1.042%; }
+    body.minimal .note:nth-child(odd), body.minimal .note:nth-child(odd) .note-detail {
+      background: rgba(104, 179, 100, 0.3);
+      border: 1px solid rgba(61, 119, 58, 0.3);
+      border-radius: 2px;
+      padding: 1.042%; }
+    body.minimal .note:nth-child(even):hover .note-detail, body.minimal .note:nth-child(even) .note-detail:hover, body.minimal .note:nth-child(even) .note-detail:focus {
+      background: rgba(82, 171, 209, 0.9);
+      border: 1px solid rgba(40, 117, 149, 0.9);
+      border-radius: 2px;
+      padding: 1.042%; }
+    body.minimal .note:nth-child(odd):hover .note-detail, body.minimal .note:nth-child(odd) .note-detail:hover, body.minimal .note:nth-child(odd) .note-detail:focus {
+      background: rgba(104, 179, 100, 0.9);
+      border: 1px solid rgba(61, 119, 58, 0.9);
+      border-radius: 2px;
+      padding: 1.042%; }
+    body.minimal .note .note-detail {
+      padding: 0 0.5% !important;
       display: inline-block;
-      padding: 10px 20px; }
-    body.minimal #tool-bar input[type='range'] {
-      position: relative;
-      top: 5px; }
+      height: 1.7em;
+      position: absolute;
+      right: 1%;
+      z-index: 5000;
+      overflow: hidden; }
+    body.minimal .note:hover .note-detail, body.minimal .note .note-detail:focus {
+      height: auto;
+      z-index: 6000;
+      outline: none; }
+    body.minimal .note .note-detail:focus {
+      box-shadow: inset 0 0 2px #666;
+      outline: none; }
+  body.minimal .highlight {
+    background: rgba(209, 82, 82, 0.3);
+    border: 1px solid rgba(149, 40, 40, 0.3);
+    border-radius: 2px;
+    padding: 1.042%;
+    padding: 0 0.5%; }
   body.minimal #detail-view .wrap {
+    float: left;
+    margin: 1.042%;
+    width: 97.917%;
+    box-sizing: border-box;
     background: rgba(255, 255, 255, 0.4);
     border: 1px solid rgba(204, 204, 204, 0.4);
     border-radius: 2px;
-    padding: 1%; }
+    padding: 1.042%; }
   body.minimal #list-view form#search-form {
-    width: 100%;
-    margin: 10px 0 20px 0;
-    padding: 0; }
+    float: left;
+    margin: 1.042%;
+    width: 97.917%;
+    box-sizing: border-box; }
     body.minimal #list-view form#search-form input {
-      width: 98%;
-      margin: 0 0 0 -1px;
       border: 1px solid #999;
-      padding: 10px 1% 10px 1%;
       font-size: 1.3em;
-      border-radius: 2px;
-      background: rgba(255, 255, 255, 0.4); }
+      font-family: Verdana, "Bitstream Vera Sans", sans-serif;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.4);
+      width: 100%;
+      padding: 1.042% 2.083%; }
       body.minimal #list-view form#search-form input:focus {
         outline: none; }
   body.minimal #list-view p.new-document {
     cursor: pointer;
-    padding: 1%;
-    margin: 1% 0;
-    border-radius: 2px;
+    border-radius: 3px;
     background: rgba(82, 171, 209, 0.3);
     border: 1px solid rgba(40, 117, 149, 0.3);
-    border-radius: 2px; }
-  body.minimal #list-view p.alert {
-    padding: 1%;
-    margin: 1% 0;
-    font-family: Inconsolata, Consolas, monospace;
-    font-size: 13px;
     border-radius: 2px;
-    background: rgba(248, 215, 121, 0.3);
-    border: 1px solid rgba(243, 186, 24, 0.3);
-    border-radius: 2px; }
-  body.minimal #list-view p.alert:before {
-    content: "!";
-    padding: 0 1em; }
+    padding: 1.042%; }
   body.minimal #list-view article {
+    float: left;
+    margin: 1.042%;
+    width: 31.25%;
+    box-sizing: border-box;
     height: 200px;
     float: left;
     cursor: pointer;
-    width: 30%;
-    min-width: 308px;
-    padding: 1%;
-    margin: 0 1% 20px 0;
-    border-radius: 2px;
+    border-radius: 3px;
     overflow: hidden; }
-    @media handheld and (max-width: 690px), screen and (max-width: 690px) {
-      body.minimal #list-view article {
-        width: 98%;
-        margin: 0 0 20px 0; } }
     body.minimal #list-view article:nth-child(odd) {
       background: rgba(82, 171, 209, 0.3);
       border: 1px solid rgba(40, 117, 149, 0.3);
-      border-radius: 2px; }
+      border-radius: 2px;
+      padding: 1.042%; }
     body.minimal #list-view article:nth-child(even) {
       background: rgba(104, 179, 100, 0.3);
       border: 1px solid rgba(61, 119, 58, 0.3);
-      border-radius: 2px; }
+      border-radius: 2px;
+      padding: 1.042%; }
     body.minimal #list-view article h1 {
       font-size: 2.618em; }
   body.minimal #edit-view textarea, body.minimal #edit-view input[type="text"], body.minimal #new-document-view textarea, body.minimal #new-document-view input[type="text"] {
-    margin: 0 0 0 -1px;
     border: 1px solid #999;
-    padding: 10px 1% 10px 1%;
     font-size: 1.3em;
-    border-radius: 2px;
+    font-family: Verdana, "Bitstream Vera Sans", sans-serif;
+    border-radius: 3px;
     background: rgba(255, 255, 255, 0.4);
-    margin-bottom: 20px;
-    width: 98%;
-    min-height: 90%;
     font-family: Menlo, Consolas, Inconsolata, monospace;
     line-height: 1.7;
     font-size: 1.3em; }
     body.minimal #edit-view textarea:focus, body.minimal #edit-view input[type="text"]:focus, body.minimal #new-document-view textarea:focus, body.minimal #new-document-view input[type="text"]:focus {
       outline: none; }
   body.minimal #edit-view .annotation, body.minimal #new-document-view .annotation {
-    width: 47.5%;
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-radius: 2px;
+    border-radius: 3px;
     position: relative; }
     body.minimal #edit-view .annotation:nth-child(odd), body.minimal #new-document-view .annotation:nth-child(odd) {
       float: right;
       background: rgba(82, 171, 209, 0.3);
       border: 1px solid rgba(40, 117, 149, 0.3);
-      border-radius: 2px; }
+      border-radius: 2px;
+      padding: 1.042%; }
     body.minimal #edit-view .annotation:nth-child(even), body.minimal #new-document-view .annotation:nth-child(even) {
       float: left;
       background: rgba(104, 179, 100, 0.3);
       border: 1px solid rgba(61, 119, 58, 0.3);
-      border-radius: 2px; }
+      border-radius: 2px;
+      padding: 1.042%; }
     body.minimal #edit-view .annotation blockquote, body.minimal #edit-view .annotation .attachment, body.minimal #new-document-view .annotation blockquote, body.minimal #new-document-view .annotation .attachment {
       font-size: 1.3em;
       font-family: Menlo, Consolas, Inconsolata, monospace; }
@@ -1049,9 +1066,7 @@ body.minimal {
     body.minimal #edit-view .annotation .delete, body.minimal #new-document-view .annotation .delete {
       font-family: Verdana, "Bitstream Vera Sans", sans-serif;
       font-size: 1em;
-      position: absolute;
-      bottom: 10px;
-      right: 10px; }
+      position: absolute; }
   body.minimal footer, body.minimal #list-view #tool-bar {
     display: none; }
 

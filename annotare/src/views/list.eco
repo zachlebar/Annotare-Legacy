@@ -10,10 +10,6 @@
         <input type="text" id="search-box" name="search-box" placeholder="Search Notes" />
     </form>
     
-    <% if @query: %>
-    	<p class="new-document">Would you like to create a new note titled: "<%= @query %>" ? &mdash; Click Here &raquo;</p>    
-    <% end %>
-    
     <% for doc in @list: %>
       <article class="document" id="document-<%= doc.id %>">
         <section class="name"><h1><%= doc.name %></h1></section>
@@ -23,8 +19,10 @@
       </article>
     <% end %>
     
-    <% if @list.length == 0: %>
-    	<p class="alert">There don't seem to be any documents. You can create them by using the navigation above.</p>
+    <% if @query? and @list.length == 0: %>
+    	<article class="new_document">
+    	  <section class="name"><h1>New Document: <%= @query %></h1></section>
+    	</article>
     <% end %>
     
     <div class="clear"></div>
