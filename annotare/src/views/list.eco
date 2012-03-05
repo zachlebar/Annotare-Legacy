@@ -19,10 +19,15 @@
       </article>
     <% end %>
     
+<<<<<<< HEAD
     <% if @query? and @list.length == 0: %>
     	<article class="new_document">
     	  <section class="name"><h1>New Document: <%= @query %></h1></section>
     	</article>
+=======
+    <% if @list.length == 0: %>
+    	<p class="alert">Looks like there aren't any documents. You can create them by using the navigation above.</p>
+>>>>>>> 3c12a16f77bf3c849691f14c96795015302a32b6
     <% end %>
     
     <div class="clear"></div>

@@ -17211,15 +17211,17 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
           __out.push('\n        </section>\n      </article>\n    ');
         }
       
-        __out.push('\n    \n    ');
+        __out.push('\n    \n<<<<<<< HEAD\n    ');
       
         if ((this.query != null) && this.list.length === 0) {
           __out.push('\n    \t<article class="new_document">\n    \t  <section class="name"><h1>New Document: ');
           __out.push(__sanitize(this.query));
-          __out.push('</h1></section>\n    \t</article>\n    ');
+          __out.push('</h1></section>\n    \t</article>\n=======\n    ');
+          if (this.list.length === 0) {
+            __out.push('\n    \t<p class="alert">Looks like there aren\'t any documents. You can create them by using the navigation above.</p>\n>>>>>>> 3c12a16f77bf3c849691f14c96795015302a32b6\n    ');
+          }
+          __out.push('\n    \n    <div class="clear"></div>\n  </section>\n</div>');
         }
-      
-        __out.push('\n    \n    <div class="clear"></div>\n  </section>\n</div>');
       
       }).call(this);
       
