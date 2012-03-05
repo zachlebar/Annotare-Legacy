@@ -798,13 +798,15 @@ body.minimal {
     margin: 0 auto;
     padding: 0;
     width: 95%;
-    max-width: 960px;
+    max-width: 1200px;
     position: relative; }
+  body.minimal p {
+    margin: 0 0 20px 0; }
   body.minimal h1, body.minimal h2, body.minimal h3, body.minimal h4, body.minimal h5, body.minimal h6 {
     font-family: "Neuton", Palatino, Georgia, serif;
     line-height: 1;
     color: #3c3c3c;
-    margin: 0; }
+    margin: 20px 0 0 0; }
     body.minimal h1 a, body.minimal h2 a, body.minimal h3 a, body.minimal h4 a, body.minimal h5 a, body.minimal h6 a {
       color: #3c3c3c; }
   body.minimal h1 {
@@ -812,18 +814,18 @@ body.minimal {
     font-weight: 400; }
   body.minimal h2 {
     font-size: 2.618em;
-    font-weight: 200; }
+    font-weight: 400; }
   body.minimal h3 {
-    font-size: 2.618em;
-    font-weight: 100; }
+    font-size: 1.618em;
+    font-weight: 400; }
   body.minimal h4 {
-    font-size: 2.618em;
-    font-weight: 800; }
+    font-size: 1.618em;
+    font-weight: 200; }
   body.minimal h5 {
-    font-size: 1.2em;
+    font-size: 1em;
     font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
   body.minimal h6 {
-    font-size: 1.1em;
+    font-size: 1em;
     font-family: Verdana, "Bitstream Vera Sans", sans-serif; }
   body.minimal a {
     text-decoration: none;
@@ -833,7 +835,7 @@ body.minimal {
     background: rgba(122, 191, 220, 0.3);
     border: 1px solid rgba(50, 148, 190, 0.3);
     border-radius: 2px;
-    padding: 1.042%; }
+    padding: 0.833%; }
   body.minimal code {
     font-family: Menlo, Consolas, Inconsolata, monospace; }
   body.minimal #application {
@@ -853,16 +855,16 @@ body.minimal {
     margin: 0 auto;
     padding: 0;
     width: 95%;
-    max-width: 960px; }
+    max-width: 1200px; }
     body.minimal header nav {
       float: left;
-      margin: 1.042%;
-      width: 97.917%;
+      margin: 0.833%;
+      width: 98.333%;
       box-sizing: border-box;
       background: rgba(0, 0, 0, 0.8);
       border: 1px solid rgba(0, 0, 0, 0.8);
       border-radius: 2px;
-      padding: 1.042%;
+      padding: 0.833%;
       border-top: none;
       margin-top: 0;
       border-top-left-radius: 0;
@@ -888,16 +890,16 @@ body.minimal {
     margin: 0 auto;
     padding: 0;
     width: 95%;
-    max-width: 960px; }
+    max-width: 1200px; }
     body.minimal .tool-bar-wrap nav {
       float: left;
-      margin: 1.042%;
-      width: 97.917%;
+      margin: 0.833%;
+      width: 98.333%;
       box-sizing: border-box;
       background: rgba(0, 0, 0, 0.8);
       border: 1px solid rgba(0, 0, 0, 0.8);
       border-radius: 2px;
-      padding: 1.042%;
+      padding: 0.833%;
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
       margin-bottom: 0; }
@@ -913,20 +915,17 @@ body.minimal {
         top: 5px; }
   body.minimal section.one-column article {
     float: left;
-    margin: 1.042%;
-    width: 97.917%;
+    width: 100.0%;
     box-sizing: border-box; }
   body.minimal section.one-column aside {
     display: none; }
   body.minimal section.two-column article {
     float: left;
-    margin: 1.042%;
-    width: 64.583%;
+    width: 66.667%;
     box-sizing: border-box; }
   body.minimal section.two-column aside {
     float: left;
-    margin: 1.042%;
-    width: 31.25%;
+    width: 33.333%;
     box-sizing: border-box; }
   body.minimal blockquote {
     margin-left: 8px;
@@ -941,23 +940,14 @@ body.minimal {
       background: rgba(82, 171, 209, 0.3);
       border: 1px solid rgba(40, 117, 149, 0.3);
       border-radius: 2px;
-      padding: 1.042%; }
+      padding: 0.833%; }
     body.minimal .note:nth-child(odd), body.minimal .note:nth-child(odd) .note-detail {
       background: rgba(104, 179, 100, 0.3);
       border: 1px solid rgba(61, 119, 58, 0.3);
       border-radius: 2px;
-      padding: 1.042%; }
-    body.minimal .note:nth-child(even):hover .note-detail, body.minimal .note:nth-child(even) .note-detail:hover, body.minimal .note:nth-child(even) .note-detail:focus {
-      background: rgba(82, 171, 209, 0.9);
-      border: 1px solid rgba(40, 117, 149, 0.9);
-      border-radius: 2px;
-      padding: 1.042%; }
-    body.minimal .note:nth-child(odd):hover .note-detail, body.minimal .note:nth-child(odd) .note-detail:hover, body.minimal .note:nth-child(odd) .note-detail:focus {
-      background: rgba(104, 179, 100, 0.9);
-      border: 1px solid rgba(61, 119, 58, 0.9);
-      border-radius: 2px;
-      padding: 1.042%; }
+      padding: 0.833%; }
     body.minimal .note .note-detail {
+      max-width: 31.667%;
       padding: 0 0.5% !important;
       display: inline-block;
       height: 1.7em;
@@ -976,21 +966,22 @@ body.minimal {
     background: rgba(209, 82, 82, 0.3);
     border: 1px solid rgba(149, 40, 40, 0.3);
     border-radius: 2px;
-    padding: 1.042%;
+    padding: 0.833%;
     padding: 0 0.5%; }
-  body.minimal #detail-view .wrap {
+  body.minimal #detail-view .wrap, body.minimal #history-view .wrap {
     float: left;
-    margin: 1.042%;
-    width: 97.917%;
+    margin: 0.833%;
+    width: 98.333%;
     box-sizing: border-box;
     background: rgba(255, 255, 255, 0.4);
     border: 1px solid rgba(204, 204, 204, 0.4);
     border-radius: 2px;
-    padding: 1.042%; }
+    padding: 0.833%;
+    margin-bottom: 56px; }
   body.minimal #list-view form#search-form {
     float: left;
-    margin: 1.042%;
-    width: 97.917%;
+    margin: 0.833%;
+    width: 98.333%;
     box-sizing: border-box; }
     body.minimal #list-view form#search-form input {
       border: 1px solid #999;
@@ -998,8 +989,8 @@ body.minimal {
       font-family: Verdana, "Bitstream Vera Sans", sans-serif;
       border-radius: 3px;
       background: rgba(255, 255, 255, 0.4);
-      width: 100%;
-      padding: 1.042% 2.083%; }
+      padding: 0.833% 1.667%;
+      width: 100%; }
       body.minimal #list-view form#search-form input:focus {
         outline: none; }
   body.minimal #list-view p.new-document {
@@ -1008,55 +999,83 @@ body.minimal {
     background: rgba(82, 171, 209, 0.3);
     border: 1px solid rgba(40, 117, 149, 0.3);
     border-radius: 2px;
-    padding: 1.042%; }
+    padding: 0.833%; }
   body.minimal #list-view article {
     float: left;
-    margin: 1.042%;
-    width: 31.25%;
+    margin: 0.833%;
+    width: 31.667%;
     box-sizing: border-box;
     height: 200px;
     float: left;
     cursor: pointer;
     border-radius: 3px;
     overflow: hidden; }
+    @media handheld and (max-width: 800px) and (min-width: 500px), screen and (max-width: 800px) and (min-width: 500px) {
+      body.minimal #list-view article {
+        float: left;
+        margin: 0.833%;
+        width: 48.333%;
+        box-sizing: border-box; } }
+    @media handheld and (max-width: 500px), screen and (max-width: 500px) {
+      body.minimal #list-view article {
+        float: left;
+        margin: 0.833%;
+        width: 98.333%;
+        box-sizing: border-box; } }
     body.minimal #list-view article:nth-child(odd) {
       background: rgba(82, 171, 209, 0.3);
       border: 1px solid rgba(40, 117, 149, 0.3);
       border-radius: 2px;
-      padding: 1.042%; }
+      padding: 0.833%; }
     body.minimal #list-view article:nth-child(even) {
       background: rgba(104, 179, 100, 0.3);
       border: 1px solid rgba(61, 119, 58, 0.3);
       border-radius: 2px;
-      padding: 1.042%; }
+      padding: 0.833%; }
     body.minimal #list-view article h1 {
       font-size: 2.618em; }
+  body.minimal #edit-view h1, body.minimal #edit-view h2, body.minimal #new-document-view h1, body.minimal #new-document-view h2 {
+    float: left;
+    margin: 0.833%;
+    width: 98.333%;
+    box-sizing: border-box; }
   body.minimal #edit-view textarea, body.minimal #edit-view input[type="text"], body.minimal #new-document-view textarea, body.minimal #new-document-view input[type="text"] {
     border: 1px solid #999;
     font-size: 1.3em;
     font-family: Verdana, "Bitstream Vera Sans", sans-serif;
     border-radius: 3px;
     background: rgba(255, 255, 255, 0.4);
+    padding: 0.833% 1.667%;
+    float: left;
+    margin: 0.833%;
+    width: 98.333%;
+    box-sizing: border-box;
+    margin-top: 10px;
+    margin-bottom: 10px;
     font-family: Menlo, Consolas, Inconsolata, monospace;
     line-height: 1.7;
     font-size: 1.3em; }
     body.minimal #edit-view textarea:focus, body.minimal #edit-view input[type="text"]:focus, body.minimal #new-document-view textarea:focus, body.minimal #new-document-view input[type="text"]:focus {
       outline: none; }
+  body.minimal #edit-view textarea, body.minimal #new-document-view textarea {
+    height: 400px; }
   body.minimal #edit-view .annotation, body.minimal #new-document-view .annotation {
+    float: left;
+    margin: 0.833%;
+    width: 31.667%;
+    box-sizing: border-box;
     border-radius: 3px;
     position: relative; }
     body.minimal #edit-view .annotation:nth-child(odd), body.minimal #new-document-view .annotation:nth-child(odd) {
-      float: right;
       background: rgba(82, 171, 209, 0.3);
       border: 1px solid rgba(40, 117, 149, 0.3);
       border-radius: 2px;
-      padding: 1.042%; }
+      padding: 0.833%; }
     body.minimal #edit-view .annotation:nth-child(even), body.minimal #new-document-view .annotation:nth-child(even) {
-      float: left;
       background: rgba(104, 179, 100, 0.3);
       border: 1px solid rgba(61, 119, 58, 0.3);
       border-radius: 2px;
-      padding: 1.042%; }
+      padding: 0.833%; }
     body.minimal #edit-view .annotation blockquote, body.minimal #edit-view .annotation .attachment, body.minimal #new-document-view .annotation blockquote, body.minimal #new-document-view .annotation .attachment {
       font-size: 1.3em;
       font-family: Menlo, Consolas, Inconsolata, monospace; }
@@ -1066,7 +1085,9 @@ body.minimal {
     body.minimal #edit-view .annotation .delete, body.minimal #new-document-view .annotation .delete {
       font-family: Verdana, "Bitstream Vera Sans", sans-serif;
       font-size: 1em;
-      position: absolute; }
+      position: absolute;
+      bottom: 5px;
+      right: 10px; }
   body.minimal footer, body.minimal #list-view #tool-bar {
     display: none; }
 

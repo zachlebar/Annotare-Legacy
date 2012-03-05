@@ -29,7 +29,7 @@ $quaternary: rgba($quaternary_red, $quaternary_green, $quaternary_blue, 0.3);
 $black: rgba(0, 0, 0, 0.8);
 
 $column-nbr: 12;
-$column-width: 60;
+$column-width: 80;
 $gutter-width: 20;
 $max-width: (($column-nbr * $column-width) + ($column-nbr * $gutter-width));
 $gutter-width-percentage: (($gutter-width / $max-width) * 100%);
@@ -56,6 +56,7 @@ $code: Menlo, Consolas, Inconsolata, monospace;
   @include sans;
   border-radius: $border-radius;
   background: $app-background;
+  padding: $gutter-width-percentage / 2 $gutter-width-percentage;
 }
 
 @mixin container() {
@@ -74,6 +75,20 @@ $code: Menlo, Consolas, Inconsolata, monospace;
 	margin: $gutter-width-percentage / 2;
 	width: grid_width($nbr);
 	box-sizing: border-box;
+}
+
+@mixin grid_container($nbr) {
+	float:left;
+	width: grid_width($nbr) + $gutter-width-percentage;
+	box-sizing: border-box;
+}
+
+@mixin alpha() {
+  margin-left: 0;
+}
+
+@mixin omega() {
+  margin-right: 0;
 }
 
 @mixin sans { font-family: $sans; }
@@ -109,11 +124,15 @@ body.minimal {
   @include reset;
   #stickey-footer-wrap { @include container; position: relative; }
   
+  p {
+    margin: 0 0 20px 0;
+  }
+  
   h1, h2, h3, h4, h5, h6 {
     @include serif;
     line-height: 1;
     color: lighten($font-color, 10%);
-    margin: 0;
+    margin: 20px 0 0 0;
     a { color: lighten($font-color, 10%); }
   }
   
@@ -123,22 +142,22 @@ body.minimal {
   }
   h2 {
     font-size: modular-scale(2);
-    @include light;
+    @include normal;
   }
   h3 {
-    font-size: modular-scale(2);
-    @include extra-light;
+    font-size: modular-scale(1);
+    @include normal;
   }
   h4 {
-    font-size: modular-scale(2);
-    @include bold;
+    font-size: modular-scale(1);
+    @include light;
   }
   h5 {
-    font-size: 1.2em;
+    font-size: modular-scale(0);
     @include sans;
   }
   h6 {
-    font-size: 1.1em;
+    font-size: modular-scale(0);
     @include sans;
   }
   
@@ -241,7 +260,7 @@ body.minimal {
   section {
     &.one-column {
       article {
-        @include grid(12);
+        @include grid_container(12);
       }
       aside {
         display: none;
@@ -249,10 +268,10 @@ body.minimal {
     }
     &.two-column {
       article {
-        @include grid(8);
+        @include grid_container(8);
       }
       aside {
-        @include grid(4);
+        @include grid_container(4);
       }
     }
   }
@@ -278,13 +297,8 @@ body.minimal {
     &:nth-child(odd), &:nth-child(odd) .note-detail {
       @include box($quaternary);
     }
-    &:nth-child(even):hover .note-detail, &:nth-child(even) .note-detail:hover, &:nth-child(even) .note-detail:focus {
-      @include box(rgba($secondary_red, $secondary_green, $secondary_blue, 0.9));
-    }
-    &:nth-child(odd):hover .note-detail, &:nth-child(odd) .note-detail:hover, &:nth-child(odd) .note-detail:focus {
-      @include box(rgba($quaternary_red, $quaternary_green, $quaternary_blue, 0.9));
-    }
     .note-detail {
+      max-width: grid_width(4);
       padding: 0 0.5% !important;
       display: inline-block;
       height: $base-size * $line-height;
@@ -308,10 +322,11 @@ body.minimal {
     padding: 0 0.5%;
   }
   
-  #detail-view {
+  #detail-view, #history-view {
     .wrap {
       @include grid(12);
       @include box($app-background);
+      margin-bottom: 56px;
     }
   }
   
@@ -321,7 +336,6 @@ body.minimal {
       input {
         @include input();
         width: 100%;
-        padding: $gutter-width-percentage / 2 $gutter-width-percentage;
         &:focus { outline: none; }
       }
     }
@@ -340,7 +354,11 @@ body.minimal {
       border-radius: $border-radius;
       overflow: hidden;
       
-      @media handheld and (max-width: 690px), screen and (max-width: 690px) {
+      @media handheld and (max-width: 800px) and (min-width: 500px), screen and (max-width: 800px) and (min-width: 500px) {
+        @include grid(6);
+      }
+      @media handheld and (max-width: 500px), screen and (max-width: 500px) {
+        @include grid(12);
       }
       
       &:nth-child(odd) {
@@ -360,8 +378,12 @@ body.minimal {
   }
   
   #edit-view, #new-document-view {
+    h1, h2 { @include grid(12); }
     textarea, input[type="text"] {
-      @include input();      
+      @include input();
+      @include grid(12);
+      margin-top: 10px;
+      margin-bottom: 10px;
       font-family: $code;
       line-height: $line-height;
       font-size: 1.3em;
@@ -371,13 +393,15 @@ body.minimal {
       }
     }
     
-    .annotation {      
+    textarea { height: 400px; }
+    
+    .annotation {   
+      @include grid(4);
+         
       &:nth-child(odd) {
-        float: right;
         @include box($secondary);
       }
       &:nth-child(even) {
-        float: left;
         @include box($quaternary);
       }
       border-radius: $border-radius;
@@ -394,6 +418,8 @@ body.minimal {
         font-family: $sans;
         font-size: 1em;
         position: absolute;
+        bottom: 5px;
+        right: 10px;
       }
     }
   }

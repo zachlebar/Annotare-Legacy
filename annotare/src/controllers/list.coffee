@@ -11,7 +11,7 @@ class List extends Flakey.controllers.Controller
 
     @actions = {
       'click .document': 'select_doc'
-      'click .new-document': 'new_document'
+      'click .new_document': 'new_document'
       'keyup #search-box': 'search'
     }
 
