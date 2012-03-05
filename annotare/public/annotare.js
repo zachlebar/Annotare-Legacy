@@ -17097,7 +17097,7 @@ require.define("/controllers/list.js", function (require, module, exports, __dir
       this.class_name = "list view";
       this.actions = {
         'click .document': 'select_doc',
-        'click .new-document': 'new_document',
+        'click .new_document': 'new_document',
         'keyup #search-box': 'search'
       };
       List.__super__.constructor.call(this, config);
@@ -17213,9 +17213,9 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
       
         __out.push('\n    \n    ');
       
-        if ((this.query != null) || this.list.length === 0) {
+        if (this.query && this.list.length === 0) {
           __out.push('\n    \t<article class="new_document">\n    \t  ');
-          if (this.query != null) {
+          if (this.query) {
             __out.push('\n    \t    <section class="name"><h1>New Document: ');
             __out.push(__sanitize(this.query));
             __out.push('</h1></section>\n    \t  ');
@@ -17781,11 +17781,11 @@ require.define("/views/history.js", function (require, module, exports, __dirnam
       
         __out.push(__sanitize(this.doc.slug));
       
-        __out.push('">\n      <h4>Version from <em id="history-time">');
+        __out.push('">\n      <h5>Version from <em id="history-time">');
       
         __out.push(__sanitize(this.time.toLocaleString()));
       
-        __out.push('</em></h4>\n      <h1 class="name">');
+        __out.push('</em></h5>\n      <h1 class="name">');
       
         __out.push(__sanitize(this.doc.name));
       

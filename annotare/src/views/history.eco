@@ -12,7 +12,7 @@
 <div class="wrap">
   <section class="two-column">
     <article id="history-<%= @doc.slug %>">
-      <h4>Version from <em id="history-time"><%= @time.toLocaleString() %></em></h4>
+      <h5>Version from <em id="history-time"><%= @time.toLocaleString() %></em></h5>
       <h1 class="name"><%= @doc.name %></h1>
       <% html = if @html? then @html else @doc.render() %>
       <section id="history-content">
