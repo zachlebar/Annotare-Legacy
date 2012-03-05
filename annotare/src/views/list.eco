@@ -19,9 +19,13 @@
       </article>
     <% end %>
     
-    <% if @query? and @list.length == 0: %>
+    <% if @query? or @list.length == 0: %>
     	<article class="new_document">
-    	  <section class="name"><h1>New Document: <%= @query %></h1></section>
+    	  <% if @query?: %>
+    	    <section class="name"><h1>New Document: <%= @query %></h1></section>
+    	  <% else: %>
+    	    <section class="name"><h1>New Document: <%= @query %></h1></section>
+    	  <% end %>
     	</article>
     <% end %>
     
