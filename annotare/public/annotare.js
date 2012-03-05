@@ -17213,10 +17213,18 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
       
         __out.push('\n    \n    ');
       
-        if ((this.query != null) && this.list.length === 0) {
-          __out.push('\n    \t<article class="new_document">\n    \t  <section class="name"><h1>New Document: ');
-          __out.push(__sanitize(this.query));
-          __out.push('</h1></section>\n    \t</article>\n    ');
+        if ((this.query != null) || this.list.length === 0) {
+          __out.push('\n    \t<article class="new_document">\n    \t  ');
+          if (this.query != null) {
+            __out.push('\n    \t    <section class="name"><h1>New Document: ');
+            __out.push(__sanitize(this.query));
+            __out.push('</h1></section>\n    \t  ');
+          } else {
+            __out.push('\n    \t    <section class="name"><h1>New Document: ');
+            __out.push(__sanitize(this.query));
+            __out.push('</h1></section>\n    \t  ');
+          }
+          __out.push('\n    \t</article>\n    ');
         }
       
         __out.push('\n    \n    <div class="clear"></div>\n  </section>\n</div>');
