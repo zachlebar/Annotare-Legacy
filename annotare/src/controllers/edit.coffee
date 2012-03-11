@@ -3,7 +3,6 @@ $ = Flakey.$
 
 autoresize = require('../lib/autoresize')
 ui = require('../lib/uikit')
-settings = require('../settings')
 Document = require('../models/Document')
 
 
@@ -63,7 +62,7 @@ class Edit extends Flakey.controllers.Controller
     @doc.base_text = $('#editor').val()
     @doc.save()
     delete localStorage[@autosave_key()]
-    ui.info('Everything\'s Shiny Capt\'n!', "\"#{ @doc.name }\" was successfully saved.").hide(settings.growl_hide_after).effect(settings.growl_effect)
+    ui.info('Everything\'s Shiny Capt\'n!', "\"#{ @doc.name }\" was successfully saved.").hide(5000).effect('slide')
     window.location.hash = "#/detail?" + Flakey.util.querystring.build(@query_params)
   
   discard: (event) =>

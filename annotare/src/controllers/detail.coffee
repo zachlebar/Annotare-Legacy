@@ -2,7 +2,6 @@ Flakey = require('flakey')
 $ = Flakey.$
 
 ui = require('../lib/uikit')
-settings = require('../settings')
 Document = require('../models/Document')
 Annotation = require('../models/Annotation')
 
@@ -70,7 +69,7 @@ class Detail extends Flakey.controllers.Controller
     selection = selection.toString()
     
     if selection.length == 0
-      ui.error('Well, you were right about this being a bad idea.', 'Please select some text first.').hide(settings.growl_hide_after).effect(settings.growl_effect)
+      ui.error('Well, you were right about this being a bad idea.', 'Please select some text first.').hide(5000).effect('slide')
     else
       # Save and Render highlight
       html = $("#detail-" + @doc.slug).html()
@@ -86,7 +85,7 @@ class Detail extends Flakey.controllers.Controller
       selection = document.selection.createRange()
     selection = selection.toString()
     if selection.length == 0
-      ui.error('Well, you were right about this being a bad idea.', 'Please select some text first.').hide(settings.growl_hide_after).effect(settings.growl_effect)
+      ui.error('Well, you were right about this being a bad idea.', 'Please select some text first.').hide(5000).effect('slide')
     else
       # Save and Render highlight
       html = $("#detail-" + @doc.slug).html()

@@ -21,7 +21,6 @@ $(document).ready () ->
   # Sync models
   Flakey.models.backend_controller.sync('Document')
   Flakey.models.backend_controller.sync('Annotation')
-  Flakey.models.backend_controller.sync('Setting')
   
   annotare = window.Annotare = new Annotare()
   annotare.make_active()
