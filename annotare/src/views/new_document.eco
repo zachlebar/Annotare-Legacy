@@ -1,18 +1,9 @@
 <div class="tool-bar-wrap">
-  <nav id="tool-bar">
-    <a href="#" class="discard">Discard Changes</a>
-    <a href="#" class="save">Save Changes</a>
-  </nav>
+	<nav id="tool-bar">
+		<a href="#" class="discard">Discard</a>
+		<a href="#" class="save">Save</a>
+	</nav>
 </div>
 
-<div class="wrap">
-  <section class="one-column">
-    <article>
-      <h1>Create a New Document</h1>
-  
-      <input type="text" id="name" name="name" placeholder="The Hitchhiker's Guide to the Galaxy" value="<%= @title %>" />
-  
-      <textarea id="editor" placeholder="Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun..."></textarea>
-    </article>
-  </section>
-</div>
+<h1>Create</h1>
+<textarea id="editor"></textarea> 
