@@ -1,34 +1,24 @@
-<div class="tool-bar-wrap">
-  <div id="tool-bar">
-    <p>"You have to be resourceful at Bethel." &mdash; Fred Rusk</p>
-  </div>
-</div>
-
-<div class="wrap">
-  <section class="one-column">
-    <form id="search-form" action="#" method="GET">
-        <input type="text" id="search-box" name="search-box" placeholder="Search Notes" />
-    </form>
+	<div class="tool-bar-wrap">
+		<div id="tool-bar">
+			<p>"You have to be resourceful at Bethel." &mdash; Fred Rusk</p>
+		</div>
+	</div>
+	
+	<form id="search-form" action="#" method="GET">
+		<input type="text" id="search-box" name="search-box" placeholder="Search Notes" />
+	</form>
+	    
+	<% if @query: %>
+		<small>Would you like to create a new document entitled "<%= @query %>"</small> 
+		<article class="new_document">
+			<h1 class="name"><%= @query %></h1>
+		</article>
+	<% end %>
+	
+	<% for doc in @list: %>
+		<article class="document" id="document-<%= doc.id %>">
+			<h1 class="name"><%= doc.name %></h1>
+		</article>
+	<% end %>
     
-    <% for doc in @list: %>
-      <article class="document" id="document-<%= doc.id %>">
-        <section class="name"><h1><%= doc.name %></h1></section>
-        <section class="content">
-          <%- doc.render() %>
-        </section>
-      </article>
-    <% end %>
-    
-    <% if @query and @list.length == 0: %>
-    	<article class="new_document">
-    	  <% if @query: %>
-    	    <section class="name"><h1>New Document: <%= @query %></h1></section>
-    	  <% else: %>
-    	    <section class="name"><h1>New Document</h1></section>
-    	  <% end %>
-    	</article>
-    <% end %>
-    
-    <div class="clear"></div>
-  </section>
 </div>
