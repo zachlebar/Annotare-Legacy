@@ -13776,19 +13776,16 @@ require.define("/controllers/new_document.js", function (require, module, export
         extraSpace: 100,
         maxHeight: 2000
       });
-      return $('#name, #editor').blur();
+      return $('#editor').blur();
     };
 
     NewDocument.prototype.save = function(params) {
-      var doc, name, text;
-      name = $('#name').val();
+      var doc, text;
       text = $('#editor').val();
-      if (name.length > 0 && text.length > 0) {
+      if (text.length > 0) {
         doc = new Document({
-          name: name,
           base_text: text
         });
-        doc.generate_slug();
         doc.save();
         ui.info('Everything\'s Shiny Capt\'n!', "\"" + doc.name + "\" was successfully saved.").hide(5000).effect('slide');
         return window.location.hash = "#/detail?" + Flakey.util.querystring.build({
@@ -17155,7 +17152,9 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
           __out.push(__sanitize(doc.id));
           __out.push('">\n\t\t\t<h1 class="name">');
           __out.push(__sanitize(doc.name));
-          __out.push('</h1>\n\t\t</article>\n\t');
+          __out.push('</h1>\n\t\t\t');
+          __out.push(doc.render());
+          __out.push('\n\t\t</article>\n\t');
         }
       
         __out.push('\n    \n</div>\n');

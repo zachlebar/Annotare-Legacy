@@ -32,17 +32,16 @@ class NewDocument extends Flakey.controllers.Controller
       extraSpace: 100,
       maxHeight: 2000
     })
-    $('#name, #editor').blur()
+    # $('#name, #editor').blur()
+    $('#editor').blur()
     
   save: (params) =>
-    name = $('#name').val()
     text = $('#editor').val()
-    if name.length > 0 and text.length > 0
+    if text.length > 0
       doc = new Document {
-        name: name
         base_text: text
       }
-      doc.generate_slug()
+      # doc.generate_slug()
       doc.save()
       ui.info('Everything\'s Shiny Capt\'n!', "\"#{ doc.name }\" was successfully saved.").hide(5000).effect('slide')
       window.location.hash = "#/detail?" + Flakey.util.querystring.build({id: doc.id})
