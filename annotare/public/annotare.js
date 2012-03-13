@@ -17397,49 +17397,29 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
     __extends(Edit, _super);
 
     function Edit(config) {
+      this.loggin = __bind(this.loggin, this);
       this.delete_note = __bind(this.delete_note, this);
       this.discard = __bind(this.discard, this);
       this.save = __bind(this.save, this);
-      this.render = __bind(this.render, this);
-      this.autosave = __bind(this.autosave, this);      this.id = "edit-view";
+      this.render = __bind(this.render, this);      this.id = "edit-view";
       this.class_name = "edit_document view";
       this.actions = {
         'click .save': 'save',
         'click .discard': 'discard',
-        'click .delete': 'delete_note',
-        'keyup #editor': 'autosave'
+        'click .delete': 'delete_note'
       };
       Edit.__super__.constructor.call(this, config);
       this.tmpl = Flakey.templates.get_template('edit', require('../views/edit'));
     }
 
-    Edit.prototype.autosave = function(event) {
-      event.preventDefault();
-      return localStorage[this.autosave_key()] = $('#editor').val();
-    };
-
-    Edit.prototype.autosave_key = function() {
-      return "autosave-draft-" + this.id;
-    };
-
     Edit.prototype.render = function() {
-      var context,
-        _this = this;
+      var context;
       if (!this.query_params.id) return;
       this.doc = Document.get(this.query_params.id);
       context = {
         doc: this.doc
       };
       this.html(this.tmpl.render(context));
-      if ((localStorage[this.autosave_key()] != null) && localStorage[this.autosave_key()].length > 0) {
-        ui.confirm('Restore?', 'An unsaved draft of this note was found. Would you like to restore it to the editor?').show(function(ok) {
-          if (ok) {
-            return $('#editor').val(localStorage[_this.autosave_key()]);
-          } else {
-            return delete localStorage[_this.autosave_key()];
-          }
-        });
-      }
       this.unbind_actions();
       this.bind_actions();
       return $('#editor').autoResize({
@@ -17452,7 +17432,6 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
       event.preventDefault();
       this.doc.base_text = $('#editor').val();
       this.doc.save();
-      delete localStorage[this.autosave_key()];
       ui.info('Everything\'s Shiny Capt\'n!', "\"" + this.doc.name + "\" was successfully saved.").hide(5000).effect('slide');
       return window.location.hash = "#/detail?" + Flakey.util.querystring.build(this.query_params);
     };
@@ -17461,10 +17440,7 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
       var _this = this;
       event.preventDefault();
       return ui.confirm('There be Monsters!', 'Careful there Captain; are you sure you want to discard all changes to this document?').show(function(ok) {
-        if (ok) {
-          delete localStorage[_this.autosave_key()];
-          return window.location.hash = "#/list";
-        }
+        if (ok) return window.location.hash = "#/list";
       });
     };
 
@@ -17479,6 +17455,11 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
           return $(event.target).parent().slideUp();
         }
       });
+    };
+
+    Edit.prototype.loggin = function(event) {
+      event.preventDefault();
+      return console.log(this.autosave_key());
     };
 
     return Edit;
@@ -17535,29 +17516,25 @@ require.define("/views/edit.js", function (require, module, exports, __dirname, 
       (function() {
         var annotation, _i, _len, _ref;
       
-        __out.push('<div class="tool-bar-wrap">\n  <nav id="tool-bar">\n    <a href="#" class="discard">Discard Changes</a>\n    <a href="#" class="save">Save Changes</a>\n  </nav>\n</div>\n\n<div class="wrap">\n  <section class="one-column">\n    <article>\n      <h1>Editing <em>');
-      
-        __out.push(__sanitize(this.doc.name));
-      
-        __out.push('</em></h1>\n      <textarea id="editor" placeholder="Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun...">');
+        __out.push('<div class="tool-bar-wrap">\n\t<nav id="tool-bar">\n\t\t<a href="#" class="discard">Discard</a>\n\t\t<a href="#" class="save">Save</a>\n\t</nav>\n</div>\n\n<h1>Edit</h1>\n<textarea id="editor">');
       
         __out.push(__sanitize(this.doc.base_text));
       
-        __out.push('</textarea>\n      <div class="annotations">\n        <h2>Notes & Highlights</h2>\n        ');
+        __out.push('</textarea>\n\n<div class="annotations">\n\t<h2>Notes & Highlights</h2>\n\t');
       
         _ref = this.doc.get_notes();
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           annotation = _ref[_i];
-          __out.push('\n          <div class="annotation" data-id="');
+          __out.push('\n\t\t<div class="annotation" data-id="');
           __out.push(__sanitize(annotation.id));
-          __out.push('">\n            <blockquote>&#8220;');
+          __out.push('">\n\t\t\t<blockquote>&#8220;');
           __out.push(annotation.text);
-          __out.push('&#8221;</blockquote>\n            <span class="attachment">');
+          __out.push('&#8221;</blockquote>\n\t\t\t<span class="attachment">');
           __out.push(annotation.attachment);
-          __out.push('</span>\n            <a href="#" class="delete">Delete</a>\n          </div>\n        ');
+          __out.push('</span>\n\t\t\t<a href="#" class="delete">Delete</a>\n\t\t</div>\n\t');
         }
       
-        __out.push('\n      </div>\n    </article>\n    \n  </section>\n</div>');
+        __out.push('\n</div>\n\n</div>\n');
       
       }).call(this);
       
