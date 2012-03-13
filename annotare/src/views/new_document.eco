@@ -6,4 +6,4 @@
 </div>
 
 <h1>Create</h1>
-<textarea id="editor"></textarea> 
+<textarea id="new-doc-editor"></textarea> 

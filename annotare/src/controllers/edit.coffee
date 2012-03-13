@@ -15,7 +15,7 @@ class Edit extends Flakey.controllers.Controller
       'click .save': 'save'
       'click .discard': 'discard'
       'click .delete': 'delete_note'
-      'keyup #editor': 'autosave'
+      'keyup #edit-editor': 'autosave'
     }
     
     super(config)
@@ -23,10 +23,10 @@ class Edit extends Flakey.controllers.Controller
     
   autosave: (event) =>
     event.preventDefault()
-    localStorage[@autosave_key()] = $('#editor').val()
+    localStorage[@autosave_key()] = $('#edit-editor').val()
     
   autosave_key: () ->
-    return "autosave-draft-#{@id}";
+    return "autosave-draft-#{@doc.id}";
   
   render: () =>
     if not @query_params.id
@@ -42,8 +42,10 @@ class Edit extends Flakey.controllers.Controller
     # Restore Draft?
     if localStorage[@autosave_key()]? and localStorage[@autosave_key()].length > 0
       ui.confirm('Restore?', 'An unsaved draft of this note was found. Would you like to restore it to the editor?').show (ok) =>
+        console.log("Inside anonymous function...")
         if ok
-          $('#editor').val(localStorage[@autosave_key()])
+          console.log("Restoring ...")
+          $('#edit-editor').val(localStorage[@autosave_key()])
         else
           delete localStorage[@autosave_key()]
     
@@ -52,14 +54,14 @@ class Edit extends Flakey.controllers.Controller
     @bind_actions()
     
     # Enable auto resizer
-    $('#editor').autoResize({
+    $('#edit-editor').autoResize({
       extraSpace: 100,
       maxHeight: 9000
     })
   
   save: (event) =>
     event.preventDefault()
-    @doc.base_text = $('#editor').val()
+    @doc.base_text = $('#edit-editor').val()
     @doc.save()
     delete localStorage[@autosave_key()]
     ui.info('Everything\'s Shiny Capt\'n!', "\"#{ @doc.name }\" was successfully saved.").hide(5000).effect('slide')

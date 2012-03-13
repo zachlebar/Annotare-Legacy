@@ -28,15 +28,15 @@ class NewDocument extends Flakey.controllers.Controller
     @unbind_actions()
     @bind_actions()
     
-    $('#editor').autoResize({
+    $('#new-doc-editor').autoResize({
       extraSpace: 100,
       maxHeight: 2000
     })
     # $('#name, #editor').blur()
-    $('#editor').blur()
+    $('#new-doc-editor').blur()
     
   save: (params) =>
-    text = $('#editor').val()
+    text = $('#new-doc-editor').val()
     if text.length > 0
       doc = new Document {
         base_text: text

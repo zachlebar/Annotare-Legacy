@@ -1,26 +1,20 @@
 <div class="tool-bar-wrap">
-  <nav id="tool-bar">
-    <a href="#" class="discard">Discard Changes</a>
-    <a href="#" class="save">Save Changes</a>
-  </nav>
+	<nav id="tool-bar">
+		<a href="#" class="discard">Discard</a>
+		<a href="#" class="save">Save</a>
+	</nav>
 </div>
 
-<div class="wrap">
-  <section class="one-column">
-    <article>
-      <h1>Editing <em><%= @doc.name %></em></h1>
-      <textarea id="editor" placeholder="Far out in the uncharted backwaters of the unfashionable end of the Western Spiral arm of the Galaxy lies a small unregarded yellow sun..."><%= @doc.base_text %></textarea>
-      <div class="annotations">
-        <h2>Notes & Highlights</h2>
-        <% for annotation in @doc.get_notes(): %>
-          <div class="annotation" data-id="<%= annotation.id %>">
-            <blockquote>&#8220;<%- annotation.text %>&#8221;</blockquote>
-            <span class="attachment"><%- annotation.attachment %></span>
-            <a href="#" class="delete">Delete</a>
-          </div>
-        <% end %>
-      </div>
-    </article>
-    
-  </section>
+<h1>Edit</h1>
+<textarea id="edit-editor"><%= @doc.base_text %></textarea>
+
+<div class="annotations">
+	<h2>Notes & Highlights</h2>
+	<% for annotation in @doc.get_notes(): %>
+		<div class="annotation" data-id="<%= annotation.id %>">
+			<blockquote>&#8220;<%- annotation.text %>&#8221;</blockquote>
+			<span class="attachment"><%- annotation.attachment %></span>
+			<a href="#" class="delete">Delete</a>
+		</div>
+	<% end %>
 </div>
