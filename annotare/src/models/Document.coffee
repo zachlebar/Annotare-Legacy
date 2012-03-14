@@ -1,6 +1,9 @@
 Flakey = require('flakey')
 
 Showdown = require('../lib/showdown')
+console.log(Showdown)
+Classify = require('../lib/classify')
+console.log(Classify)
 Annotation = require('./Annotation')
 
 class Document extends Flakey.models.Model
@@ -75,7 +78,15 @@ class Document extends Flakey.models.Model
   # Render document into HTML
   render: =>
     converter = new Showdown.converter()
+    console.log("Showdown Object")
+    console.log(converter)
+    classy_converter = new Classify
+    testclassify = classy_converter.converter("Testing")
+    console.log("Classy Object")
+    console.log(classy_converter)
+    console.log(testclassify)
     html = converter.makeHtml(@base_text)
+    #classy_converter.logger("Testing Classify")
     return html
   
 module.exports = Document
