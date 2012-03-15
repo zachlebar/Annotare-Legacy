@@ -63,7 +63,6 @@ class Edit extends Flakey.controllers.Controller
     event.preventDefault()
     @doc.base_text = $('#edit-editor').val()
     @doc.save()
-    delete localStorage[@autosave_key()]
     ui.info('Everything\'s Shiny Capt\'n!', "\"#{ @doc.name }\" was successfully saved.").hide(5000).effect('slide')
     window.location.hash = "#/detail?" + Flakey.util.querystring.build(@query_params)
   
@@ -71,7 +70,6 @@ class Edit extends Flakey.controllers.Controller
     event.preventDefault()
     ui.confirm('There be Monsters!', 'Careful there Captain; are you sure you want to discard all changes to this document?').show (ok) =>
       if ok
-        delete localStorage[@autosave_key()]
         window.location.hash = "#/list"
         
   delete_note: (event) =>
@@ -81,6 +79,10 @@ class Edit extends Flakey.controllers.Controller
         id = $(event.target).parent().attr('data-id')
         @doc.delete_annotation(id)
         $(event.target).parent().slideUp()
+
+  loggin: (event) =>
+    event.preventDefault()
+    console.log(@autosave_key())
 
 
 module.exports = Edit
