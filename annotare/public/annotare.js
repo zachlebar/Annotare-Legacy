@@ -15588,12 +15588,11 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
     };
 
     Document.prototype.render = function() {
-      var classy_converter, converter, html, testing;
+      var classy_converter, converter, html;
       converter = new Showdown.converter();
       html = converter.makeHtml(this.base_text);
       classy_converter = new Classify.converter();
-      testing = classy_converter.logger(html);
-      console.log(testing);
+      classy_converter.addClasses(html);
       return html;
     };
 
@@ -16917,6 +16916,15 @@ var Classify = {};
 
 Classify.converter = function() {
 
+	this.addClasses = function(html) {
+		console.log(html);
+
+		//for(i=0; i < jhtml.length; i++) {
+		//	var el = jhtml[i];
+		//	console.log(
+		//}
+	}
+
 	this.logger = function(text) {
 		new_text = "Classified! " + text;
 		return new_text;
@@ -17171,9 +17179,9 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
           doc = _ref[_i];
           __out.push('\n\t\t<article class="document" id="document-');
           __out.push(__sanitize(doc.id));
-          __out.push('">\n\t\t\t<h1 class="name">');
+          __out.push('">\n\t\t\t<!--<h1 class="name">');
           __out.push(__sanitize(doc.name));
-          __out.push('</h1>\n\t\t\t');
+          __out.push('</h1>-->\n\t\t\t');
           __out.push(doc.render());
           __out.push('\n\t\t</article>\n\t');
         }

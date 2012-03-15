@@ -79,8 +79,9 @@ class Document extends Flakey.models.Model
     html = converter.makeHtml(@base_text)
 
     classy_converter = new Classify.converter()
-    testing = classy_converter.logger(html)
-    console.log(testing)
+    #testing = classy_converter.addClasses(html)
+    classy_converter.addClasses(html)
+    #console.log(testing)
 
     return html
   
