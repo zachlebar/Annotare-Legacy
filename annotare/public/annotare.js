@@ -17397,7 +17397,6 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
     __extends(Edit, _super);
 
     function Edit(config) {
-      this.loggin = __bind(this.loggin, this);
       this.delete_note = __bind(this.delete_note, this);
       this.discard = __bind(this.discard, this);
       this.save = __bind(this.save, this);
@@ -17434,10 +17433,9 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
       this.html(this.tmpl.render(context));
       if ((localStorage[this.autosave_key()] != null) && localStorage[this.autosave_key()].length > 0) {
         ui.confirm('Restore?', 'An unsaved draft of this note was found. Would you like to restore it to the editor?').show(function(ok) {
-          console.log("Inside anonymous function...");
           if (ok) {
-            console.log("Restoring ...");
-            return $('#edit-editor').val(localStorage[_this.autosave_key()]);
+            $('#edit-editor').val(localStorage[_this.autosave_key()]);
+            return _this.auto_resize();
           } else {
             return delete localStorage[_this.autosave_key()];
           }
@@ -17445,6 +17443,10 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
       }
       this.unbind_actions();
       this.bind_actions();
+      return this.auto_resize();
+    };
+
+    Edit.prototype.auto_resize = function() {
       return $('#edit-editor').autoResize({
         extraSpace: 100,
         maxHeight: 9000
@@ -17455,6 +17457,9 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
       event.preventDefault();
       this.doc.base_text = $('#edit-editor').val();
       this.doc.save();
+      if ((localStorage[this.autosave_key()] != null) && localStorage[this.autosave_key()].length > 0) {
+        delete localStorage[this.autosave_key()];
+      }
       ui.info('Everything\'s Shiny Capt\'n!', "\"" + this.doc.name + "\" was successfully saved.").hide(5000).effect('slide');
       return window.location.hash = "#/detail?" + Flakey.util.querystring.build(this.query_params);
     };
@@ -17462,9 +17467,8 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
     Edit.prototype.discard = function(event) {
       var _this = this;
       event.preventDefault();
-      return ui.confirm('There be Monsters!', 'Careful there Captain; are you sure you want to discard all changes to this document?').show(function(ok) {
-        if (ok) return window.location.hash = "#/list";
-      });
+      ui.confirm('There be Monsters!', 'Careful there Captain; are you sure you want to discard all changes to this document?').show(function(ok) {});
+      if (ok) return window.location.hash = "#/list";
     };
 
     Edit.prototype.delete_note = function(event) {
@@ -17478,11 +17482,6 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
           return $(event.target).parent().slideUp();
         }
       });
-    };
-
-    Edit.prototype.loggin = function(event) {
-      event.preventDefault();
-      return console.log(this.autosave_key());
     };
 
     return Edit;
