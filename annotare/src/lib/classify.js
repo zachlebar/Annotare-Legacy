@@ -1,12 +1,12 @@
 var Classify = {}; 
 
-Classify.name = function() {
-	return alert("I'm Classy!");
+Classify.converter = function() {
+
+	this.logger = function(text) {
+		new_text = "Classified! " + text;
+		return new_text;
+	}
+
 }
 
-Classify.converter = function(text) {
-	text = "Classified! " + text;
-	return text;
-}
-
-module.export = Classify;
+module.exports = Classify;

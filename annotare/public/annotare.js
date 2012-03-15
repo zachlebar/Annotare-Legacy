@@ -15487,11 +15487,7 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
 
   Showdown = require('../lib/showdown');
 
-  console.log(Showdown);
-
   Classify = require('../lib/classify');
-
-  console.log(Classify);
 
   Annotation = require('./Annotation');
 
@@ -15592,16 +15588,12 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
     };
 
     Document.prototype.render = function() {
-      var classy_converter, converter, html, testclassify;
+      var classy_converter, converter, html, testing;
       converter = new Showdown.converter();
-      console.log("Showdown Object");
-      console.log(converter);
-      classy_converter = new Classify;
-      testclassify = classy_converter.converter("Testing");
-      console.log("Classy Object");
-      console.log(classy_converter);
-      console.log(testclassify);
       html = converter.makeHtml(this.base_text);
+      classy_converter = new Classify.converter();
+      testing = classy_converter.logger(html);
+      console.log(testing);
       return html;
     };
 
@@ -16923,16 +16915,16 @@ module.exports = Showdown;
 require.define("/lib/classify.js", function (require, module, exports, __dirname, __filename) {
 var Classify = {}; 
 
-Classify.name = function() {
-	return alert("I'm Classy!");
+Classify.converter = function() {
+
+	this.logger = function(text) {
+		new_text = "Classified! " + text;
+		return new_text;
+	}
+
 }
 
-Classify.converter = function(text) {
-	text = "Classified! " + text;
-	return text;
-}
-
-module.export = Classify;
+module.exports = Classify;
 
 });
 
