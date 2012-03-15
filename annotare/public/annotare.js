@@ -15478,7 +15478,7 @@ Card.prototype.render = function(options){
 
 require.define("/models/Document.js", function (require, module, exports, __dirname, __filename) {
 (function() {
-  var Annotation, Document, Flakey, Showdown,
+  var Annotation, Classify, Document, Flakey, Showdown,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
@@ -15486,6 +15486,12 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
   Flakey = require('flakey');
 
   Showdown = require('../lib/showdown');
+
+  console.log(Showdown);
+
+  Classify = require('../lib/classify');
+
+  console.log(Classify);
 
   Annotation = require('./Annotation');
 
@@ -15586,8 +15592,15 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
     };
 
     Document.prototype.render = function() {
-      var converter, html;
+      var classy_converter, converter, html, testclassify;
       converter = new Showdown.converter();
+      console.log("Showdown Object");
+      console.log(converter);
+      classy_converter = new Classify;
+      testclassify = classy_converter.converter("Testing");
+      console.log("Classy Object");
+      console.log(classy_converter);
+      console.log(testclassify);
       html = converter.makeHtml(this.base_text);
       return html;
     };
@@ -16905,6 +16918,22 @@ var Showdown = (function() {
 })();
 
 module.exports = Showdown;
+});
+
+require.define("/lib/classify.js", function (require, module, exports, __dirname, __filename) {
+var Classify = {}; 
+
+Classify.name = function() {
+	return alert("I'm Classy!");
+}
+
+Classify.converter = function(text) {
+	text = "Classified! " + text;
+	return text;
+}
+
+module.export = Classify;
+
 });
 
 require.define("/models/Annotation.js", function (require, module, exports, __dirname, __filename) {
