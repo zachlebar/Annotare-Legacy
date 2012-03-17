@@ -3,17 +3,23 @@ var Classify = {};
 Classify.converter = function() {
 
 	this.addClasses = function(html) {
-		console.log(html);
+		var html_array = html.split("\n");
 
-		//for(i=0; i < jhtml.length; i++) {
-		//	var el = jhtml[i];
-		//	console.log(
-		//}
-	}
+		for(i=0; i < html_array.length; i++) {
+			var el;
 
-	this.logger = function(text) {
-		new_text = "Classified! " + text;
-		return new_text;
+			if (html_array[i] != "") {
+				var el = html_array[i];
+				if (el.match(/^<([^<]+?)>@(\w+)\s/g)) {
+					var newel = el.replace(/^<([^<]+?)>@(\w+)\s/g, "<$1 class='$2'>");
+					html_array[i] = newel;
+				}
+			}
+		}
+		
+		var newhtml = html_array.join("\n");
+		
+		return newhtml;
 	}
 
 }
