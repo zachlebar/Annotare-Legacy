@@ -80,6 +80,7 @@ class Document extends Flakey.models.Model
 
     classy_converter = new Classify.converter()
     html = classy_converter.addClasses(html)
+    console.log(classy_converter.extractClass(html, "title"))
 
     return html
   

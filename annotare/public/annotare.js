@@ -15593,6 +15593,7 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
       html = converter.makeHtml(this.base_text);
       classy_converter = new Classify.converter();
       html = classy_converter.addClasses(html);
+      console.log(classy_converter.extractClass(html, "title"));
       return html;
     };
 
@@ -16925,7 +16926,7 @@ Classify.converter = function() {
 			if (html_array[i] != "") {
 				var el = html_array[i];
 				if (el.match(/^<([^<]+?)>@(\w+)\s/g)) {
-					var newel = el.replace(/^<([^<]+?)>@(\w+)\s/g, "<$1 class='$2'>");
+					var newel = el.replace(/^<([^<]+?)>@(\w+)\s/g, '<$1 class="$2">');
 					html_array[i] = newel;
 				}
 			}
@@ -16935,6 +16936,25 @@ Classify.converter = function() {
 		
 		return newhtml;
 	}
+
+	this.extractClass = function(html, css_class) {
+		var html_array = html.split("\n");
+		
+		for(i=0; i < html_array.length; i++) {
+			var el;
+
+			if (html_array[i] != "") {
+				var el = html_array[i];
+				var regex = new RegExp('^<\\w+?\\sclass="' + css_class + '">', 'gm');
+				if (el.match(regex)) {
+					var newregex = new RegExp('^<\\w+?\\sclass="' + css_class + '">(.+)<\/\\w+>$', 'gm');
+					var class_text = el.replace(newregex, "$1");
+					
+					return class_text;
+				}
+			}
+		}
+	}	
 
 }
 
