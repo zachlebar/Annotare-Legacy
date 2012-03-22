@@ -13735,7 +13735,7 @@ require.define("/controllers/annotare.js", function (require, module, exports, _
 
 require.define("/controllers/new_document.js", function (require, module, exports, __dirname, __filename) {
 (function() {
-  var $, Document, Flakey, NewDocument, autoresize, ui,
+  var $, Classify, Document, Flakey, NewDocument, autoresize, ui,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
@@ -13747,6 +13747,8 @@ require.define("/controllers/new_document.js", function (require, module, export
   autoresize = require('../lib/autoresize');
 
   ui = require('../lib/uikit');
+
+  Classify = require('../lib/classify');
 
   Document = require('../models/Document');
 
@@ -13780,13 +13782,17 @@ require.define("/controllers/new_document.js", function (require, module, export
     };
 
     NewDocument.prototype.save = function(params) {
-      var doc, text;
+      var class_converter, doc, html, text;
       text = $('#new-doc-editor').val();
       if (text.length > 0) {
         doc = new Document({
           base_text: text
         });
+        html = doc.render();
+        class_converter = new Classify.converter;
+        doc.name = class_converter.extractClass(html, "title");
         doc.save();
+        doc.generate_slug();
         ui.info('Everything\'s Shiny Capt\'n!', "\"" + doc.name + "\" was successfully saved.").hide(5000).effect('slide');
         return window.location.hash = "#/detail?" + Flakey.util.querystring.build({
           id: doc.id
@@ -15476,6 +15482,56 @@ Card.prototype.render = function(options){
 })(ui, "<div class=\"card\">\n  <div class=\"wrapper\">\n    <div class=\"face front\">1</div>\n    <div class=\"face back\">2</div>\n  </div>\n</div>");
 });
 
+require.define("/lib/classify.js", function (require, module, exports, __dirname, __filename) {
+var Classify = {}; 
+
+Classify.converter = function() {
+
+	this.addClasses = function(html) {
+		var html_array = html.split("\n");
+
+		for(i=0; i < html_array.length; i++) {
+			var el;
+
+			if (html_array[i] != "") {
+				var el = html_array[i];
+				if (el.match(/^<([^<]+?)>@(\w+)\s/g)) {
+					var newel = el.replace(/^<([^<]+?)>@(\w+)\s/g, '<$1 class="$2">');
+					html_array[i] = newel;
+				}
+			}
+		}
+		
+		var newhtml = html_array.join("\n");
+		
+		return newhtml;
+	}
+
+	this.extractClass = function(html, css_class) {
+		var html_array = html.split("\n");
+		
+		for(i=0; i < html_array.length; i++) {
+			var el;
+
+			if (html_array[i] != "") {
+				var el = html_array[i];
+				var regex = new RegExp('^<\\w+?\\sclass="' + css_class + '">', 'gm');
+				if (el.match(regex)) {
+					var newregex = new RegExp('^<\\w+?\\sclass="' + css_class + '">(.+)<\/\\w+>$', 'gm');
+					var class_text = el.replace(newregex, "$1");
+					
+					return class_text;
+				}
+			}
+		}
+	}	
+
+}
+
+module.exports = Classify;
+
+});
+
 require.define("/models/Document.js", function (require, module, exports, __dirname, __filename) {
 (function() {
   var Annotation, Classify, Document, Flakey, Showdown,
@@ -15593,7 +15649,6 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
       html = converter.makeHtml(this.base_text);
       classy_converter = new Classify.converter();
       html = classy_converter.addClasses(html);
-      console.log(classy_converter.extractClass(html, "title"));
       return html;
     };
 
@@ -16912,56 +16967,6 @@ var Showdown = (function() {
 module.exports = Showdown;
 });
 
-require.define("/lib/classify.js", function (require, module, exports, __dirname, __filename) {
-var Classify = {}; 
-
-Classify.converter = function() {
-
-	this.addClasses = function(html) {
-		var html_array = html.split("\n");
-
-		for(i=0; i < html_array.length; i++) {
-			var el;
-
-			if (html_array[i] != "") {
-				var el = html_array[i];
-				if (el.match(/^<([^<]+?)>@(\w+)\s/g)) {
-					var newel = el.replace(/^<([^<]+?)>@(\w+)\s/g, '<$1 class="$2">');
-					html_array[i] = newel;
-				}
-			}
-		}
-		
-		var newhtml = html_array.join("\n");
-		
-		return newhtml;
-	}
-
-	this.extractClass = function(html, css_class) {
-		var html_array = html.split("\n");
-		
-		for(i=0; i < html_array.length; i++) {
-			var el;
-
-			if (html_array[i] != "") {
-				var el = html_array[i];
-				var regex = new RegExp('^<\\w+?\\sclass="' + css_class + '">', 'gm');
-				if (el.match(regex)) {
-					var newregex = new RegExp('^<\\w+?\\sclass="' + css_class + '">(.+)<\/\\w+>$', 'gm');
-					var class_text = el.replace(newregex, "$1");
-					
-					return class_text;
-				}
-			}
-		}
-	}	
-
-}
-
-module.exports = Classify;
-
-});
-
 require.define("/models/Annotation.js", function (require, module, exports, __dirname, __filename) {
 (function() {
   var Annotation, Flakey,
@@ -17205,11 +17210,9 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
           doc = _ref[_i];
           __out.push('\n\t\t<article class="document" id="document-');
           __out.push(__sanitize(doc.id));
-          __out.push('">\n\t\t\t<!--<h1 class="name">');
+          __out.push('">\n\t\t\t<h1 class="name">');
           __out.push(__sanitize(doc.name));
-          __out.push('</h1>-->\n\t\t\t');
-          __out.push(doc.render());
-          __out.push('\n\t\t</article>\n\t');
+          __out.push('</h1>\n\t\t</article>\n\t');
         }
       
         __out.push('\n    \n</div>\n');
@@ -17410,15 +17413,11 @@ require.define("/views/detail.js", function (require, module, exports, __dirname
       
         __out.push(__sanitize(this.doc.slug));
       
-        __out.push('">\n      <h1 class="name">');
-      
-        __out.push(__sanitize(this.doc.name));
-      
-        __out.push('</h1>\n      ');
+        __out.push('">\n      ');
       
         __out.push(this.doc.draw_annotations(this.doc.render()));
       
-        __out.push('\n    </article>\n    \n    <aside>\n      &nbsp;\n    </aside>\n  </section>\n</div>');
+        __out.push('\n    </article>\n    \n    <aside>\n      &nbsp;\n    </aside>\n  </section>\n</div>\n');
       
       }).call(this);
       
@@ -17432,7 +17431,7 @@ require.define("/views/detail.js", function (require, module, exports, __dirname
 
 require.define("/controllers/edit.js", function (require, module, exports, __dirname, __filename) {
 (function() {
-  var $, Document, Edit, Flakey, autoresize, ui,
+  var $, Classify, Document, Edit, Flakey, autoresize, ui,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
@@ -17444,6 +17443,8 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
   autoresize = require('../lib/autoresize');
 
   ui = require('../lib/uikit');
+
+  Classify = require('../lib/classify');
 
   Document = require('../models/Document');
 
@@ -17509,8 +17510,12 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
     };
 
     Edit.prototype.save = function(event) {
+      var class_converter, tmp_html;
       event.preventDefault();
       this.doc.base_text = $('#edit-editor').val();
+      tmp_html = this.doc.render();
+      class_converter = new Classify.converter;
+      this.doc.name = class_converter.extractClass(tmp_html, "title");
       this.doc.save();
       if ((localStorage[this.autosave_key()] != null) && localStorage[this.autosave_key()].length > 0) {
         delete localStorage[this.autosave_key()];

@@ -17,8 +17,7 @@
 	
 	<% for doc in @list: %>
 		<article class="document" id="document-<%= doc.id %>">
-			<!--<h1 class="name"><%= doc.name %></h1>-->
-			<%- doc.render() %>
+			<h1 class="name"><%= doc.name %></h1>
 		</article>
 	<% end %>
     

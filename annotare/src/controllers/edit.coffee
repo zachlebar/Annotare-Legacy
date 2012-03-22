@@ -3,6 +3,7 @@ $ = Flakey.$
 
 autoresize = require('../lib/autoresize')
 ui = require('../lib/uikit')
+Classify = require('../lib/classify')
 Document = require('../models/Document')
 
 
@@ -64,6 +65,9 @@ class Edit extends Flakey.controllers.Controller
 	save: (event) =>
 		event.preventDefault()
 		@doc.base_text = $('#edit-editor').val()
+		tmp_html = @doc.render()
+		class_converter = new Classify.converter
+		@doc.name = class_converter.extractClass(tmp_html, "title")
 		@doc.save()
 
 		if localStorage[@autosave_key()]? and localStorage[@autosave_key()].length > 0

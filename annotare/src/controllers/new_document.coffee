@@ -3,6 +3,7 @@ $ = Flakey.$
 
 autoresize = require('../lib/autoresize')
 ui = require('../lib/uikit')
+Classify = require('../lib/classify')
 Document = require('../models/Document')
 
 
@@ -41,8 +42,14 @@ class NewDocument extends Flakey.controllers.Controller
       doc = new Document {
         base_text: text
       }
-      # doc.generate_slug()
+      
+      html = doc.render()
+      class_converter = new Classify.converter
+      doc.name = class_converter.extractClass(html, "title")      
+
       doc.save()
+      doc.generate_slug()
+      
       ui.info('Everything\'s Shiny Capt\'n!', "\"#{ doc.name }\" was successfully saved.").hide(5000).effect('slide')
       window.location.hash = "#/detail?" + Flakey.util.querystring.build({id: doc.id})
     
