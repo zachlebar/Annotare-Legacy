@@ -46,12 +46,19 @@ class NewDocument extends Flakey.controllers.Controller
       html = doc.render()
       class_converter = new Classify.converter
       doc.name = class_converter.extractClass(html, "title")      
+      doc.slug = class_converter.extractClass(html, "slug")      
+      if !doc.slug
+        doc.generate_slug()
 
-      doc.save()
-      doc.generate_slug()
+      dupes = Document.find({slug: doc.slug})
+      if dupes.length > 0
+        ui.info('A document with that name already exists!').hide(5000).effect('slide')
+ 
+      else
+        doc.save()
       
-      ui.info('Everything\'s Shiny Capt\'n!', "\"#{ doc.name }\" was successfully saved.").hide(5000).effect('slide')
-      window.location.hash = "#/detail?" + Flakey.util.querystring.build({id: doc.id})
+        ui.info('Everything\'s Shiny Capt\'n!', "\"#{ doc.name }\" was successfully saved.").hide(5000).effect('slide')
+        window.location.hash = "#/detail?" + Flakey.util.querystring.build({slug: doc.slug})
     
   discard: (params) =>
     ui.confirm('There be Monsters!', 'Careful there Captain; are you sure you want to discard this document?').show (ok) ->

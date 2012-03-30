@@ -16,7 +16,7 @@
 	<% end %>
 	
 	<% for doc in @list: %>
-		<article class="document" id="document-<%= doc.id %>">
+		<article class="document" data-slug="<%= doc.slug %>" id="document-<%= doc.id %>">
 			<h1 class="name"><%= doc.name %></h1>
 		</article>
 	<% end %>

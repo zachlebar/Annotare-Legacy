@@ -30,10 +30,12 @@ class Edit extends Flakey.controllers.Controller
 		return "autosave-draft-#{@doc.id}";
   
 	render: () =>
-		if not @query_params.id
+		if not @query_params.slug
 			return
       
-		@doc = Document.get(@query_params.id)
+		docset = Document.find({slug: @query_params.slug})
+		tmpdoc = docset[0]
+		@doc = Document.get(tmpdoc.id)
 
 		context = {
 			doc: @doc
@@ -55,7 +57,6 @@ class Edit extends Flakey.controllers.Controller
 
 		@auto_resize()
     
-	
 	auto_resize: () ->
 		$('#edit-editor').autoResize({
 			extraSpace: 100,
@@ -68,13 +69,25 @@ class Edit extends Flakey.controllers.Controller
 		tmp_html = @doc.render()
 		class_converter = new Classify.converter
 		@doc.name = class_converter.extractClass(tmp_html, "title")
-		@doc.save()
 
-		if localStorage[@autosave_key()]? and localStorage[@autosave_key()].length > 0
-			delete localStorage[@autosave_key()]
+		@doc.slug = class_converter.extractClass(tmp_html, "slug")
+		if !@doc.slug
+			@doc.slug = @doc.generate_slug()
+		
+		
 
-		ui.info('Everything\'s Shiny Capt\'n!', "\"#{ @doc.name }\" was successfully saved.").hide(5000).effect('slide')
-		window.location.hash = "#/detail?" + Flakey.util.querystring.build(@query_params)
+		dupes = Document.find({slug: @doc.slug})
+		if dupes.length > 0
+			ui.info('A document with that name already exists!').hide(5000).effect('slide')
+ 
+		else
+			@doc.save()
+
+			if localStorage[@autosave_key()]? and localStorage[@autosave_key()].length > 0
+				delete localStorage[@autosave_key()]
+
+			ui.info('Everything\'s Shiny Capt\'n!', "\"#{ @doc.name }\" was successfully saved.").hide(5000).effect('slide')
+			window.location.hash = "#/detail?" + Flakey.util.querystring.build(@query_params)
  
 	discard: (event) =>
 		event.preventDefault()

@@ -38,8 +38,8 @@ class List extends Flakey.controllers.Controller
     window.location.hash = "#/new?" + (if @query_params.q? then Flakey.util.querystring.build({title: @query_params.q}) else "")
     
   select_doc: (event) ->
-    id = $(event.currentTarget).attr('id').replace('document-', '')
-    window.location.hash = "#/detail?" + Flakey.util.querystring.build({id: id})
+    slug = $(event.currentTarget).attr('data-slug')
+    window.location.hash = "#/detail?" + Flakey.util.querystring.build({slug: slug})
     
   search: (event) =>
     event.preventDefault()

@@ -13782,7 +13782,7 @@ require.define("/controllers/new_document.js", function (require, module, export
     };
 
     NewDocument.prototype.save = function(params) {
-      var class_converter, doc, html, text;
+      var class_converter, doc, dupes, html, text;
       text = $('#new-doc-editor').val();
       if (text.length > 0) {
         doc = new Document({
@@ -13791,12 +13791,20 @@ require.define("/controllers/new_document.js", function (require, module, export
         html = doc.render();
         class_converter = new Classify.converter;
         doc.name = class_converter.extractClass(html, "title");
-        doc.save();
-        doc.generate_slug();
-        ui.info('Everything\'s Shiny Capt\'n!', "\"" + doc.name + "\" was successfully saved.").hide(5000).effect('slide');
-        return window.location.hash = "#/detail?" + Flakey.util.querystring.build({
-          id: doc.id
+        doc.slug = class_converter.extractClass(html, "slug");
+        if (!doc.slug) doc.generate_slug();
+        dupes = Document.find({
+          slug: doc.slug
         });
+        if (dupes.length > 0) {
+          return ui.info('A document with that name already exists!').hide(5000).effect('slide');
+        } else {
+          doc.save();
+          ui.info('Everything\'s Shiny Capt\'n!', "\"" + doc.name + "\" was successfully saved.").hide(5000).effect('slide');
+          return window.location.hash = "#/detail?" + Flakey.util.querystring.build({
+            slug: doc.slug
+          });
+        }
       }
     };
 
@@ -17125,10 +17133,10 @@ require.define("/controllers/list.js", function (require, module, exports, __dir
     };
 
     List.prototype.select_doc = function(event) {
-      var id;
-      id = $(event.currentTarget).attr('id').replace('document-', '');
+      var slug;
+      slug = $(event.currentTarget).attr('data-slug');
       return window.location.hash = "#/detail?" + Flakey.util.querystring.build({
-        id: id
+        slug: slug
       });
     };
 
@@ -17208,7 +17216,9 @@ require.define("/views/list.js", function (require, module, exports, __dirname, 
         _ref = this.list;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           doc = _ref[_i];
-          __out.push('\n\t\t<article class="document" id="document-');
+          __out.push('\n\t\t<article class="document" data-slug="');
+          __out.push(__sanitize(doc.slug));
+          __out.push('" id="document-');
           __out.push(__sanitize(doc.id));
           __out.push('">\n\t\t\t<h1 class="name">');
           __out.push(__sanitize(doc.name));
@@ -17268,9 +17278,14 @@ require.define("/controllers/detail.js", function (require, module, exports, __d
     }
 
     Detail.prototype.render = function() {
-      var context;
-      if (!this.query_params.id) return;
-      this.doc = Document.get(this.query_params.id);
+      var context, docset, tmpdoc;
+      if (!this.query_params.slug) return;
+      docset = Document.find({
+        slug: this.query_params.slug
+      });
+      tmpdoc = docset[0];
+      console.log("I'll be displaying the doc with an id of '" + tmpdoc.id + "'");
+      this.doc = Document.get(tmpdoc.id);
       if (!(this.doc != null)) return;
       context = {
         doc: this.doc
@@ -17479,10 +17494,14 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
     };
 
     Edit.prototype.render = function() {
-      var context,
+      var context, docset, tmpdoc,
         _this = this;
-      if (!this.query_params.id) return;
-      this.doc = Document.get(this.query_params.id);
+      if (!this.query_params.slug) return;
+      docset = Document.find({
+        slug: this.query_params.slug
+      });
+      tmpdoc = docset[0];
+      this.doc = Document.get(tmpdoc.id);
       context = {
         doc: this.doc
       };
@@ -17510,18 +17529,27 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
     };
 
     Edit.prototype.save = function(event) {
-      var class_converter, tmp_html;
+      var class_converter, dupes, tmp_html;
       event.preventDefault();
       this.doc.base_text = $('#edit-editor').val();
       tmp_html = this.doc.render();
       class_converter = new Classify.converter;
       this.doc.name = class_converter.extractClass(tmp_html, "title");
-      this.doc.save();
-      if ((localStorage[this.autosave_key()] != null) && localStorage[this.autosave_key()].length > 0) {
-        delete localStorage[this.autosave_key()];
+      this.doc.slug = class_converter.extractClass(tmp_html, "slug");
+      if (!this.doc.slug) this.doc.slug = this.doc.generate_slug();
+      dupes = Document.find({
+        slug: this.doc.slug
+      });
+      if (dupes.length > 0) {
+        return ui.info('A document with that name already exists!').hide(5000).effect('slide');
+      } else {
+        this.doc.save();
+        if ((localStorage[this.autosave_key()] != null) && localStorage[this.autosave_key()].length > 0) {
+          delete localStorage[this.autosave_key()];
+        }
+        ui.info('Everything\'s Shiny Capt\'n!', "\"" + this.doc.name + "\" was successfully saved.").hide(5000).effect('slide');
+        return window.location.hash = "#/detail?" + Flakey.util.querystring.build(this.query_params);
       }
-      ui.info('Everything\'s Shiny Capt\'n!', "\"" + this.doc.name + "\" was successfully saved.").hide(5000).effect('slide');
-      return window.location.hash = "#/detail?" + Flakey.util.querystring.build(this.query_params);
     };
 
     Edit.prototype.discard = function(event) {

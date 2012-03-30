@@ -23,11 +23,14 @@ class Detail extends Flakey.controllers.Controller
     @tmpl =  Flakey.templates.get_template('detail', require('../views/detail'))
   
   render: () =>
-    if not @query_params.id
+    if not @query_params.slug
       return
       
     # Render Document
-    @doc = Document.get(@query_params.id)
+    docset = Document.find({slug: @query_params.slug})
+    tmpdoc = docset[0]
+    console.log("I'll be displaying the doc with an id of '" + tmpdoc.id + "'")
+    @doc = Document.get(tmpdoc.id)
     if not @doc?
       return
     
