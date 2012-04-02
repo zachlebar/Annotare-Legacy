@@ -15631,7 +15631,7 @@ require.define("/models/Document.js", function (require, module, exports, __dirn
     Document.prototype.generate_slug = function() {
       var slug;
       slug = this.name;
-      slug = slug.toLowerCase().replace(/[^\_\ 0-9a-z-]/g, "").replace(/[ ]/g, '_');
+      slug = slug.toLowerCase().replace(/[^\_\ 0-9a-z-]/g, "").replace(/[ ]/g, '-');
       this.slug = slug;
       return slug;
     };
@@ -17284,7 +17284,6 @@ require.define("/controllers/detail.js", function (require, module, exports, __d
         slug: this.query_params.slug
       });
       tmpdoc = docset[0];
-      console.log("I'll be displaying the doc with an id of '" + tmpdoc.id + "'");
       this.doc = Document.get(tmpdoc.id);
       if (!(this.doc != null)) return;
       context = {
@@ -17529,7 +17528,7 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
     };
 
     Edit.prototype.save = function(event) {
-      var class_converter, dupes, tmp_html;
+      var class_converter, dupe_doc, dupes, tmp_html, _i, _len;
       event.preventDefault();
       this.doc.base_text = $('#edit-editor').val();
       tmp_html = this.doc.render();
@@ -17541,15 +17540,21 @@ require.define("/controllers/edit.js", function (require, module, exports, __dir
         slug: this.doc.slug
       });
       if (dupes.length > 0) {
-        return ui.info('A document with that name already exists!').hide(5000).effect('slide');
-      } else {
-        this.doc.save();
-        if ((localStorage[this.autosave_key()] != null) && localStorage[this.autosave_key()].length > 0) {
-          delete localStorage[this.autosave_key()];
+        for (_i = 0, _len = dupes.length; _i < _len; _i++) {
+          dupe_doc = dupes[_i];
+          if (dupe_doc.id !== this.doc.id) {
+            ui.info('A document with that name already exists!').hide(5000).effect('slide');
+            return;
+          }
         }
-        ui.info('Everything\'s Shiny Capt\'n!', "\"" + this.doc.name + "\" was successfully saved.").hide(5000).effect('slide');
-        return window.location.hash = "#/detail?" + Flakey.util.querystring.build(this.query_params);
       }
+      this.doc.save();
+      this.query_params.slug = this.doc.slug;
+      if ((localStorage[this.autosave_key()] != null) && localStorage[this.autosave_key()].length > 0) {
+        delete localStorage[this.autosave_key()];
+      }
+      ui.info('Everything\'s Shiny Capt\'n!', "\"" + this.doc.name + "\" was successfully saved.").hide(5000).effect('slide');
+      return window.location.hash = "#/detail?" + Flakey.util.querystring.build(this.query_params);
     };
 
     Edit.prototype.discard = function(event) {

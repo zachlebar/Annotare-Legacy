@@ -29,7 +29,6 @@ class Detail extends Flakey.controllers.Controller
     # Render Document
     docset = Document.find({slug: @query_params.slug})
     tmpdoc = docset[0]
-    console.log("I'll be displaying the doc with an id of '" + tmpdoc.id + "'")
     @doc = Document.get(tmpdoc.id)
     if not @doc?
       return

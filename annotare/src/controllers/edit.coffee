@@ -65,6 +65,7 @@ class Edit extends Flakey.controllers.Controller
   
 	save: (event) =>
 		event.preventDefault()
+
 		@doc.base_text = $('#edit-editor').val()
 		tmp_html = @doc.render()
 		class_converter = new Classify.converter
@@ -74,20 +75,23 @@ class Edit extends Flakey.controllers.Controller
 		if !@doc.slug
 			@doc.slug = @doc.generate_slug()
 		
-		
-
 		dupes = Document.find({slug: @doc.slug})
 		if dupes.length > 0
-			ui.info('A document with that name already exists!').hide(5000).effect('slide')
- 
-		else
-			@doc.save()
+			for dupe_doc in dupes
+				if dupe_doc.id isnt @doc.id 
+					ui.info('A document with that name already exists!').hide(5000).effect('slide')
+				
+					return
 
-			if localStorage[@autosave_key()]? and localStorage[@autosave_key()].length > 0
-				delete localStorage[@autosave_key()]
+		@doc.save()
 
-			ui.info('Everything\'s Shiny Capt\'n!', "\"#{ @doc.name }\" was successfully saved.").hide(5000).effect('slide')
-			window.location.hash = "#/detail?" + Flakey.util.querystring.build(@query_params)
+		@query_params.slug = @doc.slug
+
+		if localStorage[@autosave_key()]? and localStorage[@autosave_key()].length > 0
+			delete localStorage[@autosave_key()]
+
+		ui.info('Everything\'s Shiny Capt\'n!', "\"#{ @doc.name }\" was successfully saved.").hide(5000).effect('slide')
+		window.location.hash = "#/detail?" + Flakey.util.querystring.build(@query_params)
  
 	discard: (event) =>
 		event.preventDefault()

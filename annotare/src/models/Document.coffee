@@ -58,7 +58,7 @@ class Document extends Flakey.models.Model
   # Generate the doc slug based on the name
   generate_slug: =>
     slug = @name
-    slug = slug.toLowerCase().replace(/[^\_\ 0-9a-z-]/g, "").replace(/[ ]/g, '_')
+    slug = slug.toLowerCase().replace(/[^\_\ 0-9a-z-]/g, "").replace(/[ ]/g, '-')
     @slug = slug
     return slug
     
