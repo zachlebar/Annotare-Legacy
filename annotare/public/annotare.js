@@ -13758,15 +13758,33 @@ require.define("/controllers/new_document.js", function (require, module, export
 
     function NewDocument(config) {
       this.discard = __bind(this.discard, this);
-      this.save = __bind(this.save, this);      this.id = "new-document-view";
+      this.save = __bind(this.save, this);
+      this.autosave = __bind(this.autosave, this);      this.id = "new-document-view";
       this.class_name = "new_document view";
       this.actions = {
         'click .save': 'save',
-        'click .discard': 'discard'
+        'click .discard': 'discard',
+        'keyup #new-doc-editor': 'autosave'
       };
       NewDocument.__super__.constructor.call(this, config);
       this.tmpl = Flakey.templates.get_template('new_document', require('../views/new_document'));
     }
+
+    NewDocument.prototype.autosave = function(event) {
+      event.preventDefault();
+      return localStorage[this.autosave_key()] = $('#new-doc-editor').val();
+    };
+
+    NewDocument.prototype.autosave_key = function() {
+      return "autosave-draft-new-doc";
+    };
+
+    NewDocument.prototype.auto_resize = function() {
+      return $('#new-doc-editor').autoResize({
+        extraSpace: 100,
+        maxHeight: 9000
+      });
+    };
 
     NewDocument.prototype.render = function() {
       this.html(this.tmpl.render({
@@ -13776,7 +13794,7 @@ require.define("/controllers/new_document.js", function (require, module, export
       this.bind_actions();
       $('#new-doc-editor').autoResize({
         extraSpace: 100,
-        maxHeight: 2000
+        maxHeight: 9000
       });
       return $('#new-doc-editor').blur();
     };
@@ -13788,30 +13806,37 @@ require.define("/controllers/new_document.js", function (require, module, export
         doc = new Document({
           base_text: text
         });
-        html = doc.render();
-        class_converter = new Classify.converter;
-        doc.name = class_converter.extractClass(html, "title");
-        doc.slug = class_converter.extractClass(html, "slug");
-        if (!doc.slug) doc.generate_slug();
-        dupes = Document.find({
+      }
+      html = doc.render();
+      class_converter = new Classify.converter;
+      doc.name = class_converter.extractClass(html, "title");
+      doc.slug = class_converter.extractClass(html, "slug");
+      if (!doc.slug) doc.generate_slug();
+      dupes = Document.find({
+        slug: doc.slug
+      });
+      if (dupes.length > 0) {
+        ui.info('A document with that name already exists!').hide(5000).effect('slide');
+        window.location.hash = "#/new";
+        if ((localStorage[this.autosave_key()] != null) && localStorage[this.autosave_key()].length > 0) {
+          $('#new-doc-editor').val(localStorage[this.autosave_key()]);
+          return this.auto_resize();
+        }
+      } else {
+        doc.save();
+        if ((localStorage[this.autosave_key()] != null) && localStorage[this.autosave_key()].length > 0) {
+          delete localStorage[this.autosave_key()];
+        }
+        ui.info('Everything\'s Shiny Capt\'n!', "\"" + doc.name + "\" was successfully saved.").hide(5000).effect('slide');
+        return window.location.hash = "#/detail?" + Flakey.util.querystring.build({
           slug: doc.slug
         });
-        if (dupes.length > 0) {
-          return ui.info('A document with that name already exists!').hide(5000).effect('slide');
-        } else {
-          doc.save();
-          ui.info('Everything\'s Shiny Capt\'n!', "\"" + doc.name + "\" was successfully saved.").hide(5000).effect('slide');
-          return window.location.hash = "#/detail?" + Flakey.util.querystring.build({
-            slug: doc.slug
-          });
-        }
       }
     };
 
     NewDocument.prototype.discard = function(params) {
-      return ui.confirm('There be Monsters!', 'Careful there Captain; are you sure you want to discard this document?').show(function(ok) {
-        if (ok) return window.location.hash = "#/list";
-      });
+      ui.confirm('There be Monsters!', 'Careful there Captain; are you sure you want to discard this document?').show(ok)(function() {});
+      if (ok) return window.location.hash = "#/list";
     };
 
     return NewDocument;
